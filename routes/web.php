@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VenueController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::middleware('auth')->group(function() {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    Route::resource('users', UserController::class);
+    Route::resource('venues', VenueController::class);
+
+    Route::resource('products', ProductController::class)->only([
+        'show', 'edit', 'update', 'destroy'
+    ]);
+    // TODO: Make this a resource route and change the 2 following routes? Pass venue via Query params?
+    Route::get('/venues/{venue}/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/venues/{venue}/products', [ProductController::class, 'store'])->name('products.store');
+});
 
 require __DIR__.'/auth.php';

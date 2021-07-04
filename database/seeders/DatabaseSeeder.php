@@ -3,16 +3,23 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\RoleAndPermissionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call(RoleAndPermissionSeeder::class);
+
+        $admin = \App\Models\User::factory()->create([
+            'name' => 'Administrator',
+            'email' => 'admin@bapp.de',
+        ]);
+
+        $admin->assignRole('admin');
+
+        if (\Illuminate\Support\Facades\App::environment('local')) {
+            $this->call(DevSeeder::class);
+        }
     }
 }
