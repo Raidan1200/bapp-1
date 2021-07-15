@@ -14,9 +14,15 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->expectsJson()) {
+            // This is kind of misleading.
+            // auth()->user() is the Token-authenticated Venue, NOT the user!
+            return auth()->user()->products;
+        }
+
+        abort(404);
     }
 
     /**
@@ -26,7 +32,7 @@ class ProductController extends Controller
      */
     public function create(Venue $venue)
     {
-        abort_unless(auth()->user()->can('create products'), 304);
+        $this->authorize('create products');
 
         return view('products.create', compact('venue'));
     }
@@ -39,7 +45,7 @@ class ProductController extends Controller
      */
     public function store(Venue $venue, Request $request)
     {
-        abort_unless(auth()->user()->can('create products'), 304);
+        $this->authorize('create products');
 
         $validated = $request->validate([
             'name'        => 'required|max:255',
@@ -82,6 +88,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $this->authorize('modify products');
+
         return view('products.create', compact('product'));
     }
 
@@ -94,7 +102,7 @@ class ProductController extends Controller
      */
     public function update(Product $product, Request $request)
     {
-        abort_unless(auth()->user()->can('create products'), 304);
+        $this->authorize('create products');
 
         $validated = $request->validate([
             'name'        => 'required|max:255',
@@ -126,7 +134,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        abort_unless(auth()->user()->can('delete products'), 403);
+        $this->authorize('delete products');
 
         Storage::delete($product->image);
         $product->delete();

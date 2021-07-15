@@ -30,7 +30,7 @@ class VenueController extends Controller
      */
     public function create()
     {
-      abort_unless(auth()->user()->can('create products'), 304);
+      $this->authorize('create products');
 
       return view('venues.create');
     }
@@ -43,7 +43,7 @@ class VenueController extends Controller
      */
     public function store(Request $request)
     {
-        abort_unless(auth()->user()->can('create venues'), 403);
+        $this->authorize('create venues');
 
         $validated = $request->validate($this->rules);
 
@@ -73,6 +73,8 @@ class VenueController extends Controller
      */
     public function edit(Venue $venue)
     {
+        $this->authorize('modify venues');
+
         return view('venues.create', compact('venue'));
     }
 
@@ -85,7 +87,7 @@ class VenueController extends Controller
      */
     public function update(Request $request, Venue $venue)
     {
-        abort_unless(auth()->user()->can('modify venues'), 403);
+        $this->authorize('modify venues');
 
         $validated = $request->validate($this->rules);
 
@@ -103,7 +105,7 @@ class VenueController extends Controller
      */
     public function destroy(Venue $venue)
     {
-        abort_unless(auth()->user()->can('delete venues'), 403);
+        $this->authorize('delete venues');
 
         $venue->delete();
 

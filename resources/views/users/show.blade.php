@@ -27,7 +27,6 @@
     </div>
 	</x-slot>
 
-  {{-- Application UI > Lists > Tables > With avatars and multi-line content  --}}
 	<div class="flex flex-col">
     <div class="px-4 m-2">
       <p>User name: {{ $user->name }}</p>

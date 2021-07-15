@@ -12,7 +12,6 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    @livewireStyles
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -33,7 +32,19 @@
         {{ $slot }}
       </main>
     </div>
-
-    @livewireScripts
+    <div
+      x-data="{
+        isOpen: false,
+        route: '',
+        entityName: ''
+      }"
+      @open-delete-modal.window="
+        isOpen = true
+        entityName = $event.detail.entityName
+        route = $event.detail.route
+      "
+    >
+      <x-confirm />
+    </div>
   </body>
 </html>

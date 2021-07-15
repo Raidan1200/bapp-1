@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
 
         if (\Illuminate\Support\Facades\App::environment('local')) {
             $this->call(DevSeeder::class);
+            $this->call(OrderSeeder::class);
         }
     }
 }

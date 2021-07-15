@@ -17,6 +17,7 @@ class CreateUserVenueTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('venue_id')->constrained();
+            $table->unique(['user_id', 'venue_id']);
         });
     }
 

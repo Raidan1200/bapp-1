@@ -5,11 +5,21 @@
         <a href="{{ route('venues.index') }}">Venues</a>
          > {{ $venue->name }}
       </h2>
-      @can('create venues')
-        <a href="{{ route('products.create', $venue->id) }}">
-          <x-icons.add class="w-6 h-6" />
-        </a>
-      @endcan
+      <div class="flex space-x-4">
+        @can('create tokens')
+          <form action="{{ route('token.store', $venue) }}" method="POST" >
+            @csrf
+            <button>
+              <x-icons.key class="h-6 w-6" />
+            </button>
+          </form>
+        @endcan
+        @can('create products')
+          <a href="{{ route('products.create', $venue) }}">
+            <x-icons.add class="h-6 w-6" />
+          </a>
+        @endcan
+      </div>
     </div>
 	</x-slot>
 
@@ -28,12 +38,13 @@
                 <th scope="col" class="w-1/5 px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
                 </th>
-            @endcanany
+              @endcanany
             </tr>
           </thead>
-          @foreach ($venue->products as $product)
-            <tbody class="bg-white divide-y divide-gray-200">
+          <tbody class="bg-white divide-y divide-gray-200">
+            @foreach ($venue->products as $product)
               <tr>
+                {{-- Product --}}
                 <td class="px-6 py-4">
                   <a href="{{ route('products.show', $product) }}">
                     <div class="flex items-center">
@@ -51,23 +62,32 @@
                     </div>
                   </a>
                 </td>
+                {{-- Actions --}}
                 @canany(['modify products', 'delete products'])
                   <td class="px-6 py-4 text-center text-sm font-medium">
-                    <a class="inline-block" href="{{ route('products.edit', $product) }}">
-                      <x-icons.edit class="h-4 w-4" />
-                    </a>
-                    <form class="inline-block" action="{{ route('products.destroy', $product) }}" method="POST">
-                      @method('delete')
-                      @csrf
-                      <button href="#">
+                    @can('modify products')
+                      <a class="inline-block" href="{{ route('products.edit', $product) }}">
+                        <x-icons.edit class="h-4 w-4" />
+                      </a>
+                    @endcan
+                    @can('delete products')
+                      <button
+                        x-data
+                        x-on:click="
+                          $dispatch('open-delete-modal', {
+                            route: '{{ route('products.destroy', $product) }}',
+                            entityName: '{{ $product->name }}'
+                          })
+                        "
+                      >
                         <x-icons.delete class="h-4 w-4 hover:text-red-600" />
                       </button>
-                    </form>
+                    @endcan
                   </td>
                 @endcanany
               </tr>
-            </tbody>
-          @endforeach
+            @endforeach
+          </tbody>
         </table>
       </div>
     </div>

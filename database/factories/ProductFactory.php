@@ -23,10 +23,9 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->words(2, true) . (rand(0, 1) ? ' Menu' : ' Buffet'),
+            'name' => ucwords($this->faker->words(2, true)) . (rand(0, 1) ? ' Menu' : ' Buffet'),
             'excerpt' => $this->faker->paragraphs(2, true),
             'description' => $this->faker->paragraphs(4, true),
-            'image' => '',
             'capacity' => $this->faker->randomNumber(2, true),
             'price' => $this->faker->randomNumber(4, true),
             'deposit' => $this->faker->randomNumber(2, true),

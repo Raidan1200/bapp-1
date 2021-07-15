@@ -14,6 +14,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         $permissions = collect([
             'create users',    'modify users',    'delete users',
+            'create tokens',                      'delete tokens',
             'create venues',   'modify venues',   'delete venues',
             'create products', 'modify products', 'delete products',
                                'modify orders',   'delete orders',
