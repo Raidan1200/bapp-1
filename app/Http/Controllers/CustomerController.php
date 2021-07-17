@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class CustomerController extends Controller
 {
     protected $rules = [
-        'status'       => 'required', // TODO: Rule::in
-        'cash_payment' => 'required|boolean',
-        'deposit'      => 'required|numeric',
-        'notes'        => 'sometimes',
-        'customer_id'  => 'required|exists:customers,id',
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'email' => 'required|email',
+        'company' => 'sometimes',
+        'street' => 'required',
+        'street_no' => 'required',
+        'zip' => 'required|integer', // TODO: integer?
+        'city' => 'required',
+        'phone' => 'required',
     ];
 
     /**
@@ -49,10 +53,10 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Order  $order
+     * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show(Customer $customer)
     {
         //
     }
@@ -60,10 +64,10 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Order  $order
+     * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit(Order $order)
+    public function edit(Customer $customer)
     {
         //
     }
@@ -72,10 +76,10 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Order  $order
+     * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, Customer $customer)
     {
         //
     }
@@ -83,10 +87,10 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Order  $order
+     * @param  \App\Models\Customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $order)
+    public function destroy(Customer $customer)
     {
         //
     }

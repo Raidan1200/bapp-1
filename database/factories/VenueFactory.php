@@ -22,7 +22,10 @@ class VenueFactory extends Factory
     public function definition()
     {
         return [
-            'name' => ucfirst($this->faker->word()) . (rand(0, 1) ? ' Mall' : ' Place')
+            'name' => ucfirst($this->faker->word()) . (rand(0, 1) ? ' Mall' : ' Place'),
+            'email' => $this->faker->email(),
+            'reminder_delay' => 5,
+            'check_delay' => 9,
         ];
     }
 }

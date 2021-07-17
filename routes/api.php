@@ -5,8 +5,7 @@ use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\ProductController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,12 +18,8 @@ use App\Http\Controllers\ProductController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware('auth:sanctum')->group(function() {
-    Route::get('products', [ProductController::class, 'index']);
-    Route::get('products/{product}/bookings', [BookingController::class, 'index']);
-    Route::post('bookings', [BookingController::class, 'store']);
+    Route::get('config', [ApiController::class, 'config']);
+    Route::get('rooms/{room}/bookings', [ApiController::class, 'bookings']);
+    Route::post('venues/{venue}/orders', [ApiController::class, 'order']);
 });

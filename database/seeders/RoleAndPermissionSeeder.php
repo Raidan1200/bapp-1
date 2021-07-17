@@ -13,11 +13,12 @@ class RoleAndPermissionSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = collect([
-            'create users',    'modify users',    'delete users',
-            'create tokens',                      'delete tokens',
-            'create venues',   'modify venues',   'delete venues',
-            'create products', 'modify products', 'delete products',
-                               'modify orders',   'delete orders',
+            'create users',    'modify users',                      'delete users',
+            'create tokens',                                        'delete tokens',
+            'create venues',   'modify venues',   'admin venues',   'delete venues',
+            'create rooms',    'modify rooms',    'admin rooms',    'delete rooms',
+            'create products', 'modify products', 'admin products', 'delete products',
+                               'modify orders',   'admin orders',   'delete orders',
         ])->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];
         });
@@ -27,7 +28,14 @@ class RoleAndPermissionSeeder extends Seeder
         Role::create(['name' => 'admin'])
             ->givePermissionTo(Permission::all());
 
-        Role::create(['name' => 'user'])
+        Role::create(['name' => 'manager'])
+            ->givePermissionTo([
+                'create users', 'modify users',
+                'modify venues', 'modify rooms', 'modify products',
+                'admin orders', 'delete orders'
+            ]);
+
+        Role::create(['name' => 'employee'])
             ->givePermissionTo([
                 'modify orders'
             ]);

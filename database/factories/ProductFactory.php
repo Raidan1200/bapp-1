@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Venue;
+use App\Models\Room;
 use App\Models\Product;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductFactory extends Factory
@@ -24,14 +25,20 @@ class ProductFactory extends Factory
     {
         return [
             'name' => ucwords($this->faker->words(2, true)) . (rand(0, 1) ? ' Menu' : ' Buffet'),
-            'excerpt' => $this->faker->paragraphs(2, true),
+            'slogan' => $this->faker->words(5, true),
             'description' => $this->faker->paragraphs(4, true),
-            'capacity' => $this->faker->randomNumber(2, true),
-            'price' => $this->faker->randomNumber(4, true),
-            'deposit' => $this->faker->randomNumber(2, true),
-            'opens_at' => $this->faker->numberBetween(8, 16).':00:00',
-            'closes_at' => $this->faker->numberBetween(18, 24).':00:00',
-            'venue_id' => Venue::factory(),
+            'image' => null,
+            'starts_at' => Carbon::now()->subMonth(),
+            'ends_at' => Carbon::now()->addMonth(),
+            'opens_at' => $this->faker->numberBetween(10, 12) . ':00:00',
+            'closes_at' => $this->faker->numberBetween(20, 23) . ':00:00',
+            'min_occupancy' => rand(0, 1) ? $this->faker->numberBetween(10, 20) : null,
+            'unit_price' => ($unit_price = $this->faker->numberBetween(20, 50)) . '00',
+            'vat' => '19',
+            'unit_price_flat' => ($unit_price + 30) . '00',
+            'vat_flat' => '7',
+            'deposit' => rand(0, 1) ? '20' : '40',
+            'room_id' => Room::factory(),
         ];
     }
 }

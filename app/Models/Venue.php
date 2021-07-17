@@ -2,23 +2,27 @@
 
 namespace App\Models;
 
+use App\Models\Room;
 use App\Models\User;
-use App\Models\Product;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Venue extends Model
 {
-    use HasFactory, HasApiTokens;
+    use HasFactory, HasApiTokens, SoftDeletes;
 
     protected $fillable = [
-        'name'
+        'name',
+        'email',
+        'reminder_delay',
+        'check_delay',
     ];
 
-    public function products()
+    public function rooms()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Room::class);
     }
 
     public function users()

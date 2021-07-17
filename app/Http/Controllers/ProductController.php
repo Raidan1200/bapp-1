@@ -9,6 +9,31 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    protected $rules;
+
+    public function __construct()
+    {
+        $rules = [
+            'name'            => 'required|max:255',
+            'slogan'          => 'sometimes',
+            'description'     => 'sometimes',
+            'image'           => 'sometimes|mimes:jpg,jpeg,png,webp',
+            'starts_at'       => 'required|date',
+            'ends_at'         => 'required|date',
+            // TODO: This is actually wrong
+            'opens_at'        => ['required', 'min:0', 'max:24', fn($_, $value, $fail) => $value >= $request->closes_at ? $fail('Opening time cannot be equal to or after closing time.') : null],
+            'closes_at'       => 'required|min:0|max:24',
+            'min_occupancy'   => 'sometimes|integer',
+            'unit_price'      => 'required|integer',
+            'vat'             => 'required|numeric',
+            'is_flat'         => 'sometimes|boolean',
+            'unit_price_flat' => 'sometimes|integer',
+            'vat_flat'        => 'sometimes|numeric',
+            'deposit'         => 'required|numeric',
+            'room_id'         => 'exists:rooms,id'
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -47,17 +72,7 @@ class ProductController extends Controller
     {
         $this->authorize('create products');
 
-        $validated = $request->validate([
-            'name'        => 'required|max:255',
-            'excerpt'     => 'sometimes',
-            'description' => 'sometimes',
-            'image'       => 'sometimes|mimes:jpg,jpeg,png,webp',
-            'capacity'    => 'required',
-            'price'       => 'required',
-            'opens_at'    => ['required', 'min:0', 'max:24', fn($_, $value, $fail) => $value >= $request->closes_at ? $fail('Opening time cannot be equal to or after closing time.') : null],
-            'closes_at'   => 'required|min:0|max:24',
-            'deposit'     => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         if ($request->file('image')) {
             $path = $request->file('image')->store('images');
@@ -104,17 +119,7 @@ class ProductController extends Controller
     {
         $this->authorize('create products');
 
-        $validated = $request->validate([
-            'name'        => 'required|max:255',
-            'excerpt'     => 'sometimes',
-            'description' => 'sometimes',
-            'image'       => 'sometimes|mimes:jpg,jpeg,png,webp',
-            'capacity'    => 'required',
-            'price'       => 'required',
-            'opens_at'    => ['required', 'min:0', 'max:24', fn($_, $value, $fail) => $value >= $request->closes_at ? $fail('Opening time cannot be equal to or after closing time.') : null],
-            'closes_at'   => 'required|min:0|max:24',
-            'deposit'     => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         if ($request->file('image')) {
             $path = $request->file('image')->store('images');

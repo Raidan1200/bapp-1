@@ -15,10 +15,12 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_id');
             $table->string('status');
-            // TODO: Deposit
             $table->boolean('cash_payment');
-            $table->json('customer');
+            $table->unsignedFloat('deposit');
+            $table->text('notes')->nullable();
+            $table->foreignId('customer_id')->constrained();
             $table->timestamps();
         });
     }

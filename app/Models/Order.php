@@ -13,11 +13,9 @@ class Order extends Model
     protected $fillable = [
         'status',
         'cash_payment',
-        'customer',
-    ];
-
-    protected $casts = [
-        'customer' => 'array',
+        'deposit',
+        'notes',
+        'customer_id',
     ];
 
     public function bookings()

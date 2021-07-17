@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 
 class VenueMemberController extends Controller
 {
+    // TODO: API is somewhat confusing. Pass Venue via URL, not as POST data
     public function store(Request $request, User $user)
     {
-        $this->authorize('create venues');
+        $this->authorize('modify users');
 
         $request->validate([
             'venue' => 'required|exists:venues,id'
@@ -18,7 +19,7 @@ class VenueMemberController extends Controller
 
         $user->venues()->attach($request->venue);
 
-        return redirect()->back()->with('status', 'User added to Venue!');
+        return redirect()->back()->with('status', 'User added to Venue.');
     }
 
     public function destroy(Request $request, User $user, Venue $venue)
@@ -27,6 +28,6 @@ class VenueMemberController extends Controller
 
         $venue->users()->detach($user->id);
 
-        return redirect()->back()->with('status', 'User removed to Venue!');
+        return redirect()->back()->with('status', 'User removed from Venue.');
     }
 }

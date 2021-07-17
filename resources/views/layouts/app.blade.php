@@ -22,26 +22,26 @@
 
       <!-- Page Heading -->
       <header class="bg-white shadow">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          {{ $header }}
-        </div>
+      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        {{ $header }}
+      </div>
       </header>
 
       <!-- Page Content -->
       <main>
-        {{ $slot }}
+      {{ $slot }}
       </main>
     </div>
     <div
       x-data="{
-        isOpen: false,
-        route: '',
-        entityName: ''
+      isOpen: false,
+      route: '',
+      entityName: ''
       }"
       @open-delete-modal.window="
-        isOpen = true
-        entityName = $event.detail.entityName
-        route = $event.detail.route
+      isOpen = true
+      entityName = $event.detail.entityName
+      route = $event.detail.route
       "
     >
       <x-confirm />

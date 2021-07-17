@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Room;
 use App\Models\Order;
 use App\Models\Booking;
 use App\Models\Product;
@@ -24,19 +25,21 @@ class BookingFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'starts_at' => $start = $this->randomDateTime(),
-            'ends_at' => $start->addHours(rand(1, 3)),
-            'quantity' => rand(10, 30),
+        $data = [
+            'starts_at' => $starts_at = Carbon::now()->setHour(rand(12, 18))->addDays(rand(1, 4)),
+            'ends_at' => $starts_at->addHours(rand(2, 4)),
+            'quantity' => rand(20, 50),
+            'flat' => rand(0, 1),
+            'product_name' => 'Dummy',
+            'unit_price' => 0,
+            'vat' => 0,
+            'product_snapshot' => '{}',
+            'room_id' => Room::factory(),
             'product_id' => Product::factory(),
-            'product_snapshot' => json_encode([]),
-            'order_id' => Order::factory()
+            'order_id' => Order::factory(),
         ];
-    }
 
-    public function randomDateTime(string $start = '+2 days', string $end = '+2 weeks')
-    {
-        $datetime = $this->faker->dateTimeBetween($start, $end);
-        return Carbon::createFromTimestamp($datetime->getTimeStamp())->minute(0)->second(0);
+
+        return $data;
     }
 }

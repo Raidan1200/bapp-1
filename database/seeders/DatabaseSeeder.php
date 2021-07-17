@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 use Database\Seeders\RoleAndPermissionSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,15 +13,16 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RoleAndPermissionSeeder::class);
 
-        $admin = \App\Models\User::factory()->create([
+        $admin = User::factory()->create([
             'name' => 'Administrator',
             'email' => 'admin@bapp.de',
         ]);
 
         $admin->assignRole('admin');
 
-        if (\Illuminate\Support\Facades\App::environment('local')) {
-            $this->call(DevSeeder::class);
+        if (App::environment('local')) {
+            $this->call(UserSeeder::class);
+            $this->call(VenueSeeder::class);
             $this->call(OrderSeeder::class);
         }
     }

@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 class VenueController extends Controller
 {
     protected $rules = [
-        'name' => 'required'
+        'name' => 'required',
+        'email' => 'sometimes|email',
+        'reminder_delay' => 'sometimes|integer',
+        'check_delay' => 'sometimes|integer|gte:reminder_delay',
     ];
 
     /**
@@ -30,7 +33,7 @@ class VenueController extends Controller
      */
     public function create()
     {
-      $this->authorize('create products');
+      $this->authorize('create venues');
 
       return view('venues.create');
     }
@@ -49,7 +52,7 @@ class VenueController extends Controller
 
         Venue::create($validated);
 
-        return redirect()->route('venues.index')->with('status', 'Venue created!');
+        return redirect()->route('venues.index')->with('status', 'Venue created.');
     }
 
     /**
@@ -93,7 +96,7 @@ class VenueController extends Controller
 
         $venue->update($validated);
 
-        return redirect()->route('venues.index')->with('status', 'Venue updated!');
+        return redirect()->route('venues.index')->with('status', 'Venue updated.');
 
     }
 

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -22,13 +23,12 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'status' => ['new', 'confirmed', 'paid'][rand(0, 2)],
+            'invoice_id' => $this->faker->date('Ymd') . rand(1000, 9999),
+            'status' => ['deposit_mail_sent', 'deposit_paid', 'intermed_mail_sent', 'intermed_paid', 'final_mail_sent', 'fully_paid', 'cancelled'][rand(0, 6)],
             'cash_payment' => rand(0, 1),
-            'customer' => [
-                'name' => $this->faker->name(),
-                'address' => $this->faker->address(),
-                'phone' => $this->faker->phoneNumber(),
-            ]
+            'deposit' => rand(0, 1) ? '20' : '40',
+            'notes' => 'Note me tender.',
+            'customer_id' => Customer::factory(),
         ];
     }
 }

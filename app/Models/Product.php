@@ -5,32 +5,39 @@ namespace App\Models;
 use App\Models\Venue;
 use App\Models\Booking;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'excerpt',
+        'slogan',
         'description',
         'image',
-        'capacity',
-        'price',
-        'deposit',
+        'starts_at',
+        'ends_at',
         'opens_at',
         'closes_at',
-        'venue_id',
+        'min_occupancy',
+        'unit_price',
+        'vat',
+        'is_flat',
+        'unit_price_flat',
+        'vat_flat',
+        'deposit',
+        'room_id',
     ];
 
-    public function venue()
-    {
-        return $this->belongsTo(Venue::class);
-    }
+    protected $casts = [
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+    ];
 
-    public function bookings()
+    public function room()
     {
-        return $this->hasMany(Booking::class);
+        return $this->belongsTo(Room::class);
     }
 }
