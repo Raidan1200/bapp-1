@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
@@ -21,16 +23,19 @@ class ApiController extends Controller
         return auth()->user()->load('rooms.products');
     }
 
-    public function bookings(Room $room)
+    public function bookings(Request $request, Room $room)
     {
         // TODO: Is it neccessary to check this? Is this handled by Sanctum???
         abort_if(auth()->user()->id !== $room->venue->id, 403);
 
-        return $room->bookings;
+        $from = Carbon::createFromDate(...explode('-', $request->input('from')))->hour(0)->minute(0)->second(0);
+        $to = Carbon::createFromDate(...explode('-', $request->input('to')))->hour(23)->minute(59)->second(59);
+
+        return $room->bookings()->where('starts_at', '<', $to)->where('ends_at', '>', $from)->get();
     }
 
-    public function store(Request $reuqest)
+    public function order(Request $request)
     {
-
+        return [$request->toArray()];
     }
 }

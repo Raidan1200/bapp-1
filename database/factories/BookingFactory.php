@@ -25,11 +25,11 @@ class BookingFactory extends Factory
      */
     public function definition()
     {
-        $data = [
-            'starts_at' => $starts_at = Carbon::now()->setHour(rand(12, 18))->addDays(rand(1, 4)),
-            'ends_at' => $starts_at->addHours(rand(2, 4)),
-            'quantity' => rand(20, 50),
-            'flat' => rand(0, 1),
+        return [
+            'starts_at' => $starts_at = Carbon::now()->setHour($this->faker->numberBetween(12, 18))->addDays(rand(1, 21)),
+            'ends_at' => $starts_at->clone()->addHours($this->faker->numberBetween(2, 4)),
+            'quantity' => $this->faker->numberBetween(20, 50),
+            'flat' => $this->faker->numberBetween(0, 1),
             'product_name' => 'Dummy',
             'unit_price' => 0,
             'vat' => 0,
@@ -38,8 +38,5 @@ class BookingFactory extends Factory
             'product_id' => Product::factory(),
             'order_id' => Order::factory(),
         ];
-
-
-        return $data;
     }
 }
