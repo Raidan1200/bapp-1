@@ -32,8 +32,8 @@ class VenueSeeder extends Seeder
         $employee1 = User::where('email', 'emily@bapp.de')->first();
         $employee2 = User::where('email', 'erwin@bapp.de')->first();
 
-        $v1->users()->attach([$manager1->id, $employee1->id, $employee2->id]);
-        $v2->users()->attach([$manager1->id, $manager2->id, $employee1->id]);
+        $v1->users()->attach([$admin->id, $manager1->id, $employee1->id]);
+        $v2->users()->attach([$admin->id, $manager1->id, $manager2->id, $employee1->id, $employee2->id]);
 
         // Rooms
         $v1room1 = Room::factory()->create([

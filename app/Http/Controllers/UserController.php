@@ -14,6 +14,7 @@ class UserController extends Controller
 {
     public function index()
     {
+        // TODO: Add permission to view users?
         return view('users.index', [
             'users' => User::orderBy('name')->with('venues')->get()
         ]);

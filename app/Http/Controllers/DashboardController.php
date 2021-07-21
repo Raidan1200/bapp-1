@@ -12,9 +12,16 @@ use Illuminate\Support\Facades\Cache;
 class DashboardController extends Controller
 {
     public function index(Request $request) {
-        $venues = Cache::has('venues')
-            ? Cache::get('venues')
-            : $this->cacheVenues();
+        $venues = Venue::with(['rooms' => function ($q) {
+            $q->orderBy('name')->with(['products' => function ($r) {
+                $r->orderBy('name');
+            }]);
+        }])
+        ->whereHas('users', function($q) {
+            $q->where('users.id', auth()->id());
+        })
+        ->orderBy('name')
+        ->get();
 
         $venue = $request->input('venue');
         $room = $request->input('room');
@@ -24,7 +31,10 @@ class DashboardController extends Controller
             $to   = $request->input('to')   ? new Carbon($request->input('to'))   : new Carbon($from);
         }
 
-        $query = Order::with('customer')
+        $query = Order::whereHas('venue.users', function($q) {
+                $q->where('users.id', auth()->id());
+            })
+            ->with('customer')
             ->with('bookings')
             ->with('bookings.product') // TODO: remove when product snapshots are in place
             ->with('bookings.room');
@@ -51,7 +61,12 @@ class DashboardController extends Controller
             $query->where('venue_id', $venue);
         }
 
-        $orders = $query->get();
+        $orders = $query
+            ->get()
+            ->sortBy(function($q) {
+                return $q->bookings->first()->starts_at;
+            })
+            ->all();
 
         $view_data = compact('venues', 'orders');
 
@@ -61,19 +76,5 @@ class DashboardController extends Controller
         }
 
         return view('dashboard.index', $view_data);
-    }
-
-    protected function cacheVenues() {
-        $venues = Venue::with(['rooms' => function ($q) {
-            $q->orderBy('name')->with(['products' => function ($r) {
-                $r->orderBy('name');
-            }]);
-        }])
-        ->orderBy('name')
-        ->get();
-;
-        Cache::put('venues', $venues);
-
-        return $venues;
     }
 }

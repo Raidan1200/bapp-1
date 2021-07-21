@@ -21,6 +21,8 @@ class VenueController extends Controller
      */
     public function index()
     {
+        // TODO: Add permission to view venues?
+
         return view('venues.index', [
             'venues' => Venue::all()
         ]);

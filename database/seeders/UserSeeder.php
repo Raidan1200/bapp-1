@@ -41,6 +41,5 @@ class UserSeeder extends Seeder
             'name' => 'Ursula User',
             'email' => 'ursula@bapp.de',
         ]);
-
     }
 }

@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Models\Venue;
+use App\Models\Product;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
@@ -33,8 +37,68 @@ class ApiController extends Controller
         return $room->bookings()->where('starts_at', '<=', $to)->where('ends_at', '>=', $from)->get();
     }
 
-    public function order(Request $request)
+    public function order(Request $request, Venue $venue)
     {
-        return [$request->toArray()];
+        // TODO: This whole process should be a DB-transaction!!!
+
+        $p1 = Product::find($request->bookings[0]['productId']); // TODO siehe unten
+
+        $validated = $request->validate([
+            'customer.first_name' => 'required',
+            'customer.last_name' => 'required',
+            'customer.email' => 'required',
+            'customer.company' => 'sometimes',
+            'customer.street' => 'required',
+            'customer.street_no' => 'required',
+            'customer.zip' => 'required',
+            'customer.city' => 'required',
+            'customer.phone' => 'required',
+        ]);
+
+        $customer = Customer::create($validated['customer']);
+
+        // TODO validation
+        $order = $customer->orders()->create([
+            'invoice_id' => rand(), // TODO
+            'status' => 'deposit_mail_sent',
+            'cash_payment' => rand(0, 1), // TODO
+            // TODO ROLLO: Wenn jedes Produkt seinen eigenen Anzahlungs-Prozentsatz hat
+            // Wie berechnet sich dann der Anzahlungs-Prozentsatz der Gesamten Rechnung???
+            'deposit' => $p1->deposit,
+            'venue_id' => $venue->id,
+        ]);
+
+        foreach ($request['bookings'] as $index => $booking) {
+            $validatedBooking = Validator::validate($booking, [
+                'booking.starts_at' => 'required|date',
+                'booking.ends_at' => 'required|date',
+                'booking.quantity' => 'required|numeric',
+                'productId' => 'exists:products,id',
+                'roomId' => 'exists:rooms,id',
+            ]);
+
+            // TODO: KNAUB!!!
+            $validatedBooking['starts_at'] = $validatedBooking['booking']['starts_at'];
+            $validatedBooking['ends_at'] = $validatedBooking['booking']['ends_at'];
+            $validatedBooking['quantity'] = $validatedBooking['booking']['quantity'];
+            $validatedBooking['product_id'] = $validatedBooking['productId'];
+            $validatedBooking['room_id'] = $validatedBooking['roomId'];
+
+            // TODO: Inefficient
+            $product = Product::find($validatedBooking['productId']);
+
+            $validatedBooking['product_name'] = $product->name;
+            $validatedBooking['unit_price'] = $product->unit_price;
+            $validatedBooking['vat'] = $product->vat;
+            // TODO: Naming inconsitent: flat vs is_flat
+            $validatedBooking['flat'] = $product->is_flat;
+            $validatedBooking['product_snapshot'] = json_encode($product);
+
+            $order->bookings()->create($validatedBooking);
+        }
+
+        // TODO: Send deposit email
+
+        return $order;
     }
 }

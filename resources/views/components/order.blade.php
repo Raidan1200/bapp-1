@@ -14,9 +14,12 @@
   <article x-data="{
     show: false
   }">
-    <button class="hover:text-primary-dark rounded px-2 -mx-2 py-1" @click="show = !show">
-      {{ $order->customer->first_name . ' ' . $order->customer->last_name }}
-    </button>
+    <div class="flex justify-between">
+      <button class="hover:text-primary-dark rounded px-2 -mx-2 py-1" @click="show = !show">
+        {{ $order->customer->first_name . ' ' . $order->customer->last_name }}
+      </button>
+      <div>{{ $order->bookings->first()->starts_at }}</div>
+    </div>
     <div class="bg-primary-light" x-show="show">
       @if ($order->customer->company)
         <div>Company: {{ $order->customer->company }}</div>
@@ -29,28 +32,31 @@
     <ul class="py-2">
       @foreach ($order->bookings as $booking)
         <li>
-          {{ $booking->product->name }}
-          @if ($booking->flat)
-            <span>(Flat)</span>
-          @endif
-          - ({{ $booking->quantity }} * {{ number_format($booking->product->unit_price / 100, 2, ',', '.') }}€)
-          - ({{ $booking->vat }}% MwSt)
-          - {{ number_format($booking->quantity * $booking->product->unit_price / 100, 2, ',', '.') }}€
+          <table class="w-full">
+            <tr>
+              <td class="w-2/5">
+                {{ $booking->product->name }}
+                @if ($booking->flat)
+                  <span>(Flat)</span>
+                @endif
+              </td>
+              <td class="w-1/5">
+                {{ $booking->quantity }} * {{ number_format($booking->product->unit_price / 100, 2, ',', '.') }}€
+              </td>
+              <td class="w-1/5">
+                {{ $booking->vat }}% MwSt
+              </td>
+              <td class="w-1/5">
+                {{ number_format($booking->quantity * $booking->product->unit_price / 100, 2, ',', '.') }}€
+              </td>
+            </tr>
+          </table>
         </li>
       @endforeach
     </ul>
     <div class="flex justify-between">
       <div>
-        <form action="#">
-          <select class="p-0" name="" id="">
-            <option value="unconfirmed">Unbestätigt</option>
-            <option value="confirmed">Bestätigt</option>
-            <option value="deposit-email-sent">Anzahlungs-E-Mail versendet</option>
-            <option value="deposit-paid">Anzahlung eingegangen</option>
-            <option value="final-invoice-email-sent">Gesamtrechnungs-E-Mail versendet</option>
-            <option value="final-invoice-paid">Gesamtrechnung bezahlt</option>
-          </select>
-        </form>
+        <livewire:order :order="$order" />
       </div>
       <div>
         <div>Deposit ({{ $order->deposit }}%): {{ number_format($deposit / 100, 2, ',', '.') }}</div>
