@@ -22,4 +22,9 @@ class Order extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

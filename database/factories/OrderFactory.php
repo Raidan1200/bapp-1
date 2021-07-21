@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\Venue;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,6 +29,7 @@ class OrderFactory extends Factory
             'cash_payment' => rand(0, 1),
             'deposit' => rand(0, 1) ? '20' : '40',
             'notes' => 'Note me tender.',
+            'venue_id' => Venue::factory(),
             'customer_id' => Customer::factory(),
         ];
     }

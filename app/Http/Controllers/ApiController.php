@@ -25,13 +25,12 @@ class ApiController extends Controller
 
     public function bookings(Request $request, Room $room)
     {
-        // TODO: Is it neccessary to check this? Is this handled by Sanctum???
         abort_if(auth()->user()->id !== $room->venue->id, 403);
 
         $from = Carbon::createFromDate(...explode('-', $request->input('from')))->hour(0)->minute(0)->second(0);
         $to = Carbon::createFromDate(...explode('-', $request->input('to')))->hour(23)->minute(59)->second(59);
 
-        return $room->bookings()->where('starts_at', '<', $to)->where('ends_at', '>', $from)->get();
+        return $room->bookings()->where('starts_at', '<=', $to)->where('ends_at', '>=', $from)->get();
     }
 
     public function order(Request $request)

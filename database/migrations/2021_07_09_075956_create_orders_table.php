@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('cash_payment');
             $table->unsignedFloat('deposit');
             $table->text('notes')->nullable();
+            $table->foreignId('venue_id')->constrained();
             $table->foreignId('customer_id')->constrained();
             $table->timestamps();
         });

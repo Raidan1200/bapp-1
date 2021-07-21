@@ -32,7 +32,7 @@ class BookingFactory extends Factory
             'flat' => $this->faker->numberBetween(0, 1),
             'product_name' => 'Dummy',
             'unit_price' => 0,
-            'vat' => 0,
+            'vat' => $this->faker->numberBetween(7, 20),
             'product_snapshot' => '{}',
             'room_id' => Room::factory(),
             'product_id' => Product::factory(),

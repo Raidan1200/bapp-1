@@ -37,8 +37,8 @@ class Booking extends Model
         return $this->belongsTo(Order::class);
     }
 
-    public function customer()
+    public function product()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Product::class);
     }
 }

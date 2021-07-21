@@ -52,6 +52,8 @@ class VenueController extends Controller
 
         Venue::create($validated);
 
+        Cache::forget('venues');
+
         return redirect()->route('venues.index')->with('status', 'Venue created.');
     }
 
@@ -96,6 +98,8 @@ class VenueController extends Controller
 
         $venue->update($validated);
 
+        Cache::forget('venues');
+
         return redirect()->route('venues.index')->with('status', 'Venue updated.');
 
     }
@@ -111,6 +115,8 @@ class VenueController extends Controller
         $this->authorize('delete venues');
 
         $venue->delete();
+
+        Cache::forget('venues');
 
         return redirect()->route('venues.index')->with('status', 'Venue deleted!');
     }

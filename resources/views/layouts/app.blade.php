@@ -21,27 +21,27 @@
       @include('layouts.navigation')
 
       <!-- Page Heading -->
-      <header class="bg-white shadow">
+      {{-- <header class=" shadow">
       <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {{ $header }}
       </div>
-      </header>
+      </header> --}}
 
       <!-- Page Content -->
-      <main>
+      <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
       {{ $slot }}
       </main>
     </div>
     <div
       x-data="{
-      isOpen: false,
-      route: '',
-      entityName: ''
+        isOpen: false,
+        route: '',
+        entityName: ''
       }"
       @open-delete-modal.window="
-      isOpen = true
-      entityName = $event.detail.entityName
-      route = $event.detail.route
+        isOpen = true
+        entityName = $event.detail.entityName
+        route = $event.detail.route
       "
     >
       <x-confirm />

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Venue;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class VenueSeeder extends Seeder
 {
@@ -20,6 +21,10 @@ class VenueSeeder extends Seeder
         // Venues
         $v1 = Venue::factory()->create(['name' => 'Hüttenzauber']);
         $v2 = Venue::factory()->create(['name' => 'Seemagie']);
+
+        $v1->createToken('api-token')->plainTextToken;
+        // 1|eZiKXxZPJdfWbtKQdc5kzycRwUSelVVB7sV4Aghq
+        DB::update('update personal_access_tokens set token = ? where id = ?', ['cb12ad7fc5529975b3d7130f5aa9cfdac47defeb29fb31c374590f2d1b85ac6f', 1]);
 
         $admin = User::where('email', 'admin@bapp.de')->first();
         $manager1 = User::where('email', 'manni@bapp.de')->first();

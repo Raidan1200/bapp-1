@@ -81,6 +81,8 @@ class ProductController extends Controller
 
         $product = $venue->products()->create($validated);
 
+        Cache::forget('products');
+
         return redirect(route('products.show', $product));
     }
 
@@ -128,6 +130,8 @@ class ProductController extends Controller
 
         $product->update($validated);
 
+        Cache::forget('products');
+
         return redirect(route('products.show', $product));
     }
 
@@ -143,6 +147,8 @@ class ProductController extends Controller
 
         Storage::delete($product->image);
         $product->delete();
+
+        Cache::forget('products');
 
         return redirect(route('venues.show', $product->venue));
     }
