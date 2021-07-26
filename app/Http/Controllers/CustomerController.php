@@ -14,7 +14,7 @@ class CustomerController extends Controller
         'company' => 'sometimes',
         'street' => 'required',
         'street_no' => 'required',
-        'zip' => 'required|integer', // TODO: integer?
+        'zip' => 'required|integer', // TODO IMPORTANT: integer? STRING!
         'city' => 'required',
         'phone' => 'required',
     ];

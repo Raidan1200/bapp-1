@@ -41,13 +41,6 @@ class CreateProductsTable extends Migration
 
             $table->unsignedFloat('deposit');
 
-            // TODO: What if a product can be hosted in multiple rooms
-            //       a) show ONE calendar for all rooms combined
-            //          So in the end, one "room" can actually be multiple rooms??
-            //       b) show multiple calendars, one per room
-            //          -> move room_id to a many to many relation?
-            //       I will build for option a)
-            // DO b!!!!
             $table->foreignId('room_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

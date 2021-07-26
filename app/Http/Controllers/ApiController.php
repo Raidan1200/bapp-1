@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiController extends Controller
 {
+    // TODO IMPORTANT: Produkt mit Freitext und Freipreis hinzuf+gen
+
     // protected $rules = [
     //     'starts_at' => 'required|date',
     //     'ends_at' => 'required|date',
@@ -39,7 +41,7 @@ class ApiController extends Controller
 
     public function order(Request $request, Venue $venue)
     {
-        // TODO: This whole process should be a DB-transaction!!!
+        // TODO IMPORTANT: This whole process should be a DB-transaction!!!
 
         $p1 = Product::find($request->bookings[0]['productId']); // TODO siehe unten
 
@@ -62,8 +64,14 @@ class ApiController extends Controller
             'invoice_id' => rand(), // TODO
             'status' => 'deposit_mail_sent',
             'cash_payment' => rand(0, 1), // TODO
-            // TODO ROLLO: Wenn jedes Produkt seinen eigenen Anzahlungs-Prozentsatz hat
+            // TODO: Wenn jedes Produkt seinen eigenen Anzahlungs-Prozentsatz hat
             // Wie berechnet sich dann der Anzahlungs-Prozentsatz der Gesamten Rechnung???
+
+            // Kunde Reserviert ... Nur Restaurant 10%
+            // Curling Getränke Flat ...
+            // Nur Curling ... 100%
+            // Roland PDF Klass Reservation PHP
+
             'deposit' => $p1->deposit,
             'venue_id' => $venue->id,
         ]);
@@ -77,27 +85,27 @@ class ApiController extends Controller
                 'roomId' => 'exists:rooms,id',
             ]);
 
-            // TODO: KNAUB!!!
+            // TODO IMPORTANT: KNAUB!!!
             $validatedBooking['starts_at'] = $validatedBooking['booking']['starts_at'];
             $validatedBooking['ends_at'] = $validatedBooking['booking']['ends_at'];
             $validatedBooking['quantity'] = $validatedBooking['booking']['quantity'];
             $validatedBooking['product_id'] = $validatedBooking['productId'];
             $validatedBooking['room_id'] = $validatedBooking['roomId'];
 
-            // TODO: Inefficient
+            // TODO IMPORTANT: Inefficient
             $product = Product::find($validatedBooking['productId']);
 
             $validatedBooking['product_name'] = $product->name;
             $validatedBooking['unit_price'] = $product->unit_price;
             $validatedBooking['vat'] = $product->vat;
-            // TODO: Naming inconsitent: flat vs is_flat
+            // TODO IMPORTANT: Naming inconsitent: flat vs is_flat
             $validatedBooking['flat'] = $product->is_flat;
             $validatedBooking['product_snapshot'] = json_encode($product);
 
             $order->bookings()->create($validatedBooking);
         }
 
-        // TODO: Send deposit email
+        // TODO IMPORTANT: Send deposit email
 
         return $order;
     }

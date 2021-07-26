@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        // TODO: Add permission to view users?
+        // TODO ROLLO: Add permission to view users?
         return view('users.index', [
             'users' => User::orderBy('name')->with('venues')->get()
         ]);
@@ -69,7 +69,7 @@ class UserController extends Controller
             'user' => $user,
             'roles' => Role::orderBy('name')->get(),
 
-            // TODO: Filter venues already attached to the user
+            // TODO IMPORTANT: Filter venues already attached to the user
             'venues' => Venue::orderBy('name')->get(),
         ]);
     }

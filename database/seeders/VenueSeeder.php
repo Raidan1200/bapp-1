@@ -95,6 +95,7 @@ class VenueSeeder extends Seeder
             'opens_at' => '12:00:00',
             'closes_at' => '21:00:00',
             'unit_price' => 4900,
+            'min_occupancy' => 1,
             'vat' => 19,
             'is_flat' => false,
             'unit_price_flat' => null,

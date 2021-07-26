@@ -9,6 +9,11 @@ class Order extends Component
 {
     use AuthorizesRequests;
 
+    // TODO: Ist das schlau, das mit Livewire zu machen
+    //       Dadurch lädt die Seite ja nicht neu,
+    //       d.h. andere Mitarbeiter sehen potenziell alte Daten
+    // CHROMIUM!!!, 3 iPads
+
     public $order;
     public $selectedStatus;
 

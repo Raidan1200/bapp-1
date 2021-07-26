@@ -29,12 +29,16 @@ Route::middleware('auth')->group(function() {
     Route::resource('products', ProductController::class)->only([
         'show', 'edit', 'update', 'destroy'
     ]);
-    // TODO: Make this a resource route and change the 2 following routes? Pass venue via Query params?
+    // TODO IMPORTANT: Make this a resource route and change the 2 following routes? Pass venue via Query params?
     Route::get('/venues/{venue}/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/venues/{venue}/products', [ProductController::class, 'store'])->name('products.store');
 
     Route::post('/users/{user}/venues', [VenueMemberController::class, 'store'])->name('venuemember.store');
     Route::delete('/users/{user}/venues/{venue}', [VenueMemberController::class, 'destroy'])->name('venuemember.destroy');
+});
+
+Route::get('client-demo', function() {
+    return view('client-demo');
 });
 
 require __DIR__.'/auth.php';

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
+    // TODO: This is one hell of an ugly beast!
+
     public function index(Request $request) {
         $venues = Venue::with(['rooms' => function ($q) {
             $q->orderBy('name')->with(['products' => function ($r) {
@@ -74,6 +76,8 @@ class DashboardController extends Controller
             $interval = $request->input('interval');
             $view_data = array_merge($view_data, compact('from', 'to', 'interval'));
         }
+
+        // TODO: Pagination
 
         return view('dashboard.index', $view_data);
     }
