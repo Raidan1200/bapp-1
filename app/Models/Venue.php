@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Room;
 use App\Models\User;
+use App\Models\Product;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,13 +20,18 @@ class Venue extends Model
         'check_delay',
     ];
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     public function rooms()
     {
         return $this->hasMany(Room::class);
     }
 
-    public function users()
+    public function products()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(Product::class);
     }
 }

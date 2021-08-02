@@ -21,15 +21,15 @@ class VenueMember extends Component
         ]);
     }
 
-    public function remove(Venue $venue)
-    {
-        $this->user->venues()->detach($venue->id);
-        $this->user->refresh();
-    }
-
     public function add(Venue $venue)
     {
         $this->user->venues()->attach($venue->id);
+        $this->user->refresh();
+    }
+
+    public function remove(Venue $venue)
+    {
+        $this->user->venues()->detach($venue->id);
         $this->user->refresh();
     }
 }

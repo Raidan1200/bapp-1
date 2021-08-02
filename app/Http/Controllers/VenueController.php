@@ -35,7 +35,7 @@ class VenueController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\CreateVenueRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(CreateVenueRequest $request)
@@ -54,7 +54,7 @@ class VenueController extends Controller
     public function show(Venue $venue)
     {
         return view('venues.show', [
-            'venue' => $venue->load(['rooms', /* 'products' */] ) // TODO
+            'venue' => $venue->load(['rooms', 'products'] )
         ]);
     }
 
@@ -74,7 +74,7 @@ class VenueController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\CreateVenueRequest  $request
      * @param  \App\Models\Venue  $venue
      * @return \Illuminate\Http\Response
      */
@@ -83,7 +83,6 @@ class VenueController extends Controller
         $venue->update($request->validated());
 
         return redirect()->route('venues.show', $venue)->with('status', 'Venue updated.');
-
     }
 
     /**

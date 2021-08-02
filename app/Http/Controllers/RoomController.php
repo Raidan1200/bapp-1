@@ -4,58 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateRoomRequest;
 
 class RoomController extends Controller
 {
-    protected $rules = [
-        'name' => 'required',
-        'slogan' => 'sometimes',
-        'description' => 'sometimes',
-        'image' => 'sometimes|mimes:jpg,jpeg,png,webp',
-        'capacity' => 'required|integer',
-        'venue_id' => 'required|exists:venue,id',
-    ];
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
-    }
+        $this->authorize('create rooms');
+
+        return view('rooms.create', [
+            'venue_id' => $request->query('venue')
+        ]);
+      }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\CreateRoomRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateRoomRequest $request)
     {
-        //
-    }
+        $room = Room::create($request->validated());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Room  $room
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Room $room)
-    {
-        //
+        return redirect()->route('venues.show', $room->venue)->with('status', 'Raum wurde angelegt.');
     }
 
     /**
@@ -66,7 +43,9 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        //
+        $this->authorize('modify rooms');
+
+        return view('rooms.create', compact('room'));
     }
 
     /**
@@ -76,9 +55,11 @@ class RoomController extends Controller
      * @param  \App\Models\Room  $room
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Room $room)
+    public function update(CreateRoomRequest $request, Room $room)
     {
-        //
+        $room->update($request->validated());
+
+        return redirect()->route('rooms.edit', $room->venue_id)->with('status', 'Raum aktualisiert');
     }
 
     /**
@@ -89,6 +70,13 @@ class RoomController extends Controller
      */
     public function destroy(Room $room)
     {
-        //
+        $this->authorize('delete rooms');
+
+        Storage::delete($room->image);
+
+        $room->products()->sync([]);
+        $room->delete();
+
+        return redirect()->route('venues.show', $room->venue)->with('status', 'Raum wurde gelöscht.');
     }
 }

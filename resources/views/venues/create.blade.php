@@ -65,7 +65,8 @@
         @if ($venue->image)
           <img src="{{ $venue->image }}" alt="">
         @endif
-      @endisset
-    </div>
+
+      </div>
+    @endisset
   </div>
 </x-app-layout>

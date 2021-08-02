@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\VenueController;
@@ -23,8 +24,9 @@ Route::middleware('auth')->group(function() {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('users', UserController::class);
-
     Route::resource('venues', VenueController::class);
+    Route::resource('rooms', RoomController::class)->except(['index', 'show']);
+    Route::resource('products', ProductController::class)->except(['index', 'show']);
 
     Route::post('venues/{venue}/token', [TokenController::class, 'store'])->name('token.store');
 

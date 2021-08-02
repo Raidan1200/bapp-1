@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Room;
+use App\Models\Venue;
 use App\Models\Product;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -44,7 +45,7 @@ class ProductFactory extends Factory
             'vat_flat' => '7',
             'deposit_flat' => mt_rand(0, 1) ? '20' : '40',
 
-            'room_id' => Room::factory(),
+            'venue_id' => Venue::factory(),
         ];
     }
 }

@@ -43,7 +43,7 @@ class CreateProductsTable extends Migration
             $table->unsignedFloat('vat_flat')->nullable();
             $table->unsignedFloat('deposit_flat')->nullable();;
 
-            $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('venue_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

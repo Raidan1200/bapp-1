@@ -20,7 +20,7 @@ class CreateRoomsTable extends Migration
             $table->text('description')->nullable();
             $table->string('image')->nullable();
             $table->string('capacity');
-            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('venue_id')->constrained();
             $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
-        $venues = Venue::with('rooms.products')->get();
+        $venues = Venue::with(['rooms', 'products'])->get();
 
         foreach ($venues as $venue) {
             $this->makeOrdersFor($venue);
@@ -26,6 +26,7 @@ class OrderSeeder extends Seeder
 
     public function makeOrdersFor($venue) {
         $rooms = $venue->rooms;
+        $products = $venue->products;
 
         for ($i = 1; $i <= 10; $i++) {
             $order = Order::factory()->create([
@@ -33,7 +34,7 @@ class OrderSeeder extends Seeder
             ]);
             Booking::factory()->create([
                 'room_id' => $rooms[0]->id,
-                'product_id' => $rooms[0]->products[0]->id,
+                'product_id' => $products[0]->id,
                 'quantity' => rand(30, 50),
                 'order_id' => $order->id,
             ]);
@@ -45,7 +46,7 @@ class OrderSeeder extends Seeder
             ]);
             Booking::factory()->create([
                 'room_id' => $rooms[0]->id,
-                'product_id' => $rooms[0]->products[1]->id,
+                'product_id' => $products[1]->id,
                 'quantity' => rand(30, 50),
                 'order_id' => $order->id,
             ]);
@@ -57,7 +58,7 @@ class OrderSeeder extends Seeder
             ]);
             Booking::factory()->create([
                 'room_id' => $rooms[1]->id,
-                'product_id' => $rooms[1]->products[0]->id,
+                'product_id' => $products[2]->id,
                 'quantity' => rand(30, 50),
                 'order_id' => $order->id,
             ]);

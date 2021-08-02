@@ -23,11 +23,8 @@
 
       <main class="max-w-7xl mx-auto sm:p-6 lg:p-8">
 
-        @if (session('error'))
-          <div class="bg-red-300 p-4 sm:-mt-4 m-4 rounded-xl">
-              {{ session('error') }}
-          </div>
-        @endif
+        <x-session-status :status="session('status')"></x-session-status>
+        <x-session-error :status="session('error')"></x-session-error>
 
       	<div class="bg-white sm:rounded-xl p-4 lg:p-6">
           {{ $slot }}

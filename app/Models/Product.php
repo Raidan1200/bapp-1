@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Room;
 use App\Models\Venue;
-use App\Models\Booking;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -21,13 +21,15 @@ class Product extends Model
         'opens_at',
         'closes_at',
         'min_occupancy',
-        'unit_price',
+        'price',
         'vat',
+        'deposit',
         'is_flat',
+
         'unit_price_flat',
         'vat_flat',
-        'deposit',
-        'room_id',
+
+        'venue_id',
     ];
 
     protected $casts = [
@@ -35,8 +37,13 @@ class Product extends Model
         'ends_at' => 'datetime',
     ];
 
-    public function room()
+    public function venue()
     {
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Venue::class);
+    }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class);
     }
 }
