@@ -1,6 +1,4 @@
 <x-app-layout>
-  @livewireStyles
-
 	<div class="flex">
     <div class="w-1/5">
       @include('dashboard.sidebar')
@@ -9,6 +7,4 @@
       @include('dashboard.main')
     </div>
 	</div>
-
-  @livewireScripts
 </x-app-layout>

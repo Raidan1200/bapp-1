@@ -18,8 +18,7 @@
     </select>
     @if ($dirty)
       <button class="bg-green-300 px-2 py-1 rounded-xl">Save</button>
-      <button wire:click.prevent="nope" class="bg-green-300 px-2 py-1 rounded-xl">Cancel</button>
+      <button wire:click.prevent="cancel" class="bg-green-300 px-2 py-1 rounded-xl">Cancel</button>
     @endif
-    <button></button>
   </form>
 </div>

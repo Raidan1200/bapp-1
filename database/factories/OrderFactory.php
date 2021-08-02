@@ -28,7 +28,7 @@ class OrderFactory extends Factory
             'status' => ['deposit_mail_sent', 'deposit_paid', 'intermed_mail_sent', 'intermed_paid', 'final_mail_sent', 'fully_paid', 'cancelled'][rand(0, 6)],
             'cash_payment' => rand(0, 1),
             'deposit' => rand(0, 1) ? '20' : '40',
-            'notes' => 'Note me tender.',
+            'notes' => 'I am a note. Please pay attention to me!',
             'venue_id' => Venue::factory(),
             'customer_id' => Customer::factory(),
         ];

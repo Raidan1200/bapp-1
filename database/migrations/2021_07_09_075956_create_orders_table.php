@@ -16,11 +16,11 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_id');
-            $table->string('status');
+            $table->string('status');  // TODO: Still not sure about this!
             $table->boolean('cash_payment');
             $table->unsignedFloat('deposit');
             $table->text('notes')->nullable();
-            $table->foreignId('venue_id')->constrained();
+            $table->foreignId('venue_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('customer_id')->constrained();
             $table->timestamps();
         });

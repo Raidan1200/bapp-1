@@ -23,18 +23,20 @@ Route::middleware('auth')->group(function() {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('users', UserController::class);
+
     Route::resource('venues', VenueController::class);
+
     Route::post('venues/{venue}/token', [TokenController::class, 'store'])->name('token.store');
 
     Route::resource('products', ProductController::class)->only([
         'show', 'edit', 'update', 'destroy'
     ]);
-    // TODO IMPORTANT: Make this a resource route and change the 2 following routes? Pass venue via Query params?
-    Route::get('/venues/{venue}/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::post('/venues/{venue}/products', [ProductController::class, 'store'])->name('products.store');
 
-    Route::post('/users/{user}/venues', [VenueMemberController::class, 'store'])->name('venuemember.store');
-    Route::delete('/users/{user}/venues/{venue}', [VenueMemberController::class, 'destroy'])->name('venuemember.destroy');
+    // TODO IMPORTANT: Make this a resource route and change the 2 following routes? Pass venue via Query params?
+    // Route::get('/venues/{venue}/products/create', [ProductController::class, 'create'])->name('products.create');
+    // Route::post('/venues/{venue}/products', [ProductController::class, 'store'])->name('products.store');
+
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show'); // TODO
 });
 
 Route::get('client-demo', function() {

@@ -62,12 +62,16 @@ class VenueSeeder extends Seeder
             'opens_at' => '12:00:00',
             'closes_at' => '23:00:00',
             'min_occupancy' => 30,
-            'unit_price' => 2850,
+
+            'price' => 2850,
             'vat' => 19,
-            'is_flat' => false,
-            'unit_price_flat' => null,
-            'vat_flat' => null,
             'deposit' => 20,
+            'is_flat' => false,
+
+            'price_flat' => null,
+            'vat_flat' => null,
+            'deposit_flat' => null,
+
             'room_id' => $v1room1->id,
         ]);
 
@@ -79,12 +83,16 @@ class VenueSeeder extends Seeder
             'opens_at' => '12:00:00',
             'closes_at' => '23:00:00',
             'min_occupancy' => 30,
-            'unit_price' => 5890,
+
+            'price' => 5890,
             'vat' => 7,
-            'is_flat' => true,
-            'unit_price_flat' => null,
-            'vat_flat' => null,
             'deposit' => 20,
+            'is_flat' => true,
+
+            'price_flat' => null,
+            'vat_flat' => null,
+            'deposit_flat' => null,
+
             'room_id' => $v1room1->id,
         ]);
 
@@ -94,13 +102,17 @@ class VenueSeeder extends Seeder
             'description' => '',
             'opens_at' => '12:00:00',
             'closes_at' => '21:00:00',
-            'unit_price' => 4900,
             'min_occupancy' => 1,
+
+            'price' => 4900,
             'vat' => 19,
-            'is_flat' => false,
-            'unit_price_flat' => null,
-            'vat_flat' => null,
             'deposit' => 100,
+            'is_flat' => false,
+
+            'price_flat' => null,
+            'vat_flat' => null,
+            'deposit_flat' => null,
+
             'room_id' => $v1room2->id,
         ]);
 

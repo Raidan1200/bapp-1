@@ -20,7 +20,6 @@ class CreateVenuesTable extends Migration
             $table->unsignedInteger('reminder_delay')->default(5);
             $table->unsignedInteger('check_delay')->default(9);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

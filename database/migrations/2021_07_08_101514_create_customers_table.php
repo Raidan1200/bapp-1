@@ -24,6 +24,7 @@ class CreateCustomersTable extends Migration
             $table->string('zip');
             $table->string('city');
             $table->string('phone');
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

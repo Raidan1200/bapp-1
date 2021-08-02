@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @livewireStyles
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -20,31 +21,37 @@
     <div class="min-h-screen bg-gray-100">
       @include('layouts.navigation')
 
-      <!-- Page Heading -->
-      {{-- <header class=" shadow">
-      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        {{ $header }}
-      </div>
-      </header> --}}
+      <main class="max-w-7xl mx-auto sm:p-6 lg:p-8">
 
-      <!-- Page Content -->
-      <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-      {{ $slot }}
+        @if (session('error'))
+          <div class="bg-red-300 p-4 sm:-mt-4 m-4 rounded-xl">
+              {{ session('error') }}
+          </div>
+        @endif
+
+      	<div class="bg-white sm:rounded-xl p-4 lg:p-6">
+          {{ $slot }}
+        </div>
       </main>
     </div>
+
     <div
       x-data="{
         isOpen: false,
         route: '',
-        entityName: ''
+        entity: '',
+        text: '',
       }"
       @open-delete-modal.window="
         isOpen = true
-        entityName = $event.detail.entityName
         route = $event.detail.route
+        entity = $event.detail.entity
+        subText = $event.detail.text
       "
     >
       <x-confirm />
     </div>
+
+    @livewireScripts
   </body>
 </html>

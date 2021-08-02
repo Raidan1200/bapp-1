@@ -16,26 +16,20 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
 
-            // This is the booking data we absolutely need
             $table->datetime('starts_at');
             $table->datetime('ends_at');
-            $table->unsignedInteger('quantity');
 
-            // These are editable copies of the product snapshot data
             $table->string('product_name');
+            $table->unsignedInteger('quantity');
             $table->unsignedInteger('unit_price');
             $table->unsignedFloat('vat');
-            $table->boolean('flat')->default(false);
+            $table->boolean('is_flat');
 
-            // Keep a snapshot of the product at the time of booking
-            // minus the slogan, description & image fields
-            $table->json('product_snapshot');
+            $table->json('snapshot');
 
-            // TODO: should these really be constrained?
-            //       how about nullable OR set_null on delete?
-            $table->foreignId('room_id')->constrained();
-            $table->foreignId('product_id')->constrained();
-            $table->foreignId('order_id')->constrained();
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

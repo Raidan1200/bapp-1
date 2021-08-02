@@ -28,15 +28,15 @@ class BookingFactory extends Factory
         return [
             'starts_at' => $starts_at = Carbon::now()->setHour($this->faker->numberBetween(12, 18))->addDays(rand(1, 21)),
             'ends_at' => $starts_at->clone()->addHours($this->faker->numberBetween(2, 4)),
-            'quantity' => $this->faker->numberBetween(20, 50),
-            'flat' => $this->faker->numberBetween(0, 1),
             'product_name' => 'Dummy',
+            'quantity' => $this->faker->numberBetween(20, 50),
             'unit_price' => 0,
+            'is_flat' => $this->faker->numberBetween(0, 1),
             'vat' => $this->faker->numberBetween(7, 20),
-            'product_snapshot' => '{}',
-            'room_id' => Room::factory(),
-            'product_id' => Product::factory(),
+            'snapshot' => '{}',
             'order_id' => Order::factory(),
+            'product_id' => Product::factory(),
+            'room_id' => Room::factory(),
         ];
     }
 }

@@ -20,30 +20,31 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->string('image')->nullable();
 
-            // Time of year the product is offered - for calendar pagination
+            // Time of year the product is offered
             $table->datetime('starts_at');
             $table->datetime('ends_at');
 
-            // Daily opening hours - for calendar columns
+            // Daily opening hours
             $table->time('opens_at');
             $table->time('closes_at');
 
-            $table->unsignedInteger('min_occupancy')->nullable();
+            $table->unsignedInteger('min_occupancy')->default(0);
 
-            // Prices after VAT
-            $table->unsignedInteger('unit_price');
+            // All prices are after VAT
+            $table->unsignedInteger('price');
             $table->unsignedFloat('vat');
-            $table->boolean('is_flat')->default(false);
-
-            $table->unsignedInteger('unit_price_flat')->nullable();
-            $table->unsignedFloat('vat_flat')->nullable();
-            // TODO: Text-flat?
-
             $table->unsignedFloat('deposit');
+            $table->unsignedFloat('is_flat')->default(false);
 
-            $table->foreignId('room_id')->constrained();
+            // TODO: I don't like those extra flat-fields stuff
+            // IMHO  flat and non-flat should be 2 different products
+            //    OR price, vat, deposit, is_flat belong in a separate prices table
+            $table->unsignedInteger('price_flat')->nullable();
+            $table->unsignedFloat('vat_flat')->nullable();
+            $table->unsignedFloat('deposit_flat')->nullable();;
+
+            $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -4,16 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Venue;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateVenueRequest;
 
 class VenueController extends Controller
 {
-    protected $rules = [
-        'name' => 'required',
-        'email' => 'sometimes|email',
-        'reminder_delay' => 'sometimes|integer',
-        'check_delay' => 'sometimes|integer|gte:reminder_delay',
-    ];
-
     /**
      * Display a listing of the resource.
      *
@@ -21,8 +15,6 @@ class VenueController extends Controller
      */
     public function index()
     {
-        // TOTODO ROLLO: Add permission to view venues?
-
         return view('venues.index', [
             'venues' => Venue::all()
         ]);
@@ -46,17 +38,11 @@ class VenueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateVenueRequest $request)
     {
-        $this->authorize('create venues');
+        $venue = Venue::create($request->validated());
 
-        $validated = $request->validate($this->rules);
-
-        Venue::create($validated);
-
-        Cache::forget('venues');
-
-        return redirect()->route('venues.index')->with('status', 'Venue created.');
+        return redirect()->route('venues.show', $venue)->with('status', 'Venue created.');
     }
 
     /**
@@ -68,7 +54,7 @@ class VenueController extends Controller
     public function show(Venue $venue)
     {
         return view('venues.show', [
-            'venue' => $venue->load('products')
+            'venue' => $venue->load(['rooms', /* 'products' */] ) // TODO
         ]);
     }
 
@@ -92,17 +78,11 @@ class VenueController extends Controller
      * @param  \App\Models\Venue  $venue
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Venue $venue)
+    public function update(CreateVenueRequest $request, Venue $venue)
     {
-        $this->authorize('modify venues');
+        $venue->update($request->validated());
 
-        $validated = $request->validate($this->rules);
-
-        $venue->update($validated);
-
-        Cache::forget('venues');
-
-        return redirect()->route('venues.index')->with('status', 'Venue updated.');
+        return redirect()->route('venues.show', $venue)->with('status', 'Venue updated.');
 
     }
 
@@ -117,8 +97,6 @@ class VenueController extends Controller
         $this->authorize('delete venues');
 
         $venue->delete();
-
-        Cache::forget('venues');
 
         return redirect()->route('venues.index')->with('status', 'Venue deleted!');
     }

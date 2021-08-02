@@ -20,7 +20,7 @@
       </button>
       <div>{{ $order->bookings->first()->starts_at }}</div>
     </div>
-    <div class="bg-primary-light" x-show="show">
+    <div x-cloak class="bg-primary-light" x-show="show">
       @if ($order->customer->company)
         <div>Company: {{ $order->customer->company }}</div>
       @endif

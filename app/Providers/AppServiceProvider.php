@@ -29,11 +29,11 @@ class AppServiceProvider extends ServiceProvider
             \URL::forceScheme('https');
         }
 
-        DB::listen(function($query) {
-            File::append(
-                storage_path('/logs/query.log'),
-                $query->sql . ' [' . implode(', ', $query->bindings) . ']' . PHP_EOL
-           );
-        });
+        // DB::listen(function($query) {
+        //     File::append(
+        //         storage_path('/logs/query.log'),
+        //         $query->sql . ' [' . implode(', ', $query->bindings) . ']' . PHP_EOL
+        //    );
+        // });
     }
 }

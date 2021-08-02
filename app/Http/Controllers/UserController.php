@@ -9,12 +9,13 @@ use Illuminate\Validation\Rules;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
     public function index()
     {
-        // TODO ROLLO: Add permission to view users?
         return view('users.index', [
             'users' => User::orderBy('name')->with('venues')->get()
         ]);
@@ -29,22 +30,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
-        $this->authorize('create users');
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => 'required|exists:roles,id',
-            'image' => 'sometimes|mimes:jpg,jpeg,png,webp',
-        ]);
-
-        if ($request->file('image')) {
-            $path = $request->file('image')->store('images');
-            $validated['image'] = $path;
-        }
+        $validated = $request->validated();
 
         $validated['password'] = Hash::make($request->password);
 
@@ -53,29 +41,62 @@ class UserController extends Controller
 
         event(new Registered($user));
 
-        return redirect(route('users.show', $user));
+        return redirect(route('users.edit', $user));
     }
 
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+        return view('users.show', [
+            'user' => $user->load(['roles', 'venues']),
+        ]);
     }
 
     public function edit(User $user)
     {
         $this->authorize('modify users');
 
-        return view('users.edit', [
-            'user' => $user,
+        return view('users.create', [
+            'user' => $user->load(['roles', 'venues']),
             'roles' => Role::orderBy('name')->get(),
-
-            // TODO IMPORTANT: Filter venues already attached to the user
-            'venues' => Venue::orderBy('name')->get(),
         ]);
     }
 
-    public function delete(Request $request, User $user)
+    public function update(User $user, UpdateUserRequest $request)
     {
+        $validated = $request->validated();
 
+        if ($validated['password'] === null) {
+            unset($validated['password']);
+        } else {
+            $validated['password'] = Hash::make($request->password);
+        }
+
+        $user->update($validated);
+
+        if ($user->isLastAdmin()) {
+            return redirect(route('users.edit', $user))
+                ->withInput()
+                ->with('error', 'Dies ist der letzte Admin. Er muss die Galaxie retten und muss folglich Admin bleiben.');
+        }
+
+        if (! $user->hasRole($validated['role'])) {
+            $user->syncRoles($validated['role']);
+        }
+
+        return redirect(route('users.edit', $user));
+
+    }
+
+    public function destroy(User $user)
+    {
+        if ($user->isLastAdmin()) {
+            return redirect(route('users.edit', $user))
+                ->with('error', 'Der letzte Administrator kann nicht gelöscht werden.');
+        }
+
+        $user->venues()->sync([]);
+        $user->delete();
+
+        return redirect(route('users.index'));
     }
 }

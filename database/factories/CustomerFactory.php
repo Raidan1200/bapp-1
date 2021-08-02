@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -31,6 +32,7 @@ class CustomerFactory extends Factory
             'zip' => $this->faker->postcode(),
             'city' => $this->faker->city(),
             'phone' => $this->faker->phoneNumber(),
+            'user_id' => User::factory(),
         ];
     }
 }
