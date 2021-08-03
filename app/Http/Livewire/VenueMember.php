@@ -23,12 +23,16 @@ class VenueMember extends Component
 
     public function add(Venue $venue)
     {
+        $this->authorize('modify users');
+
         $this->user->venues()->attach($venue->id);
         $this->user->refresh();
     }
 
     public function remove(Venue $venue)
     {
+        $this->authorize('modify users');
+
         $this->user->venues()->detach($venue->id);
         $this->user->refresh();
     }

@@ -7,9 +7,11 @@
         @foreach ($user->venues as $venue)
           <li class="flex justify-between">
             <div>{{ $venue->name }}</div>
-            <button type="button" wire:click="remove({{ $venue }})">
-              <x-icons.delete class="h-4" />
-            </button>
+            @can('modify users')
+              <button type="button" wire:click="remove({{ $venue }})">
+                <x-icons.delete class="h-4" />
+              </button>
+            @endcan
           </li>
         @endforeach
       </ul>
@@ -26,9 +28,11 @@
       @foreach ($venues as $venue)
         <li class="flex justify-between">
           <div>{{ $venue->name }}</div>
-          <button type="button" wire:click="add({{ $venue }})">
-            <x-icons.add class="h-4" />
-          </button>
+          @can('modify users')
+            <button type="button" wire:click="add({{ $venue }})">
+              <x-icons.add class="h-4" />
+            </button>
+          @endcan
         </li>
       @endforeach
     </ul>

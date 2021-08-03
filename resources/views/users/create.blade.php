@@ -42,7 +42,11 @@
 
         <x-form-field>
           <x-label for="role">Benutzerrolle</x-label>
-          <select name="role" class="w-full" id="role">
+          <select name="role" class="w-full" id="role"
+            @cannot('modify users')
+              disabled
+            @endcannot
+          >
             <option value="">-- Benutzerrolle auswählen --</option>
             @foreach ($roles as $role)
               <option

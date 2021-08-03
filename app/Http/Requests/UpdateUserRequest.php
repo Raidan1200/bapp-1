@@ -15,7 +15,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('modify users');
+        return $this->user()->can('modify users') || $this->user->id === $this->route('user')->id;
     }
 
     /**
@@ -29,7 +29,7 @@ class UpdateUserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($this->user)],
             'password' => ['nullable', 'confirmed', 'required_with:password_confirmation', 'string', Rules\Password::defaults()],
-            'role' => 'required|exists:roles,id',
+            'role' => 'sometimes|exists:roles,id',
         ];
     }
 }

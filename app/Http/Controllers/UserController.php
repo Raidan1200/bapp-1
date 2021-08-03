@@ -16,6 +16,8 @@ class UserController extends Controller
 {
     public function index()
     {
+        $this->authorize('modify users');
+
         return view('users.index', [
             'users' => User::orderBy('name')->with('venues')->get()
         ]);
@@ -44,16 +46,9 @@ class UserController extends Controller
         return redirect(route('users.edit', $user));
     }
 
-    public function show(User $user)
-    {
-        return view('users.show', [
-            'user' => $user->load(['roles', 'venues']),
-        ]);
-    }
-
     public function edit(User $user)
     {
-        $this->authorize('modify users');
+        abort_unless(auth()->user()->can('modify users') || auth()->user()->id === $user->id, 403);
 
         return view('users.create', [
             'user' => $user->load(['roles', 'venues']),
@@ -61,7 +56,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(User $user, UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $validated = $request->validated();
 
@@ -79,16 +74,17 @@ class UserController extends Controller
                 ->with('error', 'Dies ist der letzte Admin. Er muss die Galaxie retten und muss folglich Admin bleiben.');
         }
 
-        if (! $user->hasRole($validated['role'])) {
+        if (auth()->user()->can('modify users') && ! $user->hasRole($validated['role'])) {
             $user->syncRoles($validated['role']);
         }
 
         return redirect(route('users.edit', $user));
-
     }
 
     public function destroy(User $user)
     {
+        $this->authorize('delete users');
+
         if ($user->isLastAdmin()) {
             return redirect(route('users.edit', $user))
                 ->with('error', 'Der letzte Administrator kann nicht gelöscht werden.');

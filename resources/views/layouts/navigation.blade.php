@@ -63,7 +63,7 @@
 
           <x-slot name="content">
             <x-dropdown-link
-              :href="route('profile.show')"
+              :href="route('users.edit', auth()->user())"
               title="Profil"
             >
               Profil
