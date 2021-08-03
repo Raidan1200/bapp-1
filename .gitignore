@@ -13,4 +13,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+
 NOTES.md
+/public/css/app.*.css
+/public/js/app.*.js
+/public/js/chunk-vendors.*.js

@@ -21,14 +21,14 @@
 <ul>
   @foreach ($venues as $venue)
     <li>
-      <a href="{{ route('dashboard').'?venue='.$venue->id }}">
+      <a href="{{ route('dashboard', ['venue' => $venue->id]) }}">
         {{ $venue->name }}
       </a>
       @if ($venue->rooms)
         <ul class="pl-4">
           @foreach ($venue->rooms as $room)
             <li>
-              <a href="{{ route('dashboard').'?room='.$room->id }}">
+              <a href="{{ route('dashboard', ['room' => $room->id]) }}">
                 {{ $room->name }}
               </a>
             </li>
