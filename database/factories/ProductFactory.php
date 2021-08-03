@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Room;
 use App\Models\Venue;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,7 +26,8 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'name' => ucwords($this->faker->words(2, true)) . (rand(0, 1) ? ' Menu' : ' Buffet'),
+            'name' => $name = ucwords($this->faker->words(2, true)) . (rand(0, 1) ? ' Menu' : ' Buffet'),
+            // 'slug' => Str::of($name)->slug('-'),
             'slogan' => $this->faker->words(5, true),
             'description' => $this->faker->paragraphs(4, true),
             'image' => null,
@@ -36,7 +38,7 @@ class ProductFactory extends Factory
             'closes_at' => $this->faker->numberBetween(20, 23) . ':00:00',
 
             'min_occupancy' => mt_rand(0, 1) ? $this->faker->numberBetween(10, 20) : 0,
-            'price' => ($unit_price = $this->faker->numberBetween(20, 50)) . '00',
+            'unit_price' => ($unit_price = $this->faker->numberBetween(20, 50)) . '00',
             'vat' => '19',
             'deposit' => mt_rand(0, 1) ? '20' : '40',
             'is_flat' => mt_rand(0, 1),

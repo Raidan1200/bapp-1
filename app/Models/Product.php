@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Room;
 use App\Models\Venue;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,6 +14,7 @@ class Product extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'slogan',
         'description',
         'image',
@@ -21,7 +23,7 @@ class Product extends Model
         'opens_at',
         'closes_at',
         'min_occupancy',
-        'price',
+        'unit_price',
         'vat',
         'deposit',
         'is_flat',
@@ -45,5 +47,10 @@ class Product extends Model
     public function rooms()
     {
         return $this->belongsToMany(Room::class);
+    }
+
+    public function setNameAttribute($value) {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = Str::of($value)->slug('-');
     }
 }

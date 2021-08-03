@@ -16,6 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug');
             $table->text('slogan')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
@@ -31,7 +32,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('min_occupancy')->default(0);
 
             // All prices are after VAT
-            $table->unsignedInteger('price');
+            $table->unsignedInteger('unit_price');
             $table->unsignedFloat('vat');
             $table->unsignedFloat('deposit');
             $table->unsignedFloat('is_flat')->default(false);

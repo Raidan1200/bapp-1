@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Room;
 use App\Models\Venue;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RoomFactory extends Factory
@@ -23,7 +24,8 @@ class RoomFactory extends Factory
     public function definition()
     {
         return [
-            'name' => ucwords($this->faker->words(2, true)) . (rand(0, 1) ? ' Room' : ' Room'),
+            'name' => $name = ucwords($this->faker->words(2, true)) . (rand(0, 1) ? ' Room' : ' Room'),
+            // 'slug' => Str::of($name)->slug('-'),
             'slogan' => $this->faker->words(5, true),
             'description' => $this->faker->paragraphs(4, true),
             'image' => null,

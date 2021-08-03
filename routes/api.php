@@ -3,8 +3,8 @@
 use App\Models\User;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ApiController;
 
 
 /*
@@ -19,7 +19,7 @@ use App\Http\Controllers\ApiController;
 */
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::get('config', [ApiController::class, 'config']);
-    Route::get('rooms/{room}/bookings', [ApiController::class, 'bookings']);
-    Route::post('venues/{venue}/orders', [ApiController::class, 'order']);
+    Route::get('config', [Api\ZauberController::class, 'config']);
+    Route::get('rooms/{room}/bookings', [Api\ZauberController::class, 'bookings']);
+    Route::post('venues/{venue}/orders', [Api\ZauberController::class, 'order']);
 });

@@ -38,7 +38,7 @@ class CreateProductRequest extends FormRequest
             'closes_at'       => 'required|min:0|max:24',
             'min_occupancy'   => 'sometimes|integer',
 
-            'price'           => 'required|integer',
+            'unit_price'      => 'required|integer',
             'vat'             => 'required|numeric',
             'is_flat'         => 'sometimes|boolean',
             'deposit'         => 'required|numeric',

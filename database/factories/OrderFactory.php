@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Order;
 use App\Models\Venue;
 use App\Models\Customer;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -31,6 +32,7 @@ class OrderFactory extends Factory
             'notes' => 'I am a note. Please pay attention to me!',
             'venue_id' => Venue::factory(),
             'customer_id' => Customer::factory(),
+            'starts_at' => Carbon::now()->setHour($this->faker->numberBetween(12, 18))->addDays(rand(1, 21)),
         ];
     }
 }

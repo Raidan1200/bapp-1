@@ -63,8 +63,8 @@
         </x-form-field>
 
         <x-form-field>
-          <x-label for="price">Preis</x-label>
-          <x-input type="number" min="0" name="price" class="w-full" value="{{ old('price') ?? $product->price ?? '' }}" id="price" />
+          <x-label for="unit_price">Preis</x-label>
+          <x-input type="number" min="0" name="unit_price" class="w-full" value="{{ old('unit_price') ?? $product->unit_price ?? '' }}" id="unit_price" />
         </x-form-field>
 
         <x-form-field>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Room;
 use App\Models\Venue;
@@ -9,19 +9,33 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class ApiController extends Controller
+class ZauberController extends Controller
 {
     // TODO IMPORTANT: Produkt mit Freitext und Freipreis hinzuf+gen
 
-    // protected $rules = [
-    //     'starts_at' => 'required|date',
-    //     'ends_at' => 'required|date',
-    //     'quantity' => 'required|integer',
-    //     'room_id' => 'required|exists:rooms,id',
-    //     'product_id' => 'required|products,id',
-    // ];
+    protected $rules = [
+        'customer' => [
+            'customer.first_name' => 'required',
+            'customer.last_name' => 'required',
+            'customer.email' => 'required',
+            'customer.company' => 'sometimes',
+            'customer.street' => 'required',
+            'customer.street_no' => 'required',
+            'customer.zip' => 'required',
+            'customer.city' => 'required',
+            'customer.phone' => 'required',
+        ],
+        'booking' => [
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date',
+            'quantity' => 'required|numeric',
+            'product_id' => 'exists:products,id',
+            'room_id' => 'exists:rooms,id',
+        ]
+    ];
 
     public function config()
     {
@@ -45,21 +59,17 @@ class ApiController extends Controller
 
         $p1 = Product::find($request->bookings[0]['productId']); // TODO siehe unten
 
-        $validated = $request->validate([
-            'customer.first_name' => 'required',
-            'customer.last_name' => 'required',
-            'customer.email' => 'required',
-            'customer.company' => 'sometimes',
-            'customer.street' => 'required',
-            'customer.street_no' => 'required',
-            'customer.zip' => 'required',
-            'customer.city' => 'required',
-            'customer.phone' => 'required',
-        ]);
+        $validated = $request->validate($this->rules['customer']);
 
         $customer = Customer::create($validated['customer']);
 
-        // TODO validation
+        $firstBookingDate = collect($request['bookings'])
+            ->pluck('booking.starts_at')
+            ->sort()
+            ->values()
+            ->first();
+
+            // TODO validation
         $order = $customer->orders()->create([
             'invoice_id' => rand(), // TODO
             'status' => 'deposit_mail_sent',
@@ -74,33 +84,28 @@ class ApiController extends Controller
 
             'deposit' => $p1->deposit,
             'venue_id' => $venue->id,
+            'starts_at' => new Carbon($firstBookingDate),
         ]);
 
         foreach ($request['bookings'] as $index => $booking) {
-            $validatedBooking = Validator::validate($booking, [
-                'booking.starts_at' => 'required|date',
-                'booking.ends_at' => 'required|date',
-                'booking.quantity' => 'required|numeric',
-                'productId' => 'exists:products,id',
-                'roomId' => 'exists:rooms,id',
-            ]);
-
             // TODO IMPORTANT: KNAUB!!!
-            $validatedBooking['starts_at'] = $validatedBooking['booking']['starts_at'];
-            $validatedBooking['ends_at'] = $validatedBooking['booking']['ends_at'];
-            $validatedBooking['quantity'] = $validatedBooking['booking']['quantity'];
-            $validatedBooking['product_id'] = $validatedBooking['productId'];
-            $validatedBooking['room_id'] = $validatedBooking['roomId'];
+            $booking['starts_at'] = $booking['booking']['starts_at'];
+            $booking['ends_at'] = $booking['booking']['ends_at'];
+            $booking['quantity'] = $booking['booking']['quantity'];
+            $booking['product_id'] = $booking['productId'];
+            $booking['room_id'] = $booking['roomId'];
+
+            $validatedBooking = Validator::validate($booking, $this->rules['booking']);
 
             // TODO IMPORTANT: Inefficient
-            $product = Product::find($validatedBooking['productId']);
+            $product = Product::find($validatedBooking['product_id']);
 
             $validatedBooking['product_name'] = $product->name;
             $validatedBooking['unit_price'] = $product->unit_price;
             $validatedBooking['vat'] = $product->vat;
             // TODO IMPORTANT: Naming inconsitent: flat vs is_flat
-            $validatedBooking['flat'] = $product->is_flat;
-            $validatedBooking['product_snapshot'] = json_encode($product);
+            $validatedBooking['is_flat'] = $product->is_flat;
+            $validatedBooking['snapshot'] = json_encode($product);
 
             $order->bookings()->create($validatedBooking);
         }

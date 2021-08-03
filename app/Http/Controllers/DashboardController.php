@@ -11,73 +11,49 @@ use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
-    // TODO: This is one hell of an ugly beast!
-
-    public function index(Request $request) {
-        $venues = Venue::with(['rooms' => function ($q) {
+    public function index(Request $request)
+    {
+        // Get Rooms and Products of Auth-User for the Sidebar
+        $venues = auth()->user()->venues()->with(['rooms' => function ($q) {
             $q->orderBy('name')->with(['products' => function ($r) {
                 $r->orderBy('name');
             }]);
-        }])
-        ->whereHas('users', function($q) {
-            $q->where('users.id', auth()->id());
-        })
-        ->orderBy('name')
-        ->get();
+        }])->get();
 
         $venue = $request->input('venue');
         $room = $request->input('room');
 
-        if (!$venue && !$room) {
-            $from = $request->input('from') ? new Carbon($request->input('from')) : Carbon::today();
-            $to   = $request->input('to')   ? new Carbon($request->input('to'))   : new Carbon($from);
-        }
+        // Get Orders available to Auth-User
+        $orders = Order::with(['bookings', 'customer'])
+            ->orderBy('starts_at')
+            ->whereIn('venue_id', $venues->pluck('id'));
 
-        $query = Order::whereHas('venue.users', function($q) {
-                $q->where('users.id', auth()->id());
-            })
-            ->with('customer')
-            ->with('bookings')
-            ->with('bookings.product') // TODO: remove when product snapshots are in place
-            ->with('bookings.room');
-
-        if (!$venue && !$room) {
-            $query->whereExists(function ($q) use ($from, $to) {
-                $q->select(DB::raw(1))
-                    ->from('bookings')
-                    ->whereColumn('bookings.order_id', 'orders.id')
-                    ->whereBetween('starts_at', [$from, (new Carbon($to))->hour(23)->minute(59)->second(59)]);
-                });
+        // Filter down to one Venue or Room
+        if ($venue) {
+            $orders->onlyVenue($venue);
         }
 
         if ($room) {
-            $query->whereExists(function ($q) use ($room) {
-                $q->select(DB::raw(1))
-                    ->from('bookings')
-                    ->whereColumn('bookings.order_id', 'orders.id')
-                    ->where('room_id', $room);
-                });
+            $orders->onlyRoom($room);
         }
 
-        if ($venue) {
-            $query->where('venue_id', $venue);
+        // Filter by Date-Range
+        if ($request->has('from')) {
+            $from = new Carbon($request->input('from'));
+            $days = $request->input('days') ?? 7;
+
+            $orders->inDateRange($from, $days);
         }
 
-        $orders = $query
-            ->get()
-            ->sortBy(function($q) {
-                return $q->bookings->first()->starts_at;
-            })
-            ->all();
+        $orders = $orders->orderBy('created_at')
+            ->paginate()
+            ->withQueryString();
 
         $view_data = compact('venues', 'orders');
 
         if (isset($from)) {
-            $interval = $request->input('interval');
-            $view_data = array_merge($view_data, compact('from', 'to', 'interval'));
+            $view_data = array_merge($view_data, compact('from', 'days'));
         }
-
-        // TODO: Pagination
 
         return view('dashboard.index', $view_data);
     }

@@ -8,23 +8,15 @@ use App\Http\Requests\CreateVenueRequest;
 
 class VenueController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
+        $this->authorize('modify venues');
+
         return view('venues.index', [
             'venues' => Venue::all()
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
       $this->authorize('create venues');
@@ -32,12 +24,6 @@ class VenueController extends Controller
       return view('venues.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\CreateVenueRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(CreateVenueRequest $request)
     {
         $venue = Venue::create($request->validated());
@@ -45,12 +31,6 @@ class VenueController extends Controller
         return redirect()->route('venues.show', $venue)->with('status', 'Venue created.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Venue  $venue
-     * @return \Illuminate\Http\Response
-     */
     public function show(Venue $venue)
     {
         return view('venues.show', [
@@ -58,12 +38,6 @@ class VenueController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Venue  $venue
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Venue $venue)
     {
         $this->authorize('modify venues');
@@ -71,13 +45,6 @@ class VenueController extends Controller
         return view('venues.create', compact('venue'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\CreateVenueRequest  $request
-     * @param  \App\Models\Venue  $venue
-     * @return \Illuminate\Http\Response
-     */
     public function update(CreateVenueRequest $request, Venue $venue)
     {
         $venue->update($request->validated());
@@ -85,12 +52,6 @@ class VenueController extends Controller
         return redirect()->route('venues.show', $venue)->with('status', 'Venue updated.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Venue  $venue
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Venue $venue)
     {
         $this->authorize('delete venues');

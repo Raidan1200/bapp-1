@@ -1,10 +1,23 @@
 <div class="text-xl font-semibold">
-  <a href="{{ route('dashboard').'?from='.(new \Carbon\Carbon)->format('Y-m-d') }}">Today</a>
+  <a href="{{ route('dashboard', [
+      'from' => (new \Carbon\Carbon)->format('Y-m-d'),
+      'days' => '1'
+    ]) }}"
+  >
+    Heute
+  </a>
 </div>
 <div class="text-xl font-semibold">
-  <a href="{{ route('dashboard').'?from='.(new \Carbon\Carbon)->startOfWeek()->format('Y-m-d').'&to='.(new \Carbon\Carbon)->endOfWeek()->format('Y-m-d').'&interval=week' }}">This Week</a>
+  <a href="{{ route('dashboard', [
+      'from' => (new \Carbon\Carbon)->startOfWeek()->format('Y-m-d'),
+      'days' => '7'
+    ]) }}"
+  >
+    Diese Woche
+  </a>
 </div>
-<div class="text-xl font-semibold">Venues</div>
+
+<div class="mt-4 text-xl font-semibold">Orte</div>
 <ul>
   @foreach ($venues as $venue)
     <li>

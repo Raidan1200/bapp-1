@@ -1,9 +1,10 @@
 @props(['order'])
 @php
+  // TODO: This belongs in the Controller!!!
   $total = 0;
 
   foreach ($order->bookings as $booking) {
-    $booking_price = $booking->quantity * $booking->product->unit_price;
+    $booking_price = $booking->quantity * $booking->unit_price;
     $total += $booking_price;
   }
 
@@ -18,7 +19,7 @@
       <button class="hover:text-primary-dark rounded px-2 -mx-2 py-1" @click="show = !show">
         {{ $order->customer->first_name . ' ' . $order->customer->last_name }}
       </button>
-      <div>{{ $order->bookings->first()->starts_at }}</div>
+      <div>{{ $order->starts_at }}</div>
     </div>
     <div x-cloak class="bg-primary-light" x-show="show">
       @if ($order->customer->company)
@@ -35,19 +36,19 @@
           <table class="w-full">
             <tr>
               <td class="w-2/5">
-                {{ $booking->product->name }}
+                {{ $booking->product_name }}
                 @if ($booking->flat)
                   <span>(Flat)</span>
                 @endif
               </td>
               <td class="w-1/5">
-                {{ $booking->quantity }} * {{ number_format($booking->product->unit_price / 100, 2, ',', '.') }}€
+                {{ $booking->quantity }} * {{ number_format($booking->unit_price / 100, 2, ',', '.') }}€
               </td>
               <td class="w-1/5">
                 {{ $booking->vat }}% MwSt
               </td>
               <td class="w-1/5">
-                {{ number_format($booking->quantity * $booking->product->unit_price / 100, 2, ',', '.') }}€
+                {{ number_format($booking->quantity * $booking->unit_price / 100, 2, ',', '.') }}€
               </td>
             </tr>
           </table>

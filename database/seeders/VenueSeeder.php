@@ -59,7 +59,7 @@ class VenueSeeder extends Seeder
             'closes_at' => '23:00:00',
             'min_occupancy' => 30,
 
-            'price' => 2850,
+            'unit_price' => 2850,
             'vat' => 19,
             'deposit' => 20,
             'is_flat' => false,
@@ -82,7 +82,7 @@ class VenueSeeder extends Seeder
             'closes_at' => '23:00:00',
             'min_occupancy' => 30,
 
-            'price' => 5890,
+            'unit_price' => 5890,
             'vat' => 7,
             'deposit' => 20,
             'is_flat' => true,
@@ -104,7 +104,7 @@ class VenueSeeder extends Seeder
             'closes_at' => '21:00:00',
             'min_occupancy' => 1,
 
-            'price' => 4900,
+            'unit_price' => 4900,
             'vat' => 19,
             'deposit' => 100,
             'is_flat' => false,

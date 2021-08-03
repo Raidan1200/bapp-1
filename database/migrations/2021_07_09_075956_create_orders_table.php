@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->text('notes')->nullable();
             $table->foreignId('venue_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('customer_id')->constrained();
+            $table->datetime('starts_at');
             $table->timestamps();
         });
     }

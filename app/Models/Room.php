@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Venue;
 use App\Models\Booking;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -14,6 +15,7 @@ class Room extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'slogan',
         'description',
         'image',
@@ -34,5 +36,10 @@ class Room extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function setNameAttribute($value) {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = Str::of($value)->slug('-');
     }
 }
