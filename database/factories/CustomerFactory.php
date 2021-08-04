@@ -32,7 +32,7 @@ class CustomerFactory extends Factory
             'zip' => $this->faker->postcode(),
             'city' => $this->faker->city(),
             'phone' => $this->faker->phoneNumber(),
-            'user_id' => User::factory(),
+            'user_id' => null, # User::factory(),
         ];
     }
 }

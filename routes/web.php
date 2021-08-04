@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TokenController;
@@ -27,6 +28,23 @@ Route::middleware('auth')->group(function() {
 
 Route::get('client-demo', function() {
     return view('client-demo');
+});
+
+Route::get('migrate', function () {
+    Artisan::call('migrate:fresh', [
+        '--force' => true
+    ]);
+    dd(Artisan::output());
+});
+
+Route::get('seed', function () {
+    Artisan::call('db:seed');
+    dd(Artisan::output());
+});
+
+Route::get('config', function () {
+    Artisan::call('config:clear');
+    dd(Artisan::output());
 });
 
 require __DIR__.'/auth.php';

@@ -49,7 +49,18 @@
     </div>
 
     <div class="w-full sm:w-1/2">
-      TODO: Assigned Users
+      <h2 class="text-xl my-2">Zugeorndete Benutzer</h2>
+      @if ($venue->users)
+        <ul>
+          @foreach ($venue->users as $user)
+            <li>{{ $user->name }}</li>
+          @endforeach
+        </ul>
+      @else
+        <div class="m-2">
+          Es wurde noch keine Benutzer zugeordnet
+        </div>
+      @endif
     </div>
   </div>
 

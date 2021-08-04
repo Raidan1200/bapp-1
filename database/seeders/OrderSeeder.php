@@ -17,10 +17,8 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
-        [$zauber, $see] = Venue::with(['rooms', 'products'])->get();
-
+        $zauber = Venue::with(['rooms', 'products'])->first();
         $this->makeZauber($zauber);
-        $this->makeSee($see);
     }
 
     public function makeZauber($venue) {

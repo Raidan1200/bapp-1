@@ -16,7 +16,10 @@
     show: false
   }">
     <div class="flex justify-between">
-      <button class="hover:text-primary-dark rounded px-2 -mx-2 py-1" @click="show = !show">
+      <button
+        @click="show = !show"
+        class="hover:text-primary-dark rounded px-2 -mx-2 py-1"
+      >
         {{ $order->customer->first_name . ' ' . $order->customer->last_name }}
       </button>
       <div>{{ $order->starts_at }}</div>
@@ -31,29 +34,7 @@
       <div>E-Mail: {{ $order->customer->email }}</div>
     </div>
     <ul class="py-2">
-      @foreach ($order->bookings as $booking)
-        <li>
-          <table class="w-full">
-            <tr>
-              <td class="w-2/5">
-                {{ $booking->product_name }}
-                @if ($booking->flat)
-                  <span>(Flat)</span>
-                @endif
-              </td>
-              <td class="w-1/5">
-                {{ $booking->quantity }} * {{ number_format($booking->unit_price / 100, 2, ',', '.') }}€
-              </td>
-              <td class="w-1/5">
-                {{ $booking->vat }}% MwSt
-              </td>
-              <td class="w-1/5">
-                {{ number_format($booking->quantity * $booking->unit_price / 100, 2, ',', '.') }}€
-              </td>
-            </tr>
-          </table>
-        </li>
-      @endforeach
+      <livewire:bookings :bookings="$order->bookings" />
     </ul>
     <div class="flex justify-between">
       <div>

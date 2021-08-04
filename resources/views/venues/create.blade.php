@@ -18,11 +18,7 @@
     <x-auth-validation-errors></x-auth-validation-errors>
 
     <div class="sm:flex sm:space-x-8">
-      @isset ($venue)
-        <div class="sm:w-1/2">
-      @else
-        <div class="w-full">
-      @endif
+      <div class="w-full">
         <x-form-field>
           <x-label for="name">Name</x-label>
           <x-input type="text" name="name" class="w-full" value="{{ old('name') ?? $venue->name ?? '' }}" id="name" />
@@ -51,22 +47,5 @@
         </div>
       </div>
     </form>
-
-    @isset ($venue)
-      <div class="sm:w-1/2">
-        <x-form-field>
-          <livewire:venue-member :user="$user" id="venuemembers" />
-        </x-form-field>
-
-        <x-form-field class="mt-8 border-t border-gray-700 py-4">
-          <livewire:profile-image :user="$user" id="profileimage" />
-        </x-form-field>
-
-        @if ($venue->image)
-          <img src="{{ $venue->image }}" alt="">
-        @endif
-
-      </div>
-    @endisset
   </div>
 </x-app-layout>

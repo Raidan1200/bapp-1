@@ -1,8 +1,14 @@
-<x-guest-layout>
-  <link rel="stylesheet" href="css/app.6762a995.css">
-
-    <div id="app"></div>
-
-  <script src="js/chunk-vendors.bc382ee8.js"></script>
-  <script src="js/app.407172af.js"></script>
-</x-guest-layout>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/app.bappcal.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script src="js/chunk-vendors.bappcal.js"></script>
+  <script src="js/app.bappcal.js"></script>
+</body>
+</html>

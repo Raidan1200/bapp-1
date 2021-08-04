@@ -36,7 +36,7 @@ class VenueController extends Controller
         $this->authorize('modify venues');
 
         return view('venues.show', [
-            'venue' => $venue->load(['rooms', 'products'] )
+            'venue' => $venue->load(['rooms', 'products', 'users'] )
         ]);
     }
 

@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
 
         $admin->assignRole('admin');
 
-        if (App::environment('local')) {
+        // if (App::environment('local')) {
             $this->call(UserSeeder::class);
             $this->call(VenueSeeder::class);
             $this->call(OrderSeeder::class);
-        }
+        // }
     }
 }

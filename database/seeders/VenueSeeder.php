@@ -119,18 +119,18 @@ class VenueSeeder extends Seeder
         $p3->rooms()->sync([$room2->id]);
 
         // Venue 2
-        $v2 = Venue::factory()->create(['name' => 'Seemagie']);
+        // $v2 = Venue::factory()->create(['name' => 'Seemagie']);
 
-        $v2->users()->attach([$admin->id, $manager1->id, $manager2->id, $employee1->id, $employee2->id]);
+        // $v2->users()->attach([$admin->id, $manager1->id, $manager2->id, $employee1->id, $employee2->id]);
 
-        $room1 = Room::factory()->create(['name' => 'Schloss', 'venue_id' => $v2->id]);
-        $room2 = Room::factory()->create(['name' => 'Garten', 'venue_id' => $v2->id]);
-        $room3 = Room::factory()->create(['name' => 'Tretboot', 'venue_id' => $v2->id]);
-        $p1 = Product::factory()->create(['name' => 'Hochzeit am See', 'venue_id' => $v2->id]);
-        $p2 = Product::factory()->create(['name' => 'Hochzeit mit Flat', 'venue_id' => $v2->id]);
-        $p3 = Product::factory()->create(['name' => 'Geburtstag im Tretboot', 'venue_id' => $v2->id]);
+        // $room1 = Room::factory()->create(['name' => 'Schloss', 'venue_id' => $v2->id]);
+        // $room2 = Room::factory()->create(['name' => 'Garten', 'venue_id' => $v2->id]);
+        // $room3 = Room::factory()->create(['name' => 'Tretboot', 'venue_id' => $v2->id]);
+        // $p1 = Product::factory()->create(['name' => 'Hochzeit am See', 'venue_id' => $v2->id]);
+        // $p2 = Product::factory()->create(['name' => 'Hochzeit mit Flat', 'venue_id' => $v2->id]);
+        // $p3 = Product::factory()->create(['name' => 'Geburtstag im Tretboot', 'venue_id' => $v2->id]);
 
-        $p1->rooms()->attach([$room1->id, $room2->id]);
-        $p2->rooms()->attach([$room3->id]);
+        // $p1->rooms()->attach([$room1->id, $room2->id]);
+        // $p2->rooms()->attach([$room3->id]);
     }
 }
