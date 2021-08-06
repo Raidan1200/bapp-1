@@ -26,7 +26,7 @@
         <x-session-status :status="session('status')"></x-session-status>
         <x-session-error :status="session('error')"></x-session-error>
 
-      	<div class="bg-white sm:rounded-xl p-4 lg:p-6">
+      	<div class="bg-white sm:rounded-xl p-1 sm:p-4 lg:p-6">
           {{ $slot }}
         </div>
       </main>

@@ -23,6 +23,7 @@ class CreateBookingsTable extends Migration
             $table->unsignedInteger('quantity');
             $table->unsignedInteger('unit_price');
             $table->unsignedFloat('vat');
+            $table->unsignedFloat('deposit');
             $table->boolean('is_flat');
 
             $table->json('snapshot');

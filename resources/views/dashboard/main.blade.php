@@ -28,9 +28,8 @@
   </div>
 @endisset
 
-<ul>
-  @foreach ($orders as $order)
-    <x-order :order="$order" />
-  @endforeach
-</ul>
+@foreach ($orders as $order)
+  <livewire:order :order="$order" />
+@endforeach
+
 {{ $orders->links() }}
