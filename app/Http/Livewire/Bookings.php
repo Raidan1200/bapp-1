@@ -17,8 +17,8 @@ class Bookings extends Component
 
     public $rules = [
         'bookings.*.id' => 'nullable',
-        'bookings.*.starts_at' => 'nullable|datetime',
-        'bookings.*.ends_at' => 'nullable|datetime',
+        'bookings.*.starts_at' => 'nullable|date',
+        'bookings.*.ends_at' => 'nullable|date',
         'bookings.*.product_name' => 'required|string|max:255',
         'bookings.*.is_flat' => 'required',
         'bookings.*.quantity' => 'required|numeric',
