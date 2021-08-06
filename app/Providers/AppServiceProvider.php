@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,11 +24,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         if(config('app.env') === 'production') {
-            \URL::forceScheme('https');
+            \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
-        // DB::listen(function($query) {
-        //     File::append(
+        setlocale(LC_ALL, "de_DE.UTF-8");
+        \Illuminate\Support\Carbon::setLocale(config('app.locale'));
+
+        // \Illuminate\Support\Facades\DB::listen(function($query) {
+        //     \Illuminate\Support\Facades\File::append(
         //         storage_path('/logs/query.log'),
         //         $query->sql . ' [' . implode(', ', $query->bindings) . ']' . PHP_EOL
         //    );

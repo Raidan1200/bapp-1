@@ -23,6 +23,10 @@ class Order extends Model
         'starts_at',
     ];
 
+    protected $casts = [
+        'starts_at' => 'datetime'
+    ];
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);

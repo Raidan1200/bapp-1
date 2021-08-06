@@ -16,8 +16,8 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
 
-            $table->datetime('starts_at');
-            $table->datetime('ends_at');
+            $table->datetime('starts_at')->nullable();
+            $table->datetime('ends_at')->nullable();
 
             $table->string('product_name');
             $table->unsignedInteger('quantity');
@@ -26,7 +26,7 @@ class CreateBookingsTable extends Migration
             $table->unsignedFloat('deposit');
             $table->boolean('is_flat');
 
-            $table->json('snapshot');
+            $table->json('snapshot')->nullable();
 
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();

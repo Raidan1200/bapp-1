@@ -15,10 +15,11 @@ class Booking extends Model
     protected $fillable = [
         'starts_at',
         'ends_at',
-        'quantity',
         'product_name',
+        'quantity',
         'unit_price',
         'vat',
+        'deposit',
         'is_flat',
         'snapshot',
         'room_id',
