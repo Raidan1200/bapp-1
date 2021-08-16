@@ -7,6 +7,7 @@ use App\Models\Venue;
 use App\Models\Product;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Events\OrderReceived;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -98,8 +99,10 @@ class ZauberController extends Controller
             $order->bookings()->create($validatedBooking);
         }
 
+        $order = $order->with(['customer', 'bookings'])->first();
 
-        // TODO IMPORTANT: Send deposit email
+        // TODO: A Model-Observer might be a better solution?
+        OrderReceived::dispatch($order);
 
         return $order;
     }

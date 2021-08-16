@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Carbon;
+use App\Events\OrderStateChanged;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Order extends Component
@@ -65,12 +66,16 @@ class Order extends Component
                 break;
         }
 
+        $oldStatus = $this->order->status;
+
         $this->order->update(
             array_merge($status, [
                 'notes' => $this->notes,
                 'status' => $this->selectedStatus,
             ])
         );
+
+        OrderStateChanged::dispatch($this->order, auth()->user(), $oldStatus, $this->selectedStatus);
 
         $this->dirty = false;
         $this->editingNote = false;
@@ -84,6 +89,7 @@ class Order extends Component
         $this->editingNote = false;
     }
 
+    // TODO: This is duplicated in DepositEmail.php !!! BAD!
     public function getTotalProperty()
     {
         return $this->order->bookings->reduce(function ($sum, $booking) {

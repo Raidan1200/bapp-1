@@ -38,3 +38,14 @@
     </li>
   @endforeach
 </ul>
+
+<div class="mt-6">
+  <span class="text-xl">This is just a test</span>
+  <div class=" font-semibold flex flex-col">
+    <a href="{{ route('dashboard', ['state' => 'fresh'])}}">Fresh</a>
+    <a href="{{ route('dashboard', ['state' => 'deposit_paid'])}}">Deposit</a>
+    <a href="{{ route('dashboard', ['state' => 'interim_paid'])}}">Interim</a>
+    <a href="{{ route('dashboard', ['state' => 'final_paid'])}}">Final</a>
+    <a href="{{ route('dashboard', ['state' => 'cancelled'])}}">Cancelled</a>
+  </div>
+</div>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Venue;
+use App\Models\Action;
 use App\Models\Booking;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +55,16 @@ class Order extends Model
         return $this->belongsTo(Venue::class);
     }
 
+    public function actions()
+    {
+        return $this->hasMany(Action::class)->orderBy('created_at');
+    }
+
+    public function latestAction()
+    {
+        return $this->hasOne(Action::class)->latest();
+    }
+
     public function scopeOnlyVenue($query, $venue_id)
     {
         return $query->where('venue_id', $venue_id);
@@ -62,6 +73,11 @@ class Order extends Model
     public function scopeOnlyRoom($query, $room_id)
     {
         return $query->whereHas('bookings', fn($q) => $q->where('room_id', $room_id));
+    }
+
+    public function scopeOnlyState($query, $state)
+    {
+        return $query->where('status', $state);
     }
 
     public function scopeInDateRange($query, $from, $days)

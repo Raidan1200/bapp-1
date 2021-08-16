@@ -9,6 +9,11 @@
   {{ ($order->status === 'interim_paid') ? 'border-blue-500' : '' }}
   {{ ($order->status === 'final_paid') ? 'border-green-500' : '' }} "
 >
+  {{--
+    TODO TODO: I dont get it. This does not work.
+               Also, how do I prevent n+1 problem?
+    Zuletzt bearbeitet von {{ $order->latestAction->id }}
+  --}}
   {{-- Headline --}}
   <div class="flex justify-between">
     <button
@@ -31,6 +36,7 @@
     action="#"
   >
     <div class="flex justify-between mt-2">
+      {{-- Note --}}
       <div
         @click="editNote = true"
         class="flex-1 mr-4"
@@ -44,7 +50,13 @@
         >{{ $notes }}</textarea>
         <div
           x-show="!editNote"
-        >{!! nl2br(e($notes)) !!}</div>
+        >
+          @if ($order->notes)
+            {!! nl2br(e($notes)) !!}
+          @else
+            <span class="text-gray-400">Keine Anmerkungen</span>
+          @endif
+        </div>
       </div>
       <div>
         <div>

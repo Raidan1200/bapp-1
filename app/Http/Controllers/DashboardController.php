@@ -22,9 +22,10 @@ class DashboardController extends Controller
 
         $venue = $request->input('venue');
         $room = $request->input('room');
+        $state = $request->input('state');
 
         // Get Orders available to Auth-User
-        $orders = Order::with(['bookings', 'customer'])
+        $orders = Order::with(['bookings', 'customer', 'actions'])
             ->orderBy('starts_at')
             ->whereIn('venue_id', $venues->pluck('id'));
 
@@ -35,6 +36,10 @@ class DashboardController extends Controller
 
         if ($room) {
             $orders->onlyRoom($room);
+        }
+
+        if ($state) {
+            $orders->onlyState($state);
         }
 
         // Filter by Date-Range

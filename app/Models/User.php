@@ -49,7 +49,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Venue::class);
     }
 
-    public function isLastAdmin() {
+    public function actions()
+    {
+        return $this->hasMany(Actions::class);
+    }
+
+    public function isLastAdmin()
+    {
         return $this->hasRole('admin') && User::role('admin')->count() <= 1;
     }
 }
