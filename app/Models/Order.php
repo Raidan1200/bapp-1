@@ -21,10 +21,22 @@ class Order extends Model
         'customer_id',
         'venue_id',
         'starts_at',
+        'deposit_email_at',
+        'deposit_paid_at',
+        'interim_email_at',
+        'interim_paid_at',
+        'final_email_at',
+        'final_paid_at',
     ];
 
     protected $casts = [
-        'starts_at' => 'datetime'
+        'starts_at' => 'datetime',
+        'deposit_email_at' => 'datetime',
+        'deposit_paid_at' => 'datetime',
+        'interim_email_at' => 'datetime',
+        'interim_paid_at' => 'datetime',
+        'final_email_at' => 'datetime',
+        'final_paid_at' => 'datetime',
     ];
 
     public function bookings()
@@ -54,6 +66,9 @@ class Order extends Model
 
     public function scopeInDateRange($query, $from, $days)
     {
+        // TODO: Juggling timezones like this seems kind of hacky, but it works
+        $from = (new Carbon($from))->shiftTimezone('Europe/Berlin')->timezone('UTC');
+
         return $query->whereBetween('starts_at', [$from, (new Carbon($from))->addDays($days)]);
     }
 }

@@ -36,9 +36,9 @@ class Customer extends Component
     public function save()
     {
         $this->validate();
-
         $this->customer->save();
 
+        $this->emit('updateBookings');
         $this->editing = false;
     }
 

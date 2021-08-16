@@ -23,6 +23,12 @@ class CreateOrdersTable extends Migration
             $table->foreignId('venue_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('customer_id')->constrained();
             $table->datetime('starts_at');
+            $table->datetime('deposit_email_at')->nullable();
+            $table->datetime('deposit_paid_at')->nullable();
+            $table->datetime('interim_email_at')->nullable();
+            $table->datetime('interim_paid_at')->nullable();
+            $table->datetime('final_email_at')->nullable();
+            $table->datetime('final_paid_at')->nullable();
             $table->timestamps();
         });
     }

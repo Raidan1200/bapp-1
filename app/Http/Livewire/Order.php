@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Order extends Component
@@ -11,17 +12,22 @@ class Order extends Component
 
     public $order;
 
+    public $notes;
+    public $editingNote = false;
+
     public $selectedStatus;
 
     public $dirty = false;
 
-    protected $listeners = ['updateOrder' => '$refresh'];
-
-    public $bla;
+    protected $listeners = [
+        'updateBookings' => '$refresh',
+        'updateCustomer' => '$refresh'
+    ];
 
     public function mount($order)
     {
         $this->order = $order;
+        $this->notes = $order->notes;
         $this->selectedStatus = $order->status;
     }
 
@@ -34,11 +40,40 @@ class Order extends Component
     {
         $this->authorize('modify orders', $this->order);
 
-        $this->order->update([
-            'status' => $this->selectedStatus
-        ]);
+        $status = [];
+
+        switch ($this->selectedStatus) {
+            case 'fresh':
+                $status['deposit_paid_at'] = null;
+                $status['interim_paid_at'] = null;
+                $status['final_paid_at'] = null;
+                break;
+
+            case 'deposit_paid':
+                $status['deposit_paid_at'] = Carbon::now();
+                $status['interim_paid_at'] = null;
+                $status['final_paid_at'] = null;
+                break;
+
+            case 'interim_paid':
+                $status['interim_paid_at'] = Carbon::now();
+                $status['final_paid_at'] = null;
+                break;
+
+            case 'final_paid':
+                $status['final_paid_at'] = Carbon::now();
+                break;
+        }
+
+        $this->order->update(
+            array_merge($status, [
+                'notes' => $this->notes,
+                'status' => $this->selectedStatus,
+            ])
+        );
 
         $this->dirty = false;
+        $this->editingNote = false;
     }
 
     public function cancel()
@@ -46,6 +81,7 @@ class Order extends Component
         $this->selectedStatus = $this->order->status;
 
         $this->dirty = false;
+        $this->editingNote = false;
     }
 
     public function getTotalProperty()

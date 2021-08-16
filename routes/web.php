@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\ProductController;
@@ -17,15 +18,12 @@ Route::middleware('auth')->group(function() {
     Route::resource('users', UserController::class)->except(['show']);
     Route::resource('venues', VenueController::class);
     Route::resource('rooms', RoomController::class)->except(['index', 'show']);
-    Route::resource('products', ProductController::class)->except(['index', 'show']);
-
+    Route::resource('products', ProductController::class)->except(['index']);
+    Route::delete('orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::post('venues/{venue}/token', [TokenController::class, 'store'])->name('token.store');
-
-    Route::resource('products', ProductController::class)->only([
-        'show', 'edit', 'update', 'destroy'
-    ]);
 });
 
+// Temporary routes
 Route::get('client-demo', function() {
     return view('client-demo');
 });

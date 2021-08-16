@@ -31,9 +31,9 @@ class ZauberController extends Controller
         'booking' => [
             'starts_at' => 'required|date',
             'ends_at' => 'required|date',
-            'quantity' => 'required|numeric',
             'product_id' => 'exists:products,id',
             'room_id' => 'exists:rooms,id',
+            'quantity' => 'required|numeric',
         ]
     ];
 
@@ -57,61 +57,60 @@ class ZauberController extends Controller
     {
         // TODO IMPORTANT: This whole process should be a DB-transaction!!!
 
-        $p1 = Product::find($request->bookings[0]['productId']); // TODO siehe unten
-
         $validated = $request->validate($this->rules['customer']);
 
         $customer = Customer::create($validated['customer']);
 
         $firstBookingDate = collect($request['bookings'])
-            ->pluck('booking.starts_at')
+            ->pluck('starts_at')
             ->sort()
             ->values()
             ->first();
 
-            // TODO validation
+        // TODO validation
         $order = $customer->orders()->create([
             'invoice_id' => rand(), // TODO
             'status' => 'deposit_mail_sent',
             'cash_payment' => rand(0, 1), // TODO
-            // TODO: Wenn jedes Produkt seinen eigenen Anzahlungs-Prozentsatz hat
-            // Wie berechnet sich dann der Anzahlungs-Prozentsatz der Gesamten Rechnung???
 
+            // TODO
             // Kunde Reserviert ... Nur Restaurant 10%
             // Curling Getränke Flat ...
             // Nur Curling ... 100%
             // Roland PDF Klass Reservation PHP
 
-            'deposit' => $p1->deposit,
+            'deposit' => 0,
             'venue_id' => $venue->id,
             'starts_at' => new Carbon($firstBookingDate),
         ]);
 
         foreach ($request['bookings'] as $index => $booking) {
-            // TODO IMPORTANT: KNAUB!!!
-            $booking['starts_at'] = $booking['booking']['starts_at'];
-            $booking['ends_at'] = $booking['booking']['ends_at'];
-            $booking['quantity'] = $booking['booking']['quantity'];
-            $booking['product_id'] = $booking['productId'];
-            $booking['room_id'] = $booking['roomId'];
-
             $validatedBooking = Validator::validate($booking, $this->rules['booking']);
 
-            // TODO IMPORTANT: Inefficient
-            $product = Product::find($validatedBooking['product_id']);
-
+            $product = Product::find($booking['product_id']);
             $validatedBooking['product_name'] = $product->name;
             $validatedBooking['unit_price'] = $product->unit_price;
             $validatedBooking['vat'] = $product->vat;
-            // TODO IMPORTANT: Naming inconsitent: flat vs is_flat
+            $validatedBooking['deposit'] = $product->deposit;
             $validatedBooking['is_flat'] = $product->is_flat;
-            $validatedBooking['snapshot'] = json_encode($product);
+            $validatedBooking['snapshot'] = json_encode($this->productSnapshot($product));
 
             $order->bookings()->create($validatedBooking);
         }
 
+
         // TODO IMPORTANT: Send deposit email
 
         return $order;
+    }
+
+    protected function productSnapshot($product)
+    {
+        return collect($product->toArray())->only(
+            'id', 'name', 'slug',
+            'unit_price', 'vat', 'deposit', 'is_flat',
+            'price_flat', 'vat_flat', 'deposit_flat',
+            'venue_id'
+        );
     }
 }

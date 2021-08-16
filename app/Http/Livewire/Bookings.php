@@ -54,6 +54,9 @@ class Bookings extends Component
     {
         $this->validate();
 
+        // TODO IMPORTANT:
+        //      Check if the new quantiy exceeds the capacity!
+
         // TODO This is REAAAALLY inefficient
         //      Does Laravel have something like "bulkUpdate" or "updateMany"?
 
@@ -87,7 +90,7 @@ class Bookings extends Component
         $this->editing = false;
         $this->bookings = $newBookings;
         $this->data = $newBookings;
-        $this->emit('updateOrder');
+        $this->emit('updateBookings');
     }
 
     public function addRow()
