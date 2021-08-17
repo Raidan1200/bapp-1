@@ -15,10 +15,16 @@ class Order extends Component
 
     public $notes;
     public $selectedStatus;
-    public $latestAction;
 
-    public $editingNote = false;
     public $dirty = false;
+
+    protected $colors = [
+        'fresh' => 'border-red-500',
+        'cancelled' => 'border-red-500',
+        'deposit_paid' => 'border-yellow-500',
+        'interim_paid' => 'border-blue-500',
+        'final_paid' => 'border-green-500',
+    ];
 
     protected $listeners = [
         'updateBookings' => '$refresh',
@@ -30,7 +36,6 @@ class Order extends Component
         $this->order = $order;
         $this->notes = $order->notes;
         $this->selectedStatus = $order->status;
-        $this->latestAction = $order->latestAction;
     }
 
     public function updated()
@@ -42,41 +47,15 @@ class Order extends Component
     {
         $this->authorize('modify orders', $this->order);
 
-        $oldStatus = $this->order->status;
-        $status = [];
-
-        if ($this->order->status !== $this->selectedStatus) {
-            switch ($this->order->status) {
-                case 'fresh':
-                    $status['deposit_paid_at'] = null;
-                    $status['interim_paid_at'] = null;
-                    $status['final_paid_at'] = null;
-                    break;
-
-                case 'deposit_paid':
-                    $status['deposit_paid_at'] = Carbon::now();
-                    $status['interim_paid_at'] = null;
-                    $status['final_paid_at'] = null;
-                    break;
-
-                case 'interim_paid':
-                    $status['interim_paid_at'] = Carbon::now();
-                    $status['final_paid_at'] = null;
-                    break;
-
-                case 'final_paid':
-                    $status['final_paid_at'] = Carbon::now();
-                    break;
-            }
-
-            OrderStateChanged::dispatch($this->order, auth()->user(), $oldStatus, $this->selectedStatus);
+        if ($statusTimestamps = $this->statusTimestamps()) {
+            OrderStateChanged::dispatch($this->order, auth()->user(), $this->order->status, $this->selectedStatus);
         }
 
         $this->order->update(
             array_merge([
                 'notes' => $this->notes,
                 'status' => $this->selectedStatus,
-            ], $status)
+            ], $statusTimestamps)
         );
 
         $this->dirty = false;
@@ -106,8 +85,58 @@ class Order extends Component
         });
     }
 
+    public function getColorProperty() : string
+    {
+        return $this->colors[$this->order->status] ?? '';
+    }
+
     public function render()
     {
         return view('livewire.order');
+    }
+
+    // Helpers
+    public function statusTimestamps() : array
+    {
+        if ($this->statusHasChanged()) {
+            return $this->updatedTimestamps();
+        }
+
+        return [];
+    }
+
+    public function statusHasChanged() : bool
+    {
+        return $this->order->status !== $this->selectedStatus;
+    }
+
+    public function updatedTimestamps() : array
+    {
+        $timestamps = [];
+
+        switch ($this->order->status) {
+            case 'fresh':
+                $timestamps['deposit_paid_at'] = null;
+                $timestamps['interim_paid_at'] = null;
+                $timestamps['final_paid_at'] = null;
+                break;
+
+            case 'deposit_paid':
+                $timestamps['deposit_paid_at'] = Carbon::now();
+                $timestamps['interim_paid_at'] = null;
+                $timestamps['final_paid_at'] = null;
+                break;
+
+            case 'interim_paid':
+                $timestamps['interim_paid_at'] = Carbon::now();
+                $timestamps['final_paid_at'] = null;
+                break;
+
+            case 'final_paid':
+                $timestamps['final_paid_at'] = Carbon::now();
+                break;
+        }
+
+        return $timestamps;
     }
 }

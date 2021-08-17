@@ -1,13 +1,9 @@
 <article
   x-data="{
     editCustomer: false,
-    editNote: @entangle('editingNote'),
+    dirty: @entangle('dirty')
   }"
-  class="sm:m-2 sm:p-2 lg:p-4 bg-white rounded-xl shadow text-sm sm:text-base border-t
-  {{ ($order->status === 'fresh' || $order->status === 'cancelled') ? 'border-red-500' : '' }}
-  {{ ($order->status === 'deposit_paid') ? 'border-yellow-500' : '' }}
-  {{ ($order->status === 'interim_paid') ? 'border-blue-500' : '' }}
-  {{ ($order->status === 'final_paid') ? 'border-green-500' : '' }} "
+  class="sm:m-2 sm:p-2 lg:p-4 bg-white rounded-xl shadow text-sm sm:text-base border-t {{ $this->color }}"
 >
   {{-- Headline --}}
   <div class="flex justify-between">
@@ -21,8 +17,8 @@
       <div class="font-semibold text-right">{{ $order->starts_at->timezone('Europe/Berlin')->formatLocalized('%a %d.%m %H:%M') }}</div>
       @isset ($order->latestAction)
         <div>
-          <span>{{ $latestAction->created_at->diffForHumans() }}</span>:
-          <span class="font-semibold">{{ $latestAction->user_name }}</span>: {{ $latestAction->message }}
+          <span>{{ $order->latestAction->created_at->diffForHumans() }}</span>:
+          <span class="font-semibold">{{ $order->latestAction->user_name }}</span>: {{ $order->latestAction->message }}
         </div>
       @endisset
     </div>
@@ -41,19 +37,19 @@
     <div class="flex justify-between mt-2">
       {{-- Note --}}
       <div
-        @click="editNote = true"
+        @click="dirty = true"
         class="flex-1 mr-4"
       >
         <textarea
           x-cloak
-          x-show="editNote"
+          x-show="dirty"
           wire:model.defer="notes"
           class="w-full"
           name="order-notes"
           id="order-notes"
         >{{ $notes }}</textarea>
         <div
-          x-show="!editNote"
+          x-show="!dirty"
         >
           @if ($order->notes)
             {!! nl2br(e($notes)) !!}
