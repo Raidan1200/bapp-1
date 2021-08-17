@@ -42,41 +42,42 @@ class Order extends Component
     {
         $this->authorize('modify orders', $this->order);
 
+        $oldStatus = $this->order->status;
         $status = [];
 
-        switch ($this->selectedStatus) {
-            case 'fresh':
-                $status['deposit_paid_at'] = null;
-                $status['interim_paid_at'] = null;
-                $status['final_paid_at'] = null;
-                break;
+        if ($this->order->status !== $this->selectedStatus) {
+            switch ($this->order->status) {
+                case 'fresh':
+                    $status['deposit_paid_at'] = null;
+                    $status['interim_paid_at'] = null;
+                    $status['final_paid_at'] = null;
+                    break;
 
-            case 'deposit_paid':
-                $status['deposit_paid_at'] = Carbon::now();
-                $status['interim_paid_at'] = null;
-                $status['final_paid_at'] = null;
-                break;
+                case 'deposit_paid':
+                    $status['deposit_paid_at'] = Carbon::now();
+                    $status['interim_paid_at'] = null;
+                    $status['final_paid_at'] = null;
+                    break;
 
-            case 'interim_paid':
-                $status['interim_paid_at'] = Carbon::now();
-                $status['final_paid_at'] = null;
-                break;
+                case 'interim_paid':
+                    $status['interim_paid_at'] = Carbon::now();
+                    $status['final_paid_at'] = null;
+                    break;
 
-            case 'final_paid':
-                $status['final_paid_at'] = Carbon::now();
-                break;
+                case 'final_paid':
+                    $status['final_paid_at'] = Carbon::now();
+                    break;
+            }
+
+            OrderStateChanged::dispatch($this->order, auth()->user(), $oldStatus, $this->selectedStatus);
         }
 
-        $oldStatus = $this->order->status;
-
         $this->order->update(
-            array_merge($status, [
+            array_merge([
                 'notes' => $this->notes,
                 'status' => $this->selectedStatus,
-            ])
+            ], $status)
         );
-
-        OrderStateChanged::dispatch($this->order, auth()->user(), $oldStatus, $this->selectedStatus);
 
         $this->dirty = false;
         $this->editingNote = false;
