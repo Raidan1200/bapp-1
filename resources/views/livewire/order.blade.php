@@ -84,31 +84,33 @@
       </div>
     </div>
     @if ($dirty)
-      <div class="text-right">
-        @can('delete orders')
-          <div class="sm:text-right mt-8 inline-block">
+      <div class="flex justify-between mt-4">
+        <div>
+          @can('delete orders')
             <x-button
               type="button"
-              class="hover:bg-red-500"
+              class="bg-red-400 hover:bg-red-600"
             >
               <div
                 x-data
                 @click.prevent="$dispatch('open-delete-modal', {
                   route: '{{ route('orders.destroy', $order) }}',
-                  entity: '{{ $order->customer->name }}',
+                  entity: '{{ "von {$order->customer->first_name} {$order->customer->last_name}" }}',
                   subText: '',
                 })"
               >
                 Bestellung löschen
               </div>
             </x-button>
-          </div>
-        @endcan
-        <button class="bg-green-300 px-2 py-1 rounded-xl">Save</button>
-        <button
-          wire:click.prevent="cancel"
-          class="bg-green-300 px-2 py-1 rounded-xl"
-        >Cancel</button>
+          @endcan
+        </div>
+        <div>
+          <x-button class="bg-green-500 hover:bg-green-600">Save</x-button>
+          <x-button
+            wire:click.prevent="cancel"
+            class="bg-yellow-500 hover:bg-yellow-600"
+          >Cancel</x-button>
+        </div>
       </div>
     @endif
   </form>
