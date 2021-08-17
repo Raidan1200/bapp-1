@@ -90,7 +90,7 @@ class Bookings extends Component
         $this->editing = false;
         $this->bookings = $newBookings;
         $this->data = $newBookings;
-        $this->emit('updateBookings');
+        $this->emitUp('updateBookings');
     }
 
     public function addRow()
