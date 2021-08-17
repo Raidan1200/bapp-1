@@ -30,6 +30,8 @@
   </div>
 @endisset
 
+{{ $orders->links() }}
+
 @foreach ($orders as $order)
   <livewire:order :order="$order" />
 @endforeach
