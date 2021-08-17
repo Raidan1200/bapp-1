@@ -69,6 +69,7 @@ class ZauberController extends Controller
             ->first();
 
         // TODO validation
+
         $order = $customer->orders()->create([
             'invoice_id' => rand(), // TODO
             'status' => 'deposit_mail_sent',
@@ -88,6 +89,7 @@ class ZauberController extends Controller
         foreach ($request['bookings'] as $index => $booking) {
             $validatedBooking = Validator::validate($booking, $this->rules['booking']);
 
+            // TODO: This is actually an "n + 1" query, but I guess it's OK
             $product = Product::find($booking['product_id']);
             $validatedBooking['product_name'] = $product->name;
             $validatedBooking['unit_price'] = $product->unit_price;
