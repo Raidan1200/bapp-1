@@ -40,6 +40,8 @@ class Order extends Model
         'final_paid_at' => 'datetime',
     ];
 
+    protected $with = ['bookings', 'customer'];
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
@@ -65,6 +67,7 @@ class Order extends Model
         return $this->hasOne(Action::class)->latest();
     }
 
+    // TODO: OnlyVenue ... is a bad name!
     public function scopeOnlyVenue($query, $venue_id)
     {
         return $query->where('venue_id', $venue_id);
@@ -86,5 +89,12 @@ class Order extends Model
         $from = (new Carbon($from))->shiftTimezone('Europe/Berlin')->timezone('UTC');
 
         return $query->whereBetween('starts_at', [$from, (new Carbon($from))->addDays($days)]);
+    }
+
+    public function getDepositAttribute()
+    {
+        return $this->bookings->reduce(function ($deposit, $booking) {
+            return $deposit += ($booking->quantity * $booking->unit_price) * ($booking->deposit / 100);
+        });
     }
 }

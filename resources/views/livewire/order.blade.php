@@ -5,6 +5,7 @@
   }"
   class="sm:m-2 sm:p-2 lg:p-4 bg-white rounded-xl shadow text-sm sm:text-base border-t {{ $this->color }}"
 >
+  {{ Request::fullUrlWithQuery([]) }}
   {{-- Headline --}}
   <div class="flex justify-between">
     <button

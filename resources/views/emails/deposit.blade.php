@@ -10,7 +10,7 @@ Sie haben für {{ $order->starts_at }} angefragt:
 @endforeach
 
 Bitte überweisen Sie uns all ihr Geld.
-Alternativ genügt auch eine Anzahlung von {{ number_format($deposit / 100, 2, ',', '.') }}€.
+Alternativ genügt auch eine Anzahlung von {{ number_format($order->deposit / 100, 2, ',', '.') }}€.
 
 Bankdaten Trallalla.
 </pre>

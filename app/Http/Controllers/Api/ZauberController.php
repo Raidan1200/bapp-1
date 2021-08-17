@@ -99,7 +99,7 @@ class ZauberController extends Controller
             $order->bookings()->create($validatedBooking);
         }
 
-        $order = $order->with(['customer', 'bookings'])->first();
+        $order = $order->with(['customer'])->first();
 
         // TODO: A Model-Observer might be a better solution?
         OrderReceived::dispatch($order);

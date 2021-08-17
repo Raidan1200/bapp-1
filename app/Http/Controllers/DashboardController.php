@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $state = $request->input('state');
 
         // Get Orders available to Auth-User
-        $orders = Order::with(['bookings', 'customer', 'latestAction'])
+        $orders = Order::with(['latestAction'])
             ->orderBy('starts_at')
             ->whereIn('venue_id', $venues->pluck('id'));
 

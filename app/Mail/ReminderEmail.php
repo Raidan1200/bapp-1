@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DepositEmail extends Mailable
+class ReminderEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -31,6 +31,6 @@ class DepositEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.deposit');
+        return $this->view('emails.reminder');
     }
 }

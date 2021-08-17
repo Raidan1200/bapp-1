@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Room;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
@@ -33,5 +34,13 @@ class Venue extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function getOverdueOrdersAttribute()
+    {
+        return Order::whereBetween('starts_at', [
+            now()->addDays($this->reminder_delay),
+            now()->addDays($this->reminder_delay + 1)
+        ])->get();
     }
 }
