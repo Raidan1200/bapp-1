@@ -14,10 +14,10 @@ class Order extends Component
     public $order;
 
     public $notes;
-    public $editingNote = false;
-
     public $selectedStatus;
+    public $latestAction;
 
+    public $editingNote = false;
     public $dirty = false;
 
     protected $listeners = [
@@ -30,6 +30,7 @@ class Order extends Component
         $this->order = $order;
         $this->notes = $order->notes;
         $this->selectedStatus = $order->status;
+        $this->latestAction = $order->latestAction;
     }
 
     public function updated()

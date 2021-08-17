@@ -11,10 +11,12 @@
       </a>
 
       <span>
-        {{ $from->format('d.m') }}
-        @if ($days != 1)
-          - {{ (new \Carbon\Carbon($from))->addDays($days)->subSeconds(1)->format('d.m') }}
-        @endif
+        <a href="{{ url()->full() }}">
+          {{ $from->format('d.m') }}
+          @if ($days != 1)
+            - {{ (new \Carbon\Carbon($from))->addDays($days)->subSeconds(1)->format('d.m') }}
+          @endif
+        </a>
       </span>
 
       <a href="{{ route('dashboard', [

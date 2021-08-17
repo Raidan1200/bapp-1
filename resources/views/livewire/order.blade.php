@@ -9,20 +9,23 @@
   {{ ($order->status === 'interim_paid') ? 'border-blue-500' : '' }}
   {{ ($order->status === 'final_paid') ? 'border-green-500' : '' }} "
 >
-  {{--
-    TODO TODO: I dont get it. This does not work.
-               Also, how do I prevent n+1 problem?
-    Zuletzt bearbeitet von {{ $order->latestAction->id }}
-  --}}
   {{-- Headline --}}
   <div class="flex justify-between">
     <button
       @click="editCustomer = !editCustomer"
-      class="hover:text-primary-dark rounded px-2 -mx-2 py-1 font-semibold"
+      class="flex-1 text-left hover:text-primary-dark rounded px-2 -mx-2 py-1 font-semibold"
     >
       {{ $order->customer->first_name . ' ' . $order->customer->last_name }}
     </button>
-    <div class="font-semibold">{{ $order->starts_at->timezone('Europe/Berlin')->formatLocalized('%a %d.%m %H:%M') }}</div>
+    <div>
+      <div class="font-semibold text-right">{{ $order->starts_at->timezone('Europe/Berlin')->formatLocalized('%a %d.%m %H:%M') }}</div>
+      @isset ($order->latestAction)
+        <div>
+          <span>{{ $latestAction->created_at->diffForHumans() }}</span>:
+          <span class="font-semibold">{{ $latestAction->user_name }}</span>: {{ $latestAction->message }}
+        </div>
+      @endisset
+    </div>
   </div>
   {{-- Customer Data --}}
   <div x-cloak class="bg-primary-light" x-show="editCustomer">
@@ -42,6 +45,7 @@
         class="flex-1 mr-4"
       >
         <textarea
+          x-cloak
           x-show="editNote"
           wire:model.defer="notes"
           class="w-full"
