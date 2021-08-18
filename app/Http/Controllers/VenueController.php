@@ -28,7 +28,9 @@ class VenueController extends Controller
     {
         $venue = Venue::create($request->validated());
 
-        return redirect()->route('venues.show', $venue)->with('status', 'Venue created.');
+        return redirect()
+            ->route('venues.show', $venue)
+            ->with('status', 'Venue created.');
     }
 
     public function show(Venue $venue)
@@ -51,7 +53,9 @@ class VenueController extends Controller
     {
         $venue->update($request->validated());
 
-        return redirect()->route('venues.show', $venue)->with('status', 'Venue updated.');
+        return redirect()
+            ->route('venues.show', $venue)
+            ->with('status', 'Veranstaltungsort aktualisiert.');
     }
 
     public function destroy(Venue $venue)
@@ -60,6 +64,8 @@ class VenueController extends Controller
 
         $venue->delete();
 
-        return redirect()->route('venues.index')->with('status', 'Venue deleted!');
+        return redirect()
+            ->route('venues.index')
+            ->with('status', 'Veranstaltungsort gelöscht!');
     }
 }

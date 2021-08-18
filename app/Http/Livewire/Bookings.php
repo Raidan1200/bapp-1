@@ -25,13 +25,13 @@ class Bookings extends Component
         'bookings.*.unit_price' => 'required|numeric',
         'bookings.*.vat' => 'required|numeric',
         'bookings.*.deposit' => 'required|numeric',
-        'bookings.*.status' => 'required|in:stored,new,delete',
+        'bookings.*.state' => 'required|in:stored,new,delete',
     ];
 
     public function mount()
     {
         foreach ($this->bookings as &$booking) {
-            $booking['status'] = 'stored';
+            $booking['state'] = 'stored';
             $booking['is_flat'] = $booking['is_flat'] ?? false;
         }
 
@@ -63,25 +63,25 @@ class Bookings extends Component
         $newBookings = [];
 
         foreach ($this->bookings as $booking) {
-            if ($booking['status'] === 'delete' || $booking['status'] === 'stored') {
+            if ($booking['state'] === 'delete' || $booking['state'] === 'stored') {
                 $model = Booking::find($booking['id']);
 
-                if ($booking['status'] === 'delete') {
+                if ($booking['state'] === 'delete') {
                     $model->delete();
                 }
 
-                if ($booking['status'] === 'stored') {
+                if ($booking['state'] === 'stored') {
                     $model->update($booking);
                     $newBookings[] = $booking;
                 }
             }
 
-            if ($booking['status'] === 'new') {
+            if ($booking['state'] === 'new') {
                 $booking['order_id'] = $this->orderId;
 
                 $newBooking = Booking::create($booking);
                 $booking['id'] = $newBooking->id;
-                $booking['status'] = 'stored';
+                $booking['state'] = 'stored';
 
                 $newBookings[] = $booking;
             }
@@ -108,7 +108,7 @@ class Bookings extends Component
             'is_flat' => false,
             'product_id' => null,
             'room_id' => null,
-            'status' => 'new'
+            'state' => 'new'
         ];
     }
 
@@ -116,13 +116,13 @@ class Bookings extends Component
     {
         $this->resetValidation();
 
-        switch ($this->bookings[$key]['status']) {
+        switch ($this->bookings[$key]['state']) {
             case 'stored':
-                $this->bookings[$key]['status'] = 'delete';
+                $this->bookings[$key]['state'] = 'delete';
                 break;
 
             case 'delete':
-                $this->bookings[$key]['status'] = 'stored';
+                $this->bookings[$key]['state'] = 'stored';
                 break;
 
             case 'new':

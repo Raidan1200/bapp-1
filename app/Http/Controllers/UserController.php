@@ -43,7 +43,7 @@ class UserController extends Controller
 
         event(new Registered($user));
 
-        return redirect(route('users.edit', $user));
+        return redirect()->route('users.edit', $user);
     }
 
     public function edit(User $user)
@@ -78,7 +78,7 @@ class UserController extends Controller
             $user->syncRoles($validated['role']);
         }
 
-        return redirect(route('users.edit', $user));
+        return redirect()->route('users.edit', $user);
     }
 
     public function destroy(User $user)
@@ -90,7 +90,7 @@ class UserController extends Controller
                 ->with('error', 'Der letzte Administrator kann nicht gelöscht werden.');
         }
 
-        $user->venues()->sync([]);
+        $user->venues()->sync([]); // TODO: Do I need this? DB cascade?
         $user->delete();
 
         return redirect(route('users.index'));

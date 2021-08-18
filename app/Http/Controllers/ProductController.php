@@ -23,6 +23,8 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
 
+        $validated['is_flat'] = $request->has('is_flat');
+
         if ($request->file('image')) {
             $path = $request->file('image')->store('images');
             $validated['image'] = $path;
@@ -31,13 +33,14 @@ class ProductController extends Controller
         $venue = Venue::findOrFail($validated['venue_id']);
         $product = $venue->products()->create($validated);
 
-        return redirect(route('venues.show', $venue));
+        return redirect()
+            ->route('venues.show', $venue);
     }
 
-    public function show(Product $product)
-    {
-        return view('products.show', compact('product'));
-    }
+    // public function show(Product $product)
+    // {
+    //     return view('products.show', compact('product'));
+    // }
 
     public function edit(Product $product)
     {
@@ -46,12 +49,16 @@ class ProductController extends Controller
         return view('products.create', compact('product'));
     }
 
-    public function update(CreateProductRequest $product, Request $request)
+    public function update(CreateProductRequest $request, Product $product)
     {
         $this->authorize('create products');
 
-        $validated = $request->validate($this->rules);
+        $validated = $request->validated();
 
+        // TODO: Damn checkboxes!!! Can I do this with a mutator?
+        $validated['is_flat'] = $request->has('is_flat');
+
+        // TODO: Delete old image
         if ($request->file('image')) {
             $path = $request->file('image')->store('images');
             $validated['image'] = $path;
@@ -59,7 +66,9 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return redirect(route('products.show', $product));
+        return redirect()
+            ->route('venues.show', $product->venue)
+            ->with('status', 'Produkt wurde aktualisiert.');
     }
 
     public function destroy(Product $product)
@@ -68,9 +77,11 @@ class ProductController extends Controller
 
         Storage::delete($product->image);
 
-        $product->rooms()->sync([]);
+        $product->rooms()->sync([]); // TODO: Do I need this? DB cascade?
         $product->delete();
 
-        return redirect()->route('venues.show', $product->venue)->with('status', 'Produkt wurde gelöscht.');
+        return redirect()
+            ->route('venues.show', $product->venue)
+            ->with('status', 'Produkt wurde gelöscht.');
     }
 }

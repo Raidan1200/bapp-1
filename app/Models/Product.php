@@ -37,6 +37,7 @@ class Product extends Model
     protected $casts = [
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
+        'is_flat' => 'boolean',
     ];
 
     public function venue()

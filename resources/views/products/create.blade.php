@@ -39,12 +39,12 @@
 
         <x-form-field>
           <x-label for="starts_at">Angeboten von</x-label>
-          <x-input type="date" name="starts_at" class="w-full" value="{{ old('starts_at') ?? $product->starts_at ?? '' }}" id="starts_at" />
+          <x-input type="date" name="starts_at" class="w-full" value="{{ old('starts_at') ?? (isset($product) ? $product->starts_at->format('Y-m-d') : '') }}" id="starts_at" />
         </x-form-field>
 
         <x-form-field>
           <x-label for="capacity">Angeboten bis</x-label>
-          <x-input type="date" name="ends_at" class="w-full" value="{{ old('ends_at') ?? $product->ends_at ?? '' }}" id="ends_at" />
+          <x-input type="date" name="ends_at" class="w-full" value="{{ old('ends_at') ?? (isset($product) ? $product->starts_at->format('Y-m-d') : '') }}" id="ends_at" />
         </x-form-field>
 
         <x-form-field>
@@ -78,16 +78,15 @@
         </x-form-field>
 
         <x-form-field>
-          <x-label for="is_flat">Preis ist Flatpreis</x-label>
+          <x-label for="is_flat">Preis ist Flatpreis
             <input
               {{ (old('deposit') ?? $product->deposit ?? false ) ? 'checked' : '' }}
               type="checkbox"
               name="is_flat"
-              id="remember_me"
-              class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-          </label>
-          </x-form-field>
+              class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            >
+          </x-label>
+        </x-form-field>
 
         <div class="mt-2 text-right">
           <a href="{{ route('venues.show', $product->venue_id ?? $venue_id) }}">

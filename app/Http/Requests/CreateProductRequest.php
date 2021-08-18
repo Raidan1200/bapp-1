@@ -33,14 +33,14 @@ class CreateProductRequest extends FormRequest
             'image'           => 'sometimes|mimes:jpg,jpeg,png,webp',
             'starts_at'       => 'required|date',
             'ends_at'         => 'required|date',
-            // TODO IMPORTANT: This is actually wrong
+            // TODO IMPORTANT: This is actually wrong!!! VERY WRONG!
             'opens_at'        => ['required', 'min:0', 'max:24', fn($_, $value, $fail) => $value >= $request->closes_at ? $fail('Opening time cannot be equal to or after closing time.') : null],
             'closes_at'       => 'required|min:0|max:24',
             'min_occupancy'   => 'sometimes|integer',
 
             'unit_price'      => 'required|integer',
             'vat'             => 'required|numeric',
-            'is_flat'         => 'sometimes|boolean',
+            'is_flat'         => 'sometimes',  // 'sometimes|boolean' TODO how to handle boolean here???
             'deposit'         => 'required|numeric',
 
             'venue_id'        => 'exists:venues,id'

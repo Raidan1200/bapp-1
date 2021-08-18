@@ -14,7 +14,7 @@ class Order extends Component
     public $order;
 
     public $notes;
-    public $selectedStatus;
+    public $selectedState;
 
     public $dirty = false;
 
@@ -35,7 +35,7 @@ class Order extends Component
     {
         $this->order = $order;
         $this->notes = $order->notes;
-        $this->selectedStatus = $order->status;
+        $this->selectedState = $order->state;
     }
 
     public function updated()
@@ -47,15 +47,15 @@ class Order extends Component
     {
         $this->authorize('modify orders', $this->order);
 
-        if ($statusTimestamps = $this->statusTimestamps()) {
-            OrderStateChanged::dispatch($this->order, auth()->user(), $this->order->status, $this->selectedStatus);
+        if ($stateTimestamps = $this->stateTimestamps()) {
+            OrderStateChanged::dispatch($this->order, auth()->user(), $this->order->state, $this->selectedState);
         }
 
         $this->order->update(
             array_merge([
                 'notes' => $this->notes,
-                'status' => $this->selectedStatus,
-            ], $statusTimestamps)
+                'state' => $this->selectedState,
+            ], $stateTimestamps)
         );
 
         $this->dirty = false;
@@ -64,7 +64,7 @@ class Order extends Component
 
     public function cancel()
     {
-        $this->selectedStatus = $this->order->status;
+        $this->selectedState = $this->order->state;
 
         $this->dirty = false;
         $this->editingNote = false;
@@ -87,7 +87,7 @@ class Order extends Component
 
     public function getColorProperty() : string
     {
-        return $this->colors[$this->order->status] ?? '';
+        return $this->colors[$this->order->state] ?? '';
     }
 
     public function render()
@@ -96,25 +96,25 @@ class Order extends Component
     }
 
     // Helpers
-    public function statusTimestamps() : array
+    public function stateTimestamps() : array
     {
-        if ($this->statusHasChanged()) {
+        if ($this->stateHasChanged()) {
             return $this->updatedTimestamps();
         }
 
         return [];
     }
 
-    public function statusHasChanged() : bool
+    public function stateHasChanged() : bool
     {
-        return $this->order->status !== $this->selectedStatus;
+        return $this->order->state !== $this->selectedState;
     }
 
     public function updatedTimestamps() : array
     {
         $timestamps = [];
 
-        switch ($this->order->status) {
+        switch ($this->order->state) {
             case 'fresh':
                 $timestamps['deposit_paid_at'] = null;
                 $timestamps['interim_paid_at'] = null;

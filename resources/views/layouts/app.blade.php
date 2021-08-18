@@ -34,13 +34,13 @@
 
     <div
       x-data="{
-        isOpen: false,
+        open: false,
         route: '',
         entity: '',
         text: '',
       }"
       @open-delete-modal.window="
-        isOpen = true
+        open = true
         route = $event.detail.route
         entity = $event.detail.entity
         subText = $event.detail.text

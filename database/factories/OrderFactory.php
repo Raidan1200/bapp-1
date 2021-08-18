@@ -26,7 +26,7 @@ class OrderFactory extends Factory
     {
         return [
             'invoice_id' => $this->faker->date('Ymd') . rand(1000, 9999),
-            'status' => ['fresh', 'deposit_paid', 'interim_paid', 'final_paid', 'cancelled'][rand(0, 4)],
+            'state' => ['fresh', 'deposit_paid', 'interim_paid', 'final_paid', 'cancelled'][rand(0, 4)],
             'cash_payment' => rand(0, 1),
             'deposit' => rand(0, 1) ? '20' : '40',
             'notes' => 'I am a note. Please pay attention to me!',

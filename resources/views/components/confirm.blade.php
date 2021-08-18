@@ -2,7 +2,7 @@
   <div
     style="background-color: rgba(0, 0, 0, 0.8); display: none"
     class="fixed z-40 top-0 right-0 left-0 bottom-0 h-full w-full"
-    x-show="isOpen"
+    x-show="open"
     x-transition:enter="ease-out transition-slow"
     x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100"
@@ -12,7 +12,7 @@
   >
   <div
     class="p-4 max-w-xl mx-auto absolute left-0 right-0 overflow-hidden mt-24 bg-white rounded-xl"
-    x-on:click.away="isOpen = false"
+    @click.away="open = false"
   >
     <form
       method="POST"
@@ -32,7 +32,7 @@
       <div class="text-right">
         <button
           type="button"
-          x-on:click="isOpen = false"
+          x-on:click="open = false"
           class="px-4 py-2 rounded-lg text-gray-600 bg-white hover:text-blue-600 shadow mr-2"
         >Cancel</button>
         <button

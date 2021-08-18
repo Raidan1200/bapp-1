@@ -72,7 +72,7 @@ class ZauberController extends Controller
 
         $order = $customer->orders()->create([
             'invoice_id' => rand(), // TODO
-            'status' => 'deposit_mail_sent',
+            'state' => 'fresh',
             'cash_payment' => rand(0, 1), // TODO
 
             // TODO
