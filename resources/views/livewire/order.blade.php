@@ -11,7 +11,7 @@
       @click="editCustomer = !editCustomer"
       class="flex-1 text-left hover:text-primary-dark rounded px-2 -mx-2 py-1 font-semibold"
     >
-      {{ $order->customer->first_name . ' ' . $order->customer->last_name }}
+      {{ $order->customer->name }}
     </button>
     <div>
       <div class="font-semibold text-right">{{ $order->starts_at->timezone('Europe/Berlin')->formatLocalized('%a %d.%m %H:%M') }}</div>

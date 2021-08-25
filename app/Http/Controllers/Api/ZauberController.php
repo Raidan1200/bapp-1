@@ -16,27 +16,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ZauberController extends Controller
 {
-    // protected $rules = [
-    //     'customer' => [
-    //         'customer.first_name' => 'required',
-    //         'customer.last_name' => 'required',
-    //         'customer.email' => 'required',
-    //         'customer.company' => 'sometimes',
-    //         'customer.street' => 'required',
-    //         'customer.street_no' => 'required',
-    //         'customer.zip' => 'required',
-    //         'customer.city' => 'required',
-    //         'customer.phone' => 'required',
-    //     ],
-    //     'booking' => [
-    //         'starts_at' => 'required|date',
-    //         'ends_at' => 'required|date',
-    //         'product_id' => 'exists:products,id',
-    //         'room_id' => 'exists:rooms,id',
-    //         'quantity' => 'required|numeric',
-    //     ]
-    // ];
-
     public function config()
     {
         // Note that auth()->user() is a Venue, not a User!
