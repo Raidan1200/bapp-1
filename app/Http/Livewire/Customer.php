@@ -3,11 +3,13 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\Customer as CustomerModel;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Customer extends Component
 {
-    public CustomerModel $customer;
+    use AuthorizesRequests;
+
+    public $customer;
 
     public bool $editing = false;
 
@@ -35,6 +37,8 @@ class Customer extends Component
 
     public function save()
     {
+        $this->authorize('modify orders');
+
         $this->validate();
         $this->customer->save();
 

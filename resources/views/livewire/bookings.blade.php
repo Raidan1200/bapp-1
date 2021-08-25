@@ -4,14 +4,16 @@
       <tr class="bg-gray-100">
         <td class="w-5/12 border-r px-1 border-white">
           Produkt
-          @if(!$editing)
-            <button
-              class="float-right p-2"
-              wire:click="startEditing"
-            >
-              <x-icons.edit height="3" :width="3" />
-            </button>
-          @endif
+          @can('modify orders')
+            @if(!$editing)
+              <button
+                class="float-right p-2"
+                wire:click="startEditing"
+              >
+                <x-icons.edit height="3" :width="3" />
+              </button>
+            @endif
+          @endcan
         </td>
         <td class="w-1/12 text-center px-1 border-r border-white">Flat</td>
         <td class="w-1/12 text-right px-1 border-r border-white">#</td>
@@ -42,7 +44,7 @@
         @endif
         <tr
           wire:key="{{ $key }}"
-          class="{{ $booking['status'] === 'delete' ? 'bg-red-200' : '' }} {{ $booking['status'] === 'new' ? 'bg-green-200' : '' }}"
+          class="{{ $booking['state'] === 'delete' ? 'bg-red-200' : '' }} {{ $booking['state'] === 'new' ? 'bg-green-200' : '' }}"
         >
           <td>
             <x-input

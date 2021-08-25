@@ -37,7 +37,9 @@
     <div class="flex justify-between mt-2">
       {{-- Note --}}
       <div
-        @click="dirty = true"
+        @can('modify orders')
+          @click="dirty = true"
+        @endcan
         class="flex-1 mr-4"
       >
         <textarea
@@ -60,18 +62,31 @@
       </div>
       <div>
         <div>
-          <select
-            wire:model="selectedState"
-            class="py-0"
-            name="order-status"
-            id="order-status"
-          >
-            <option value="fresh">Nicht bestätigt</option>
-            <option value="deposit_paid">Anzahlung eingegangen</option>
-            <option value="interim_paid">Zwischenrechnung bezahlt</option>
-            <option value="final_paid">Schlussrechnung bezahlt</option>
-            <option value="cancelled">Storniert</option>
-          </select>
+          @can('modify orders')
+            <select
+              wire:model="selectedState"
+              class="py-0"
+              name="order-status"
+              id="order-status"
+            >
+              {{-- TODO: Find a more elegant solution ... please :) --}}
+              <option value="fresh"
+                {{ (in_array($order->state, ['deposit_paid', 'interim_paid', 'final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
+              >Nicht bestätigt</option>
+              <option value="deposit_paid"
+                {{ (in_array($order->state, ['interim_paid', 'final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
+              >Anzahlung eingegangen</option>
+              <option value="interim_paid"
+                {{ (in_array($order->state, ['final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
+              >Zwischenrechnung bezahlt</option>
+              <option value="final_paid"
+                {{ (in_array($order->state, ['cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
+              >Schlussrechnung bezahlt</option>
+              <option value="cancelled">Storniert</option>
+            </select>
+          @else
+            {{ $selectedState }}
+          @endcan
         </div>
         <div>
           <div>Anzahlung: {{ number_format($this->deposit / 100, 2, ',', '.') }}</div>

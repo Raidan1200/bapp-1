@@ -31,6 +31,9 @@ class DepositEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.deposit');
+        return $this
+            // ->from('email', 'name')
+            // ->subject('subject')
+            ->view('emails.deposit');
     }
 }

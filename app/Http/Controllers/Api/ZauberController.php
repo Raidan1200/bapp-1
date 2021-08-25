@@ -11,32 +11,31 @@ use App\Events\OrderReceived;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ZauberRequest;
 use Illuminate\Support\Facades\Validator;
 
 class ZauberController extends Controller
 {
-    // TODO IMPORTANT: Produkt mit Freitext und Freipreis hinzuf+gen
-
-    protected $rules = [
-        'customer' => [
-            'customer.first_name' => 'required',
-            'customer.last_name' => 'required',
-            'customer.email' => 'required',
-            'customer.company' => 'sometimes',
-            'customer.street' => 'required',
-            'customer.street_no' => 'required',
-            'customer.zip' => 'required',
-            'customer.city' => 'required',
-            'customer.phone' => 'required',
-        ],
-        'booking' => [
-            'starts_at' => 'required|date',
-            'ends_at' => 'required|date',
-            'product_id' => 'exists:products,id',
-            'room_id' => 'exists:rooms,id',
-            'quantity' => 'required|numeric',
-        ]
-    ];
+    // protected $rules = [
+    //     'customer' => [
+    //         'customer.first_name' => 'required',
+    //         'customer.last_name' => 'required',
+    //         'customer.email' => 'required',
+    //         'customer.company' => 'sometimes',
+    //         'customer.street' => 'required',
+    //         'customer.street_no' => 'required',
+    //         'customer.zip' => 'required',
+    //         'customer.city' => 'required',
+    //         'customer.phone' => 'required',
+    //     ],
+    //     'booking' => [
+    //         'starts_at' => 'required|date',
+    //         'ends_at' => 'required|date',
+    //         'product_id' => 'exists:products,id',
+    //         'room_id' => 'exists:rooms,id',
+    //         'quantity' => 'required|numeric',
+    //     ]
+    // ];
 
     public function config()
     {
@@ -54,57 +53,50 @@ class ZauberController extends Controller
         return $room->bookings()->where('starts_at', '<=', $to)->where('ends_at', '>=', $from)->get();
     }
 
-    public function order(Request $request, Venue $venue)
+    public function order(ZauberRequest $request, Venue $venue)
     {
-        // TODO IMPORTANT: This whole process should be a DB-transaction!!!
+        $validated = $request->validated();
 
-        $validated = $request->validate($this->rules['customer']);
-
-        $customer = Customer::create($validated['customer']);
-
-        $firstBookingDate = collect($request['bookings'])
+        $firstBookingDate = collect($validated['bookings'])
             ->pluck('starts_at')
             ->sort()
             ->values()
             ->first();
 
-        // TODO validation
+        $bookings = [];
 
-        $order = $customer->orders()->create([
-            'invoice_id' => rand(), // TODO
-            'state' => 'fresh',
-            'cash_payment' => rand(0, 1), // TODO
-
-            // TODO
-            // Kunde Reserviert ... Nur Restaurant 10%
-            // Curling Getränke Flat ...
-            // Nur Curling ... 100%
-            // Roland PDF Klass Reservation PHP
-
-            'deposit' => 0,
-            'venue_id' => $venue->id,
-            'starts_at' => new Carbon($firstBookingDate),
-        ]);
-
-        foreach ($request['bookings'] as $index => $booking) {
-            $validatedBooking = Validator::validate($booking, $this->rules['booking']);
-
-            // TODO: This is actually an "n + 1" query, but I guess it's OK
-            $product = Product::find($booking['product_id']);
-            $validatedBooking['product_name'] = $product->name;
-            $validatedBooking['unit_price'] = $product->unit_price;
-            $validatedBooking['vat'] = $product->vat;
-            $validatedBooking['deposit'] = $product->deposit;
-            $validatedBooking['is_flat'] = $product->is_flat;
-            $validatedBooking['snapshot'] = json_encode($this->productSnapshot($product));
-
-            $order->bookings()->create($validatedBooking);
+        // TODO: This is actually an "n + 1" query, but I guess it's OK
+        foreach ($validated['bookings'] as $booking) {
+            $product = Product::findOrFail($booking['product_id']);
+            $booking['product_name'] = $product->name;
+            $booking['unit_price'] = $product->unit_price;
+            $booking['vat'] = $product->vat;
+            $booking['deposit'] = $product->deposit;
+            $booking['is_flat'] = $product->is_flat;
+            $booking['snapshot'] = json_encode($this->productSnapshot($product));
+            $bookings[] = $booking;
         }
 
-        $order = $order->with(['customer'])->first();
+        $order = DB::transaction(function () use ($validated, $venue, $firstBookingDate, $bookings) {
+            $customer = Customer::create($validated['customer']);
+
+            $order = $customer->orders()->create([
+                'invoice_id' => rand(), // TODO ROLAND
+                'state' => 'fresh',
+                'cash_payment' => rand(0, 1), // TODO ROLAND
+                'deposit' => 0,
+                'venue_id' => $venue->id,
+                'starts_at' => new Carbon($firstBookingDate),
+            ]);
+
+            $order->bookings()->createMany($bookings);
+
+            return $order;
+        });
 
         // TODO: A Model-Observer might be a better solution?
-        OrderReceived::dispatch($order);
+        // OTOH, we probably need a mail-queue for batch processing anyways
+        OrderReceived::dispatch($order->load('customer'));
 
         return $order;
     }

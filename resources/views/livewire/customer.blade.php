@@ -60,12 +60,14 @@
     </form>
   @else
     <div>
-      <button
-        class="float-right p-2"
-        wire:click="startEditing"
-      >
-        <x-icons.edit />
-      </button>
+      @can('modify orders')
+        <button
+          class="float-right p-2"
+          wire:click="startEditing"
+        >
+          <x-icons.edit />
+        </button>
+      @endcan
       @if ($customer->company)
         <div>Firma: {{ $customer->company }}</div>
       @endif

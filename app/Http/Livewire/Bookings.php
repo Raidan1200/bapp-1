@@ -4,9 +4,12 @@ namespace App\Http\Livewire;
 
 use App\Models\Booking;
 use Livewire\Component;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Bookings extends Component
 {
+    use AuthorizesRequests;
+
     public $bookings;
 
     public $data;
@@ -52,6 +55,8 @@ class Bookings extends Component
 
     public function save()
     {
+        $this->authorize('modify orders');
+
         $this->validate();
 
         // TODO IMPORTANT:
