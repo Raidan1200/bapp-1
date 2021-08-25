@@ -21,8 +21,9 @@ class OrderFilters extends QueryFilter
         return $this->builder->where('state', $state);
     }
 
-    public function from(string $from)
+    public function from(string $from = null)
     {
+        $from = $from === null ? now() : $from;
         $days = $this->request->input('days') ?? 7;
 
         return $this->builder->whereBetween('starts_at', [
