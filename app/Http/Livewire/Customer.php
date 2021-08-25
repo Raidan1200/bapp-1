@@ -42,7 +42,7 @@ class Customer extends Component
         $this->validate();
         $this->customer->save();
 
-        $this->emitUp('updateBookings');
+        $this->emitUp('updateCustomer');
         $this->editing = false;
     }
 

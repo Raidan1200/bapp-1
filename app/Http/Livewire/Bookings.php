@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Booking;
 use Livewire\Component;
+use App\Events\OrderHasChanged;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Bookings extends Component
@@ -64,8 +65,6 @@ class Bookings extends Component
 
         // TODO This is REAAAALLY inefficient
         //      Does Laravel have something like "bulkUpdate" or "updateMany"?
-
-        $newBookings = [];
 
         foreach ($this->bookings as $booking) {
             if ($booking['state'] === 'delete' || $booking['state'] === 'stored') {

@@ -16,9 +16,9 @@
     <div>
       <div class="font-semibold text-right">{{ $order->starts_at->timezone('Europe/Berlin')->formatLocalized('%a %d.%m %H:%M') }}</div>
       @isset ($order->latestAction)
-        <div>
+        <div title="Von: '{{ $order->latestAction->from }}' Zu: '{{ $order->latestAction->to }}'">
           <span>{{ $order->latestAction->created_at->diffForHumans() }}</span>:
-          <span class="font-semibold">{{ $order->latestAction->user_name }}</span>: {{ $order->latestAction->message }}
+          <span class="font-semibold">{{ $order->latestAction->user_name }}</span>: {{ $order->latestAction->what }}
         </div>
       @endisset
     </div>

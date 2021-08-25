@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Carbon;
-use App\Events\OrderStateChanged;
+use App\Events\OrderHasChanged;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Order extends Component
@@ -27,8 +27,8 @@ class Order extends Component
     ];
 
     protected $listeners = [
-        'updateBookings' => '$refresh',
-        'updateCustomer' => '$refresh'
+        'updateBookings' => 'logBookingsChange', //$refresh',
+        'updateCustomer' => 'logCustomerDataChange', //$refresh'
     ];
 
     public function mount($order)
@@ -47,15 +47,14 @@ class Order extends Component
     {
         $this->authorize('modify orders', $this->order);
 
-        if ($stateTimestamps = $this->stateTimestamps()) {
-            OrderStateChanged::dispatch($this->order, auth()->user(), $this->order->state, $this->selectedState);
-        }
+        $this->logStateChange();
+        $this->logNotesChange();
 
         $this->order->update(
             array_merge([
                 'notes' => $this->notes,
                 'state' => $this->selectedState,
-            ], $stateTimestamps)
+            ], $this->updatedTimestamps())
         );
 
         $this->dirty = false;
@@ -81,22 +80,41 @@ class Order extends Component
     }
 
     // Helpers
-    public function stateTimestamps() : array
-    {
-        if ($this->stateHasChanged()) {
-            return $this->updatedTimestamps();
-        }
-
-        return [];
-    }
-
-    public function stateHasChanged() : bool
+    public function stateHasChanged()
     {
         return $this->order->state !== $this->selectedState;
     }
 
+    public function logStateChange()
+    {
+        if ($this->stateHasChanged()) {
+            OrderHasChanged::dispatch($this->order, auth()->user(), 'state', $this->order->state, $this->selectedState);
+        }
+    }
+
+    public function logNotesChange()
+    {
+        if ($this->order->notes !== $this->notes) {
+            OrderHasChanged::dispatch($this->order, auth()->user(), 'notes', $this->order->notes, $this->notes);
+        }
+    }
+
+    public function logCustomerDataChange()
+    {
+        OrderHasChanged::dispatch($this->order, auth()->user(), 'customer', '', '');
+    }
+
+    public function logBookingsChange()
+    {
+        OrderHasChanged::dispatch($this->order, auth()->user(), 'bookings', $this->order->bookings->count(), '');
+    }
+
     public function updatedTimestamps() : array
     {
+        if (! $this->stateHasChanged()) {
+            return [];
+        }
+
         $timestamps = [];
 
         switch ($this->order->state) {

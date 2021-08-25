@@ -12,12 +12,13 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class OrderStateChanged
+class OrderHasChanged
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $order;
     public $user;
+    public $what;
     public $from;
     public $to;
 
@@ -26,10 +27,11 @@ class OrderStateChanged
      *
      * @return void
      */
-    public function __construct(Order $order, User $user, $from, $to)
+    public function __construct(Order $order, User $user, $what, $from, $to)
     {
         $this->order = $order;
         $this->user = $user;
+        $this->what = $what;
         $this->from = $from;
         $this->to = $to;
     }

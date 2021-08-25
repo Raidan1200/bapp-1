@@ -13,7 +13,9 @@ class Action extends Model
     public $fillable = [
         'user_name',
         'user_email',
-        'message',
+        'what',
+        'from',
+        'to',
         'order_id',
         'user_id',
     ];

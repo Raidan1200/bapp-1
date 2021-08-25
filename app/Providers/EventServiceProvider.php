@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 use App\Events\OrderReceived;
-use App\Events\OrderStateChanged;
+use App\Events\OrderHasChanged;
+use App\Listeners\LogOrderChange;
 use App\Listeners\SendDepositEmail;
 use Illuminate\Support\Facades\Event;
-use App\Listeners\LogOrderStateChange;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,8 +25,8 @@ class EventServiceProvider extends ServiceProvider
         OrderReceived::class => [
             SendDepositEmail::class,
         ],
-        OrderStateChanged::class => [
-            LogOrderStateChange::class,
+        OrderHasChanged::class => [
+            LogOrderChange::class,
         ]
     ];
 

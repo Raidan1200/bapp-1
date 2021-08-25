@@ -17,7 +17,9 @@ class CreateActionsTable extends Migration
             $table->id();
             $table->string('user_name');
             $table->string('user_email');
-            $table->string('message');
+            $table->string('what');
+            $table->string('from');
+            $table->string('to');
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
