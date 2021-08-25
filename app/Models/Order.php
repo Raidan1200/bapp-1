@@ -83,4 +83,11 @@ class Order extends Model
             return $deposit += ($booking->quantity * $booking->unit_price) * ($booking->deposit / 100);
         });
     }
+
+    public function getTotalAttribute()
+    {
+        return $this->bookings->reduce(function ($sum, $booking) {
+            return $sum += $booking->quantity * $booking->unit_price;
+        });
+    }
 }

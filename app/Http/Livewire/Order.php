@@ -70,21 +70,6 @@ class Order extends Component
         $this->editingNote = false;
     }
 
-    // TODO: This is duplicated in DepositEmail.php !!! BAD!
-    public function getTotalProperty()
-    {
-        return $this->order->bookings->reduce(function ($sum, $booking) {
-            return $sum += $booking->quantity * $booking->unit_price;
-        });
-    }
-
-    public function getDepositProperty()
-    {
-        return $this->order->bookings->reduce(function ($deposit, $booking) {
-            return $deposit += ($booking->quantity * $booking->unit_price) * ($booking->deposit / 100);
-        });
-    }
-
     public function getColorProperty() : string
     {
         return $this->colors[$this->order->state] ?? '';

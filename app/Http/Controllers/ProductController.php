@@ -55,11 +55,11 @@ class ProductController extends Controller
 
         $validated = $request->validated();
 
-        // TODO: Damn checkboxes!!! Can I do this with a mutator?
         $validated['is_flat'] = $request->has('is_flat');
 
-        // TODO: Delete old image
         if ($request->file('image')) {
+            Storage::delete($product->image); // TODO: Test this
+
             $path = $request->file('image')->store('images');
             $validated['image'] = $path;
         }

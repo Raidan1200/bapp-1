@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-// TODO: Do we really need to queue this?
 class SendDepositEmail implements ShouldQueue
 {
     /**
