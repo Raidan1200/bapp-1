@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration
+class CreatePackagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug');
@@ -21,7 +21,7 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->string('image')->nullable();
 
-            // Time of year the product is offered
+            // Time of year the package is offered
             $table->datetime('starts_at');
             $table->datetime('ends_at');
 
@@ -35,10 +35,10 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('unit_price');
             $table->unsignedFloat('vat');
             $table->unsignedFloat('deposit');
-            $table->unsignedFloat('is_flat')->default(false);
+            $table->boolean('is_flat')->default(false);
 
             // TODO: I don't like those extra flat-fields stuff
-            // IMHO  flat and non-flat should be 2 different products
+            // IMHO  flat and non-flat should be 2 different packages
             //    OR price, vat, deposit, is_flat belong in a separate prices table
             $table->unsignedInteger('price_flat')->nullable();
             $table->unsignedFloat('vat_flat')->nullable();
@@ -56,6 +56,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('packages');
     }
 }

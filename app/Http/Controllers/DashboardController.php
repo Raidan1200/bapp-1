@@ -15,7 +15,7 @@ class DashboardController extends Controller
     public function index(OrderFilters $filters, Request $request)
     {
         $venues = auth()->user()->venues()->with(['rooms' => function ($q) {
-            $q->orderBy('name')->with(['products' => function ($r) {
+            $q->orderBy('name')->with(['packages' => function ($r) {
                 $r->orderBy('name');
             }]);
         }])->get();

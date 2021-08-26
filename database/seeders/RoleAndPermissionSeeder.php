@@ -17,7 +17,7 @@ class RoleAndPermissionSeeder extends Seeder
             'create tokens',                                        'delete tokens',
             'create venues',   'modify venues',   'admin venues',   'delete venues',
             'create rooms',    'modify rooms',    'admin rooms',    'delete rooms',
-            'create products', 'modify products', 'admin products', 'delete products',
+            'create packages', 'modify packages', 'admin packages', 'delete packages',
                                'modify orders',   'admin orders',   'delete orders',
         ])->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];
@@ -31,7 +31,7 @@ class RoleAndPermissionSeeder extends Seeder
         Role::create(['name' => 'manager'])
             ->givePermissionTo([
                 'create users', 'modify users',
-                'modify venues', 'modify rooms', 'modify products',
+                'modify venues', 'modify rooms', 'modify packages',
                 'admin orders', 'delete orders'
             ]);
 

@@ -36,7 +36,7 @@
             <td colspan="7" class="bg-red-300">
               {{ var_dump($errors->all()) }}
               Es fehlen:
-              @if ($errors->has("bookings.$key.product_name"))
+              @if ($errors->has("bookings.$key.package_name"))
                 Produktname
               @endif
             </td>
@@ -48,7 +48,7 @@
         >
           <td>
             <x-input
-              wire:model.defer="bookings.{{ $key }}.product_name"
+              wire:model.defer="bookings.{{ $key }}.package_name"
               class="w-full"
             />
           </td>
@@ -91,7 +91,7 @@
       @else
         <tr>
           <td>
-            {{ $booking['product_name'] }}
+            {{ $booking['package_name'] }}
           </td>
           <td class="flex justify-center">
             @if ($booking['is_flat'])

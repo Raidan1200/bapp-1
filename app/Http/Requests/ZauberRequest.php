@@ -36,7 +36,7 @@ class ZauberRequest extends FormRequest
 
             'bookings.*.starts_at' => 'required|date',
             'bookings.*.ends_at' => 'required|date',
-            'bookings.*.product_id' => 'exists:products,id',
+            'bookings.*.package_id' => 'exists:packages,id',
             'bookings.*.room_id' => 'exists:rooms,id',
             'bookings.*.quantity' => 'required|numeric',
         ];

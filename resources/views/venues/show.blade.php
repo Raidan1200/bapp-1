@@ -26,17 +26,17 @@
       @endif
 
       <div class="flex my-2">
-        <h2 class="text-xl my-2">Produkte</h2>
-        <x-link href="{{ route('products.create', ['venue' => $venue->id]) }}">
+        <h2 class="text-xl my-2">Pakete</h2>
+        <x-link href="{{ route('packages.create', ['venue' => $venue->id]) }}">
           <x-icons.add class="h-6 w-6" />
         </x-link>
       </div>
-      @if ($venue->products)
+      @if ($venue->packages)
         <ul class="m-2">
-          @foreach ($venue->products as $product)
+          @foreach ($venue->packages as $package)
             <li>
-              <x-link href="{{ route('products.edit', $product) }}">
-                {{ $product->name }}
+              <x-link href="{{ route('packages.edit', $package) }}">
+                {{ $package->name }}
               </x-link>
             </li>
           @endforeach

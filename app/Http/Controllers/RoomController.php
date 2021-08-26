@@ -36,7 +36,7 @@ class RoomController extends Controller
     {
         $room->update($request->validated());
 
-        return redirect()->route('rooms.edit', $room->venue_id)->with('status', 'Raum aktualisiert');
+        return redirect()->route('venues.show', $room->venue_id)->with('status', 'Raum aktualisiert');
     }
 
     public function destroy(Room $room)
@@ -45,7 +45,7 @@ class RoomController extends Controller
 
         Storage::delete($room->image);
 
-        $room->products()->sync([]);
+        $room->packages()->sync([]);
         $room->delete();
 
         return redirect()->route('venues.show', $room->venue)->with('status', 'Raum wurde gelöscht.');

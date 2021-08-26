@@ -15,8 +15,8 @@ class CreateUserVenueTable extends Migration
     {
         Schema::create('user_venue', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('venue_id')->constrained();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
             $table->unique(['user_id', 'venue_id']);
         });
     }

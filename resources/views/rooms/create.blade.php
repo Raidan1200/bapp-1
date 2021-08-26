@@ -80,7 +80,7 @@
     @isset ($room)
       <div class="sm:w-1/2">
         <x-form-field>
-          <livewire:product-room :room="$room" id="productroom" />
+          <livewire:package-room :room="$room" id="packageroom" />
         </x-form-field>
       </div>
     @endisset

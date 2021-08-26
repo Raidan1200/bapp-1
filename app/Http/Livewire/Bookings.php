@@ -23,7 +23,7 @@ class Bookings extends Component
         'bookings.*.id' => 'nullable',
         'bookings.*.starts_at' => 'nullable|date',
         'bookings.*.ends_at' => 'nullable|date',
-        'bookings.*.product_name' => 'required|string|max:255',
+        'bookings.*.package_name' => 'required|string|max:255',
         'bookings.*.is_flat' => 'required',
         'bookings.*.quantity' => 'required|numeric',
         'bookings.*.unit_price' => 'required|numeric',
@@ -104,13 +104,13 @@ class Bookings extends Component
         $this->bookings[] = [
             'starts_at' => null,
             'ends_at' => null,
-            'product_name' => '',
+            'package_name' => '',
             'quantity' => 1,
             'unit_price' => 0,
             'vat' => 20,
             'deposit' => 0,
             'is_flat' => false,
-            'product_id' => null,
+            'package_id' => null,
             'room_id' => null,
             'state' => 'new'
         ];

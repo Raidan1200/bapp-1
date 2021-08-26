@@ -19,7 +19,7 @@ class CreateBookingsTable extends Migration
             $table->datetime('starts_at')->nullable();
             $table->datetime('ends_at')->nullable();
 
-            $table->string('product_name');
+            $table->string('package_name');
             $table->unsignedInteger('quantity');
             $table->unsignedInteger('unit_price');
             $table->unsignedFloat('vat');
@@ -29,7 +29,7 @@ class CreateBookingsTable extends Migration
             $table->json('snapshot')->nullable();
 
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('package_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('room_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });

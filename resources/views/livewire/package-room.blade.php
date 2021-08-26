@@ -1,12 +1,12 @@
 <form>
   <div class="my-4">
     <h3 class="text-xl">Zugeordnete Produkte</h3>
-    @if ($assignedProducts->count())
+    @if ($assignedPackages->count())
       <ul>
-        @foreach ($assignedProducts as $product)
+        @foreach ($assignedPackages as $package)
           <li class="flex justify-between">
-            <div>{{ $product->name }}</div>
-            <button type="button" wire:click="remove({{ $product }})">
+            <div>{{ $package->name }}</div>
+            <button type="button" wire:click="remove({{ $package }})">
               <x-icons.delete class="h-4" />
             </button>
           </li>
@@ -19,12 +19,12 @@
 
   <div class="my-4">
     <h3 class="text-xl">Nicht Zugeordnet</h3>
-    @if ($otherProducts->count())
+    @if ($otherPackages->count())
       <ul>
-        @foreach ($otherProducts as $product)
+        @foreach ($otherPackages as $package)
           <li class="flex justify-between">
-            <div>{{ $product->name }}</div>
-            <button type="button" wire:click="add({{ $product }})">
+            <div>{{ $package->name }}</div>
+            <button type="button" wire:click="add({{ $package }})">
               <x-icons.add class="h-4" />
             </button>
           </li>

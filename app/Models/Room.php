@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Venue;
 use App\Models\Booking;
-use App\Models\Product;
+use App\Models\Package;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,9 +28,9 @@ class Room extends Model
         return $this->belongsTo(Venue::class);
     }
 
-    public function products()
+    public function packages()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Package::class);
     }
 
     public function bookings()

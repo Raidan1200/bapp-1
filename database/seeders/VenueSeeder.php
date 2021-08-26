@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Room;
 use App\Models\User;
 use App\Models\Venue;
-use App\Models\Product;
+use App\Models\Package;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -50,7 +50,7 @@ class VenueSeeder extends Seeder
             'venue_id' => $v1->id
         ]);
 
-        $p1 = Product::factory()->create([
+        $p1 = Package::factory()->create([
             'name' => 'Hüttenpaket Classic',
             'slogan' => 'Herzlich willkommen zu ihrer Weihnachtsfeier beim Dresdner Hüttenzauber im gemütlichen, rustikalen Hüttenrestaurant!',
             'description' => '<p>Herzlich willkommen zu ihrer Weihnachtsfeier beim Dresdner Hüttenzauber im gemütlichen, rustikalen Hüttenrestaurant!<br /><br />Genießen Sie einen abwechslungsreichen Abend in unserem neu gestalteten gemütlichen Hüttenrestaurant. Genießen einen stimmungsvollen Abend im urigen Ambiente. Zusätzlich haben Sie die Möglichkeit einen heiteren Aktivteil auf einer unserer 4 Eisstockbahnen durchzuführen. Diese können Sie gern optional nach Wahl des Hüttenpaketes hinzu buchen.<br /><br />Ihr persönliches Hüttenpaket:<br /><ul><li>gemütliche Hüttenatmosphäre im Kerzenschein</li><li>leckeres 3-Gang Menü:<h5><b>1. Gang</b></h5>Hausgemachtes Karotten-Ingwersüppchen mit Orange<h5><b>2. Gang</b></h5>Knusprige Entenkeule an einer Beifußsoße, mit Apfelrotkohl und Kartoffelklößen<br>oder eines unserer typisch-alpenländischen Hüttengerichte nach Wahl<h5><b>3. Gang</b></h5>leckeres Hüttendessert zum Abschluss </li></ul><br /><br />28.50€ inkl. gesetzl Mwst.<br />Preis gilt pro Person</p>',
@@ -73,7 +73,7 @@ class VenueSeeder extends Seeder
 
         $p1->rooms()->sync([$room1->id]);
 
-        $p2 = Product::factory()->create([
+        $p2 = Package::factory()->create([
             'name' => 'Hüttenpaket Premium',
             'slogan' => 'Herzlich willkommen zu ihrer Weihnachtsfeier beim Dresdner Hüttenzauber im gemütlichen, rustikalen Hüttenrestaurant!',
             'description' => '<p>Herzlich willkommen zu ihrer Weihnachtsfeier beim Dresdner Hüttenzauber im gemütlichen, rustikalen Hüttenrestaurant!<br /><br />Genießen Sie einen abwechslungsreichen Abend in unserem neu gestalteten gemütlichen Hüttenrestaurant. Genießen einen stimmungsvollen Abend im urigen Ambiente. Zusätzlich haben Sie die Möglichkeit einen heiteren Aktivteil auf einer unserer 4 Eisstockbahnen durchzuführen. Diese können Sie gern optional nach Wahl des Hüttenpaketes hinzu buchen.<br /><br />Ihr persönliches Hüttenpaket:<br /><ul><li>gemütliche Hüttenatmosphäre im Kerzenschein</li><li>leckeres 3-Gang Menü:<h5><b>1. Gang</b></h5>Hausgemachtes Karotten-Ingwersüppchen mit Orange<h5><b>2. Gang</b></h5>Knusprige Entenkeule an einer Beifußsoße, mit Apfelrotkohl und Kartoffelklößen<br>oder eines unserer typisch-alpenländischen Hüttengerichte nach Wahl<h5><b>3. Gang</b></h5>leckeres Hüttendessert zum Abschluss<br /> </li><li><h5><b>inklusive Getränkeflat</b></h5> im Hüttenrestaurant mit Benediktiner, Wernesgrüner, Weine, Secco & alkoholfreien Getränken<br>(zusätzliche Getränke wie Spirituosen und Mixgetränke werden nach Verbrauch abgerechnet) ab 22:00 Uhr werden alle Getränke nach Verbrauch abgerechnet</li></ul><br /><br />58.90€ inkl. gesetzl Mwst.<br />Preis gilt pro Person</p>',
@@ -96,7 +96,7 @@ class VenueSeeder extends Seeder
 
         $p2->rooms()->sync([$room1->id]);
 
-        $p3 = Product::factory()->create([
+        $p3 = Package::factory()->create([
             'name' => 'Curlingbahn',
             'slogan' => 'Das Event für Jung und Alt',
             'description' => '',
@@ -126,9 +126,9 @@ class VenueSeeder extends Seeder
         // $room1 = Room::factory()->create(['name' => 'Schloss', 'venue_id' => $v2->id]);
         // $room2 = Room::factory()->create(['name' => 'Garten', 'venue_id' => $v2->id]);
         // $room3 = Room::factory()->create(['name' => 'Tretboot', 'venue_id' => $v2->id]);
-        // $p1 = Product::factory()->create(['name' => 'Hochzeit am See', 'venue_id' => $v2->id]);
-        // $p2 = Product::factory()->create(['name' => 'Hochzeit mit Flat', 'venue_id' => $v2->id]);
-        // $p3 = Product::factory()->create(['name' => 'Geburtstag im Tretboot', 'venue_id' => $v2->id]);
+        // $p1 = Package::factory()->create(['name' => 'Hochzeit am See', 'venue_id' => $v2->id]);
+        // $p2 = Package::factory()->create(['name' => 'Hochzeit mit Flat', 'venue_id' => $v2->id]);
+        // $p3 = Package::factory()->create(['name' => 'Geburtstag im Tretboot', 'venue_id' => $v2->id]);
 
         // $p1->rooms()->attach([$room1->id, $room2->id]);
         // $p2->rooms()->attach([$room3->id]);

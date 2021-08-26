@@ -68,7 +68,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        if ($user->isLastAdmin()) {
+        if ($user->isLastAdmin() && $validated['role'] != 1) {
             return redirect(route('users.edit', $user))
                 ->withInput()
                 ->with('error', 'Dies ist der letzte Admin. Er muss die Galaxie retten und muss folglich Admin bleiben.');

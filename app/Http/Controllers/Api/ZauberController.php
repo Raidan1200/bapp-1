@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Room;
 use App\Models\Venue;
-use App\Models\Product;
+use App\Models\Package;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Events\OrderReceived;
@@ -19,7 +19,7 @@ class ZauberController extends Controller
     public function config()
     {
         // Note that auth()->user() is a Venue, not a User!
-        return auth()->user()->load('rooms.products');
+        return auth()->user()->load('rooms.packages');
     }
 
     public function bookings(Request $request, Room $room)
@@ -46,13 +46,13 @@ class ZauberController extends Controller
 
         // TODO: This is actually an "n + 1" query, but I guess it's OK
         foreach ($validated['bookings'] as $booking) {
-            $product = Product::findOrFail($booking['product_id']);
-            $booking['product_name'] = $product->name;
-            $booking['unit_price'] = $product->unit_price;
-            $booking['vat'] = $product->vat;
-            $booking['deposit'] = $product->deposit;
-            $booking['is_flat'] = $product->is_flat;
-            $booking['snapshot'] = json_encode($this->productSnapshot($product));
+            $package = package::findOrFail($booking['package_id']);
+            $booking['package_name'] = $package->name;
+            $booking['unit_price'] = $package->unit_price;
+            $booking['vat'] = $package->vat;
+            $booking['deposit'] = $package->deposit;
+            $booking['is_flat'] = $package->is_flat;
+            $booking['snapshot'] = json_encode($this->packageSnapshot($package));
             $bookings[] = $booking;
         }
 
@@ -80,9 +80,9 @@ class ZauberController extends Controller
         return $order;
     }
 
-    protected function productSnapshot($product)
+    protected function packageSnapshot($package)
     {
-        return collect($product->toArray())->only(
+        return collect($package->toArray())->only(
             'id', 'name', 'slug',
             'unit_price', 'vat', 'deposit', 'is_flat',
             'price_flat', 'vat_flat', 'deposit_flat',

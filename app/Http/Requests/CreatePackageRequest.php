@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProductRequest extends FormRequest
+class CreatePackageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,7 @@ class CreateProductRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('create products') || $this->user()->can('modify products');
+        return $this->user()->can('create packages') || $this->user()->can('modify packages');
     }
 
     /**

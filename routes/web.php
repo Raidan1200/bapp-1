@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\TokenController;
 use App\Http\Controllers\VenueController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VenueMemberController;
@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function() {
     Route::resource('users', UserController::class)->except(['show']);
     Route::resource('venues', VenueController::class);
     Route::resource('rooms', RoomController::class)->except(['index', 'show']);
-    Route::resource('products', ProductController::class)->except(['index']);
+    Route::resource('packages', PackageController::class)->except(['index']);
     Route::get('customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
     Route::delete('orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::post('venues/{venue}/token', [TokenController::class, 'store'])->name('token.store');

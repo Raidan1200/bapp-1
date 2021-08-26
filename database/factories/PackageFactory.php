@@ -4,19 +4,19 @@ namespace Database\Factories;
 
 use App\Models\Room;
 use App\Models\Venue;
-use App\Models\Product;
+use App\Models\Package;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProductFactory extends Factory
+class PackageFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Product::class;
+    protected $model = Package::class;
 
     /**
      * Define the model's default state.

@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Venue;
 use App\Models\Booking;
-use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;

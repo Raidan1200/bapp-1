@@ -6,7 +6,7 @@ wir haben Deine Buchungsanfrage erhalten.
 Sie haben für {{ $order->starts_at }} angefragt:
 
 @foreach ($order->bookings as $booking)
-- {{ $booking->quantity }} Mal {{ $booking->product_name }}
+- {{ $booking->quantity }} Mal {{ $booking->package_name }}
 @endforeach
 
 Bitte überweisen Sie uns all ihr Geld.

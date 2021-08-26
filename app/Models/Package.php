@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Product extends Model
+class Package extends Model
 {
     use HasFactory;
 
@@ -27,10 +27,8 @@ class Product extends Model
         'vat',
         'deposit',
         'is_flat',
-
         'unit_price_flat',
         'vat_flat',
-
         'venue_id',
     ];
 
