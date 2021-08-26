@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Package;
+use App\Models\Product;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,12 +29,17 @@ class Venue extends Model
 
     public function rooms()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Room::class)->orderBy('name');
     }
 
     public function packages()
     {
-        return $this->hasMany(Package::class);
+        return $this->hasMany(Package::class)->orderBy('name');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class)->orderBy('name');
     }
 
     public function getOverdueOrdersAttribute()

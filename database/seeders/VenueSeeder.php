@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\User;
 use App\Models\Venue;
 use App\Models\Package;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -117,6 +118,22 @@ class VenueSeeder extends Seeder
         ]);
 
         $p3->rooms()->sync([$room2->id]);
+
+        Product::factory()->create([
+            'name' => 'Bier, gezapft, klein',
+            'venue_id' => $v1->id
+        ]);
+
+        Product::factory()->create([
+            'name' => 'Bier, gezapft, groß',
+            'venue_id' => $v1->id
+        ]);
+
+        Product::factory()->create([
+            'name' => 'Champagner, Flasche',
+            'venue_id' => $v1->id
+        ]);
+
 
         // Venue 2
         // $v2 = Venue::factory()->create(['name' => 'Seemagie']);

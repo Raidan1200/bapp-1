@@ -44,7 +44,7 @@ class CreatePackagesTable extends Migration
             $table->unsignedFloat('vat_flat')->nullable();
             $table->unsignedFloat('deposit_flat')->nullable();;
 
-            $table->foreignId('venue_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

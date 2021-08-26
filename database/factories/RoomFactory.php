@@ -24,7 +24,7 @@ class RoomFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $name = ucwords($this->faker->words(2, true)) . (rand(0, 1) ? ' Room' : ' Room'),
+            'name' => $name = ucwords($this->faker->words(2, true)) . (rand(0, 1) ? ' Room' : ' Chamber'),
             // 'slug' => Str::of($name)->slug('-'),
             'slogan' => $this->faker->words(5, true),
             'description' => $this->faker->paragraphs(4, true),

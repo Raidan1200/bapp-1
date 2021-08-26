@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Products;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\RoomController;
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function() {
     Route::resource('venues', VenueController::class);
     Route::resource('rooms', RoomController::class)->except(['index', 'show']);
     Route::resource('packages', PackageController::class)->except(['index']);
+    Route::get('products', Products::class)->name('products');
     Route::get('customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
     Route::delete('orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
     Route::post('venues/{venue}/token', [TokenController::class, 'store'])->name('token.store');
