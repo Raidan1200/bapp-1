@@ -25,10 +25,10 @@ class CreateOrdersTable extends Migration
             $table->datetime('starts_at');
             $table->datetime('deposit_invoice_at')->nullable();
             $table->datetime('deposit_paid_at')->nullable();
-            $table->integer('deposit_amount_paid')->nullable();
+            $table->integer('deposit_amount')->nullable();
             $table->datetime('interim_invoice_at')->nullable();
             $table->datetime('interim_paid_at')->nullable();
-            $table->integer('interim_amount_paid')->nullable();
+            $table->integer('interim_amount')->nullable();
             $table->datetime('final_invoice_at')->nullable();
             $table->datetime('final_paid_at')->nullable();
             $table->datetime('cancelled_at')->nullable();
