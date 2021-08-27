@@ -3,7 +3,7 @@
     <thead>
       <tr class="bg-gray-100">
         <td class="w-5/12 border-r px-1 border-white">
-          Produkt
+          Paket
           @can('modify orders')
             @if(!$editing)
               <button
@@ -21,9 +21,9 @@
         <td class="w-1/12 text-right px-1 border-r border-white">MwSt</td>
         <td class="w-1/12 text-right px-1 border-r border-white">Anz.</td>
         @if ($editing)
-        <td class="w-2/12 text-right px-1 font-semibold">
-          Löschen
-        </td>
+          <td class="w-2/12 text-right px-1 font-semibold">
+            Löschen
+          </td>
         @else
           <td class="w-2/12 text-right px-1">Gesamt</td>
         @endif
@@ -37,7 +37,7 @@
               {{ var_dump($errors->all()) }}
               Es fehlen:
               @if ($errors->has("bookings.$key.package_name"))
-                Produktname
+                Paketname
               @endif
             </td>
           </tr>

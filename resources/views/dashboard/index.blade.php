@@ -68,7 +68,7 @@
             <button
               class="cursor-pointer bg-gray-100 text-gray-700 hover:text-black border border-gray-400 rounded px-2 py-1"
               @click="open = !open"
-            >{{ Request::query('state') ?: 'Alle' }}</button>
+            >{{ Request::has('state') ? __('app.'.Request::query('state')) : 'Alle' }}</button>
             <ul class="bg-white absolute right-0 mt-2 shadow rounded w-40 py-1 text-indigo-600"
               x-show="open"
               x-cloak
@@ -81,27 +81,27 @@
               <li>
                 <a href="{{ route('dashboard', array_filter(array_merge($filters, ['state' => 'fresh']))) }}"
                   class="py-1 px-3 block hover:bg-indigo-100"
-                >Neu</a>
+                >{{ __('app.fresh') }}</a>
               </li>
               <li>
                 <a href="{{ route('dashboard', array_filter(array_merge($filters, ['state' => 'deposit_paid']))) }}"
                   class="py-1 px-3 block hover:bg-indigo-100"
-                >Angezahlt</a>
+                >{{ __('app.deposit_paid') }}</a>
               </li>
               <li>
                 <a href="{{ route('dashboard', array_filter(array_merge($filters, ['state' => 'interim_paid']))) }}"
                   class="py-1 px-3 block hover:bg-indigo-100"
-                >Zwischengezahlt</a>
+                >{{ __('app.interim_paid') }}</a>
               </li>
               <li>
                 <a href="{{ route('dashboard', array_filter(array_merge($filters, ['state' => 'final_paid']))) }}"
                   class="py-1 px-3 block hover:bg-indigo-100"
-                >Endgezahlt</a>
+                >{{ __('app.final_paid') }}</a>
               </li>
               <li>
                 <a href="{{ route('dashboard', array_filter(array_merge($filters, ['state' => 'cancelled']))) }}"
                   class="py-1 px-3 block hover:bg-indigo-100"
-                >Storniert</a>
+                >{{ __('app.cancelled') }}</a>
               </li>
             </ul>
           </div>
@@ -110,4 +110,6 @@
       @include('dashboard.main')
     </div>
 	</div>
+  {{ config('app.locale')}}
+
 </x-app-layout>
