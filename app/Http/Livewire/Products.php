@@ -25,7 +25,6 @@ class Products extends Component
     public function mount(Request $request)
     {
         $this->venue = $request->query('venue');
-        $this->products = Venue::findOrFail($this->venue)->products->toArray();
     }
 
     public function add()
@@ -56,7 +55,7 @@ class Products extends Component
 
         array_unshift($this->products, $product);
 
-        $this->adding = false;
+        $this->add();
     }
 
     public function cancelAdd()
@@ -109,6 +108,8 @@ class Products extends Component
 
     public function render()
     {
+        $this->products = Venue::findOrFail($this->venue)->products->toArray();
+
         return view('livewire.products');
     }
 }

@@ -63,7 +63,7 @@
         </x-form-field>
 
         <x-form-field>
-          <x-label for="unit_price">Preis</x-label>
+          <x-label for="unit_price">Brutto Preis</x-label>
           <x-input type="number" min="0" name="unit_price" class="w-full" value="{{ old('unit_price') ?? $package->unit_price ?? '' }}" id="unit_price" />
         </x-form-field>
 

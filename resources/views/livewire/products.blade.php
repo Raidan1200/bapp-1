@@ -1,21 +1,34 @@
 <div>
   @if ($adding)
-    <x-input wire:model.defer="newProduct.name" />
-    <div>{{ $errors->first("newProduct.name") }}</div>
-    <x-input wire:model.defer="newProduct.unit_price" />
-    <div>{{ $errors->first("newProduct.unit_price") }}</div>
-    <x-input wire:model.defer="newProduct.vat" />
-    <div>{{ $errors->first("newProduct.vat") }}</div>
-    <x-button wire:click="store">Save</x-button>
-    <x-button wire:click="cancelAdd">Cancel</x-button>
+    <form class="flex justify-between border-b ">
+      <x-form-field>
+        <x-label for="name">Produktname</x-label>
+        <x-input wire:model.defer="newProduct.name" />
+        <div>{{ $errors->first("newProduct.name") }}</div>
+      </x-form-field>
+      <x-form-field>
+        <x-label for="name">Brutto-Preis</x-label>
+        <x-input wire:model.defer="newProduct.unit_price" />
+        <div>{{ $errors->first("newProduct.unit_price") }}</div>
+      </x-form-field>
+      <x-form-field>
+        <x-label for="name">MwSt</x-label>
+        <x-input wire:model.defer="newProduct.vat" />
+        <div>{{ $errors->first("newProduct.vat") }}</div>
+    </x-form-field>
+      <x-form-field>
+        <x-button wire:click.prevent="store">Speichern</x-button>
+        <x-button wire:click.prevent="cancelAdd">Abbrechen</x-button>
+      </x-form-field>
+    </form>
   @else
-    <x-button wire:click="add">Add</x-button>
+    <x-button wire:click="add">Produkt hinzufügen</x-button>
   @endif
-  <table>
+  <table class="mt-4">
     <thead>
       <tr>
         <td>Produktname</td>
-        <td>Preis</td>
+        <td>Brutto-Preis</td>
         <td>MwSt</td>
         @if ($editingIndex)
           <td>Aktionen</td>
@@ -39,16 +52,16 @@
               <div>{{ $errors->first("products.$index.vat") }}</div>
             </td>
             <td>
-              <x-button wire:click="save({{ $index }})">Save</x-button>
-              <x-button wire:click="cancelEdit">Cancel</x-button>
+              <x-button wire:click="save({{ $index }})">Speichern</x-button>
+              <x-button wire:click="cancelEdit">Abbrechen</x-button>
             </td>
           @else
             <td>{{ $product['name'] }}</td>
             <td>{{ $product['unit_price'] }}</td>
             <td>{{ $product['vat'] }}</td>
             <td>
-              <x-button wire:click="edit({{ $index }})">Edit</x-button>
-              <x-button wire:click="delete({{ $index }})">Delete</x-button>
+              <x-button wire:click="edit({{ $index }})">Editieren</x-button>
+              <x-button wire:click="delete({{ $index }})">Löschen</x-button>
             </td>
           @endif
         </tr>
