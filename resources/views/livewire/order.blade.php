@@ -89,8 +89,8 @@
           @endcan
         </div>
         <div>
-          <div>Anzahlung: {{ number_format($this->order->deposit / 100, 2, ',', '.') }}</div>
-          <div>Gesamt: {{ number_format($this->order->total / 100, 2, ',', '.') }}</div>
+          <div>Anzahlung: {{ $this->order->deposit }}</div>
+          <div>Gesamt: {{ $this->order->total }}</div>
         </div>
       </div>
     </div>

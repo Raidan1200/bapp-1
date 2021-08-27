@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Models\Venue;
 use App\Models\Action;
+use Brick\Money\Money;
 use App\Models\Booking;
 use App\Filters\QueryFilter;
+use Brick\Math\RoundingMode;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -80,14 +82,26 @@ class Order extends Model
     public function getDepositAttribute()
     {
         return $this->bookings->reduce(function ($deposit, $booking) {
-            return $deposit += ($booking->quantity * $booking->unit_price) * ($booking->deposit / 100);
-        });
+            return $deposit->plus(
+                Money::ofMinor($booking->unit_price, 'EUR')
+                    ->toRational()
+                    ->multipliedBy($booking->quantity)
+                    ->multipliedBy($booking->deposit / 100)
+                    ->to($deposit->getContext(), RoundingMode::DOWN) // TODO: DOWN?
+            );
+        }, Money::ofMinor('0', 'EUR'))
+        ->formatTo('de_DE');
     }
 
     public function getTotalAttribute()
     {
         return $this->bookings->reduce(function ($sum, $booking) {
-            return $sum += $booking->quantity * $booking->unit_price;
-        });
+            return $sum->plus(
+                Money::ofMinor($booking->unit_price, 'EUR')
+                ->multipliedBy($booking->quantity)
+                ->to($sum->getContext(), RoundingMode::DOWN) // TODO: DOWN?
+            );
+        }, Money::ofMinor('0', 'EUR'))
+        ->formatTo('de_DE');
     }
 }
