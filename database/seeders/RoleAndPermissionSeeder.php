@@ -18,6 +18,7 @@ class RoleAndPermissionSeeder extends Seeder
             'create venues',   'modify venues',   'admin venues',   'delete venues',
             'create rooms',    'modify rooms',    'admin rooms',    'delete rooms',
             'create packages', 'modify packages', 'admin packages', 'delete packages',
+            'create products', 'modify products',                   'delete products',
                                'modify orders',   'admin orders',   'delete orders',
         ])->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];

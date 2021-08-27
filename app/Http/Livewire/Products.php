@@ -6,9 +6,12 @@ use App\Models\Venue;
 use App\Models\Product;
 use Livewire\Component;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Products extends Component
 {
+    use AuthorizesRequests;
+
     public $venue;
     public $products;
 
@@ -40,6 +43,8 @@ class Products extends Component
 
     public function store()
     {
+        $this->authorize('create products');
+
         $this->validate([
             'newProduct.name' => 'required',
             'newProduct.unit_price' => 'required|numeric',
@@ -72,6 +77,8 @@ class Products extends Component
 
     public function save($productIndex)
     {
+        $this->authorize('modify products');
+
         $this->validate([
             'products.*.name' => 'required',
             'products.*.unit_price' => 'required|numeric',
@@ -101,6 +108,8 @@ class Products extends Component
 
     public function delete($productIndex)
     {
+        $this->authorize('delete products');
+
         $product = Product::find($this->products[$productIndex]['id']);
         $product->delete();
         array_splice($this->products, $productIndex, 1);

@@ -1,29 +1,31 @@
 <div>
-  @if ($adding)
-    <form class="flex justify-between border-b ">
-      <x-form-field>
-        <x-label for="name">Produktname</x-label>
-        <x-input wire:model.defer="newProduct.name" />
-        <div>{{ $errors->first("newProduct.name") }}</div>
+  @can('create products')
+    @if ($adding)
+      <form class="flex justify-between border-b ">
+        <x-form-field>
+          <x-label for="name">Produktname</x-label>
+          <x-input wire:model.defer="newProduct.name" />
+          <div>{{ $errors->first("newProduct.name") }}</div>
+        </x-form-field>
+        <x-form-field>
+          <x-label for="name">Brutto-Preis</x-label>
+          <x-input wire:model.defer="newProduct.unit_price" />
+          <div>{{ $errors->first("newProduct.unit_price") }}</div>
+        </x-form-field>
+        <x-form-field>
+          <x-label for="name">MwSt</x-label>
+          <x-input wire:model.defer="newProduct.vat" />
+          <div>{{ $errors->first("newProduct.vat") }}</div>
       </x-form-field>
-      <x-form-field>
-        <x-label for="name">Brutto-Preis</x-label>
-        <x-input wire:model.defer="newProduct.unit_price" />
-        <div>{{ $errors->first("newProduct.unit_price") }}</div>
-      </x-form-field>
-      <x-form-field>
-        <x-label for="name">MwSt</x-label>
-        <x-input wire:model.defer="newProduct.vat" />
-        <div>{{ $errors->first("newProduct.vat") }}</div>
-    </x-form-field>
-      <x-form-field>
-        <x-button wire:click.prevent="store">Speichern</x-button>
-        <x-button wire:click.prevent="cancelAdd">Abbrechen</x-button>
-      </x-form-field>
-    </form>
-  @else
-    <x-button wire:click="add">Produkt hinzufügen</x-button>
-  @endif
+        <x-form-field>
+          <x-button wire:click.prevent="store">Speichern</x-button>
+          <x-button wire:click.prevent="cancelAdd">Abbrechen</x-button>
+        </x-form-field>
+      </form>
+    @else
+      <x-button wire:click="add">Produkt hinzufügen</x-button>
+    @endif
+  @endcan
   <table class="mt-4">
     <thead>
       <tr>
@@ -60,8 +62,12 @@
             <td>{{ $product['unit_price'] }}</td>
             <td>{{ $product['vat'] }}</td>
             <td>
-              <x-button wire:click="edit({{ $index }})">Editieren</x-button>
-              <x-button wire:click="delete({{ $index }})">Löschen</x-button>
+              @can('modify products')
+                <x-button wire:click="edit({{ $index }})">Editieren</x-button>
+              @endcan
+              @can('delete products')
+                <x-button wire:click="delete({{ $index }})">Löschen</x-button>
+              @endcan
             </td>
           @endif
         </tr>

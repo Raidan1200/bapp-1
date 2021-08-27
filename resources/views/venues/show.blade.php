@@ -5,17 +5,23 @@
     <div class="w-full sm:w-1/2">
       <div class="flex my-2">
         <h2 class="text-xl">Räume</h2>
-        <x-link href="{{ route('rooms.create', ['venue' => $venue->id]) }}">
-          <x-icons.add class="h-6 w-6" />
-        </x-link>
+        @can('create rooms')
+          <x-link href="{{ route('rooms.create', ['venue' => $venue->id]) }}">
+            <x-icons.add class="h-6 w-6" />
+          </x-link>
+        @endcan
       </div>
       @if ($venue->rooms)
         <ul class="m-2">
           @foreach ($venue->rooms as $room)
             <li>
-              <x-link href="{{ route('rooms.edit', $room) }}">
+              @can('modify rooms')
+                <x-link href="{{ route('rooms.edit', $room) }}">
+                  {{ $room->name }}
+                </x-link>
+              @else
                 {{ $room->name }}
-              </x-link>
+              @endcan
             </li>
           @endforeach
         </ul>
@@ -27,18 +33,24 @@
 
       <div class="flex my-2">
         <h2 class="text-xl my-2">Pakete</h2>
-        {{-- TODO: Somehow I don't like the Query String Param. Use a REST route instead? /venues/1/products/create ? --}}
-        <x-link href="{{ route('packages.create', ['venue' => $venue->id]) }}">
-          <x-icons.add class="h-6 w-6" />
-        </x-link>
+        @can('create packages')
+          {{-- TODO: Somehow I don't like the Query String Param. Use a REST route instead? /venues/1/products/create ? --}}
+          <x-link href="{{ route('packages.create', ['venue' => $venue->id]) }}">
+            <x-icons.add class="h-6 w-6" />
+          </x-link>
+        @endcan
       </div>
       @if ($venue->packages)
         <ul class="m-2">
           @foreach ($venue->packages as $package)
             <li>
-              <x-link href="{{ route('packages.edit', $package) }}">
+              @can('modify packages')
+                <x-link href="{{ route('packages.edit', $package) }}">
+                  {{ $package->name }}
+                </x-link>
+              @else
                 {{ $package->name }}
-              </x-link>
+              @endcan
             </li>
           @endforeach
         </ul>
@@ -50,10 +62,12 @@
 
       <div class="flex my-2">
         <h2 class="text-xl my-2">Produkte</h2>
-        {{-- TODO: Somehow I don't like the Query String Param. Use a REST route instead? /venues/1/products/create ? --}}
-        <x-link href="{{ route('products', ['venue' => $venue->id]) }}">
-          <x-icons.add class="h-6 w-6" />
-        </x-link>
+        @canany('create products', 'modify products', 'delete products')
+          {{-- TODO: Somehow I don't like the Query String Param. Use a REST route instead? /venues/1/products/create ? --}}
+          <x-link href="{{ route('products', ['venue' => $venue->id]) }}">
+            <x-icons.add class="h-6 w-6" />
+          </x-link>
+        @endcanany
       </div>
       @if ($venue->products)
         <ul class="m-2">
