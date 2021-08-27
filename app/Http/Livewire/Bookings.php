@@ -24,8 +24,8 @@ class Bookings extends Component
         'bookings.*.ends_at' => 'nullable|date',
         'bookings.*.package_name' => 'required|string|max:255',
         'bookings.*.is_flat' => 'required',
-        'bookings.*.quantity' => 'required|numeric',
-        'bookings.*.unit_price' => 'required|numeric',
+        'bookings.*.quantity' => 'required|integer',
+        'bookings.*.unit_price' => 'required|numeric',  // TODO: numeric or integer? or custom regex?
         'bookings.*.vat' => 'required|numeric',
         'bookings.*.deposit' => 'required|numeric',
         'bookings.*.state' => 'required|in:stored,new,delete',

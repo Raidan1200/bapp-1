@@ -37,13 +37,11 @@ class CreatePackageRequest extends FormRequest
             'opens_at'        => ['required', 'min:0', 'max:24', fn($_, $value, $fail) => $value >= $request->closes_at ? $fail('Opening time cannot be equal to or after closing time.') : null],
             'closes_at'       => 'required|min:0|max:24',
             'min_occupancy'   => 'sometimes|integer',
-
-            'unit_price'      => 'required|integer',
+            'unit_price'      => 'required|numeric',  // TODO: numeric or integer? or custom regex?
             'vat'             => 'required|numeric',
             'is_flat'         => 'sometimes',
             'deposit'         => 'required|numeric',
-
-            'venue_id'        => 'exists:venues,id'
+            'venue_id'        => 'required|exists:venues,id'
         ];
     }
 }
