@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->string('invoice_id');
             $table->string('state');
             $table->boolean('cash_payment');
-            $table->unsignedFloat('deposit'); // TODO: Not needed?
+            // $table->unsignedFloat('deposit'); // TODO: Not needed? NO NOT NEEDED!!!
             $table->text('notes')->nullable();
             $table->foreignId('venue_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('customer_id')->constrained();
