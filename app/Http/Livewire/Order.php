@@ -3,8 +3,10 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Services\Invoice;
 use Illuminate\Support\Carbon;
 use App\Events\OrderHasChanged;
+use App\Models\Order as OrderModel;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Order extends Component
@@ -17,6 +19,8 @@ class Order extends Component
     public $selectedState;
 
     public $dirty = false;
+
+    public $test = 'Nix';
 
     protected $colors = [
         'fresh' => 'border-red-500',
@@ -79,36 +83,6 @@ class Order extends Component
         return view('livewire.order');
     }
 
-    // Helpers
-    public function stateHasChanged()
-    {
-        return $this->order->state !== $this->selectedState;
-    }
-
-    public function logStateChange()
-    {
-        if ($this->stateHasChanged()) {
-            OrderHasChanged::dispatch($this->order, auth()->user(), 'state', $this->order->state, $this->selectedState);
-        }
-    }
-
-    public function logNotesChange()
-    {
-        if ($this->order->notes !== $this->notes) {
-            OrderHasChanged::dispatch($this->order, auth()->user(), 'notes', $this->order->notes, $this->notes);
-        }
-    }
-
-    public function logCustomerDataChange()
-    {
-        OrderHasChanged::dispatch($this->order, auth()->user(), 'customer', '', '');
-    }
-
-    public function logBookingsChange()
-    {
-        OrderHasChanged::dispatch($this->order, auth()->user(), 'bookings', $this->order->bookings->count(), '');
-    }
-
     public function updatedTimestamps() : array
     {
         if (! $this->stateHasChanged()) {
@@ -141,5 +115,51 @@ class Order extends Component
         }
 
         return $timestamps;
+    }
+
+    public function makeInvoice(string $type)
+    {
+        $order = OrderModel::findOrFail($this->order->id)->load('venue');
+
+        $invoice = (new Invoice)
+            ->ofType($type)
+            ->forOrder($order)
+            ->calculate();
+
+        $order->update($invoice->updatedFields());
+
+        return $invoice
+            ->makePdf()
+            ->stream("invoice_{$this->order->invoice_id}.pdf"); // TODO: Filename?
+    }
+
+    // Action-Log
+    protected function stateHasChanged()
+    {
+        return $this->order->state !== $this->selectedState;
+    }
+
+    protected function logStateChange()
+    {
+        if ($this->stateHasChanged()) {
+            OrderHasChanged::dispatch($this->order, auth()->user(), 'state', $this->order->state, $this->selectedState);
+        }
+    }
+
+    protected function logNotesChange()
+    {
+        if ($this->order->notes !== $this->notes) {
+            OrderHasChanged::dispatch($this->order, auth()->user(), 'notes', $this->order->notes, $this->notes);
+        }
+    }
+
+    protected function logCustomerDataChange()
+    {
+        OrderHasChanged::dispatch($this->order, auth()->user(), 'customer', '', '');
+    }
+
+    protected function logBookingsChange()
+    {
+        OrderHasChanged::dispatch($this->order, auth()->user(), 'bookings', $this->order->bookings->count(), '');
     }
 }

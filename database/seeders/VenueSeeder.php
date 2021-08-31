@@ -20,7 +20,10 @@ class VenueSeeder extends Seeder
     public function run()
     {
         // Venue 1
-        $v1 = Venue::factory()->create(['name' => 'Hüttenzauber']);
+        $v1 = Venue::factory()->create([
+            'name' => 'Hüttenzauber',
+            'slug' => 'zauber',
+        ]);
 
         $v1->createToken('api-token')->plainTextToken;
         // 1|eZiKXxZPJdfWbtKQdc5kzycRwUSelVVB7sV4Aghq
