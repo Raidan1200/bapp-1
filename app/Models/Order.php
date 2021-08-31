@@ -91,6 +91,7 @@ class Order extends Model
         return $this->bookings->reduce(function ($sum, $booking) {
             return $sum += $booking->quantity * $booking->unit_price;
         });
+    }
 
     // Brick/Money ... removed
     // public function getDepositAttribute()
