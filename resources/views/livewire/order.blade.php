@@ -37,11 +37,18 @@
     <div class="flex justify-between mt-2">
       {{-- Note --}}
       <div
-        @can('modify orders')
-          @click="dirty = true"
-        @endcan
         class="flex-1 mr-4"
       >
+          @can('modify orders')
+            <button
+              x-show="!dirty"
+              type="button"
+              class="float-right"
+              @click="dirty = true"
+            >
+              <x-icons.edit />
+            </button>
+          @endcan
         <textarea
           x-cloak
           x-show="dirty"
@@ -92,6 +99,28 @@
           <div>Anzahlung: {{ $this->order->deposit }}</div>
           <div>Gesamt: {{ $this->order->total }}</div>
         </div>
+      @can('modify orders') {{-- TODO: New Permission? create/send invoices? --}}
+        <x-dropdown align="left">
+            <x-slot name="trigger">
+            <button class="flex items-center hover:bg-gray-100 transition duration-150 ease-in-out">
+                <div>Rechnungen</div>
+                <div class="ml-1">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                </div>
+            </button>
+            </x-slot>
+
+            <x-slot name="content">
+                <div wire:click="makeInvoice('deposit')">Anzahlung</div>
+                <div wire:click="makeInvoice('interim')">Zwischen</div>
+                <div wire:click="makeInvoice('final')">Abschluss</div>
+            </x-slot>
+        </x-dropdown>
+        @else
+            Bla blubb
+        @endcan
       </div>
     </div>
     @if ($dirty)

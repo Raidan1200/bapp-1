@@ -23,6 +23,7 @@ class VenueFactory extends Factory
     {
         return [
             'name' => ucfirst($this->faker->word()) . (rand(0, 1) ? ' Mall' : ' Place'),
+            'slug' => $this->faker->word(),
             'email' => $this->faker->email(),
             'reminder_delay' => 5,
             'check_delay' => 9,
