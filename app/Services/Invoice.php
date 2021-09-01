@@ -46,7 +46,7 @@ class Invoice
         if (in_array($this->type, ['deposit', 'interim'])) {
             $amount_field = $this->type . '_amount';
 
-            $this->updatedFields[$amount_field] = $this->data['total'];
+            $this->updatedFields[$amount_field] = $this->data['gross_total'];
         }
 
         return $this;

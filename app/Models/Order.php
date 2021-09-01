@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Item;
 use App\Models\Venue;
-use App\Models\Action;
 // use Brick\Money\Money;
+use App\Models\Action;
 use App\Models\Booking;
 use App\Filters\QueryFilter;
 use Brick\Math\RoundingMode;
@@ -49,9 +50,17 @@ class Order extends Model
 
     protected $with = ['bookings', 'customer'];
 
+    /*
+     * Relations
+     */
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
     }
 
     public function customer()
@@ -74,11 +83,9 @@ class Order extends Model
         return $this->hasOne(Action::class)->latestOfMany();
     }
 
-    public function scopeFilter($query, QueryFilter $filters)
-    {
-        return $filters->apply($query);
-    }
-
+    /*
+     * Accessors / Mutators
+     */
     public function getDepositAttribute()
     {
         return $this->bookings->reduce(function ($deposit, $booking) {
@@ -86,37 +93,23 @@ class Order extends Model
         });
     }
 
-    public function getTotalAttribute()
+    public function getGrossTotalAttribute()
     {
-        return $this->bookings->reduce(function ($sum, $booking) {
-            return $sum += $booking->quantity * $booking->unit_price;
-        });
+        return
+            $this->bookings->reduce(function ($sum, $booking) {
+                return $sum += $booking->quantity * $booking->unit_price;
+            })
+            +
+            $this->items->reduce(function ($deposit, $item) {
+                return $deposit += $item->quantity * $item->unit_price;
+            });
     }
 
-    // Brick/Money ... removed
-    // public function getDepositAttribute()
-    // {
-    //     return $this->bookings->reduce(function ($deposit, $booking) {
-    //         return $deposit->plus(
-    //             Money::ofMinor($booking->unit_price, 'EUR')
-    //                 ->toRational()
-    //                 ->multipliedBy($booking->quantity)
-    //                 ->multipliedBy($booking->deposit / 100)
-    //                 ->to($deposit->getContext(), RoundingMode::DOWN) // TODO: DOWN?
-    //         );
-    //     }, Money::ofMinor('0', 'EUR'))
-    //     ->formatTo('de_DE');
-    // }
-
-    // public function getTotalAttribute()
-    // {
-    //     return $this->bookings->reduce(function ($sum, $booking) {
-    //         return $sum->plus(
-    //             Money::ofMinor($booking->unit_price, 'EUR')
-    //             ->multipliedBy($booking->quantity)
-    //             ->to($sum->getContext(), RoundingMode::DOWN) // TODO: DOWN?
-    //         );
-    //     }, Money::ofMinor('0', 'EUR'))
-    //     ->formatTo('de_DE');
-    // }
+    /*
+     * Misc
+     */
+    public function scopeFilter($query, QueryFilter $filters)
+    {
+        return $filters->apply($query);
+    }
 }

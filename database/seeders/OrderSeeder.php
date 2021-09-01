@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Item;
 use App\Models\Order;
 use App\Models\Venue;
 use App\Models\Booking;
+use App\Models\Product;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 
@@ -21,6 +23,7 @@ class OrderSeeder extends Seeder
         $this->makeZauber($zauber);
     }
 
+    // TODO: DRY up code!
     public function makeZauber($venue) {
         $rooms = $venue->rooms;
         $packages = $venue->packages;
@@ -37,6 +40,16 @@ class OrderSeeder extends Seeder
                 'quantity' => rand(30, 50),
                 'order_id' => $order->id,
             ]);
+
+            for ($j = 1; $j <= rand(0, 3); $j++) {
+                $product = Product::inRandomOrder()->first();
+                Item::factory()->create([
+                    'product_name' => $product->name,
+                    'unit_price' => $product->unit_price,
+                    'vat' => $product->vat,
+                    'order_id' => $order->id,
+                ]);
+            }
         }
 
         for ($i = 1; $i <= 10; $i++) {
@@ -51,6 +64,16 @@ class OrderSeeder extends Seeder
                 'quantity' => rand(30, 50),
                 'order_id' => $order->id,
             ]);
+
+            for ($j = 1; $j <= rand(0, 3); $j++) {
+                $product = Product::inRandomOrder()->first();
+                Item::factory()->create([
+                    'product_name' => $product->name,
+                    'unit_price' => $product->unit_price,
+                    'vat' => $product->vat,
+                    'order_id' => $order->id,
+                ]);
+            }
         }
 
         for ($i = 1; $i <= 10; $i++) {
@@ -65,6 +88,16 @@ class OrderSeeder extends Seeder
                 'quantity' => rand(30, 50),
                 'order_id' => $order->id,
             ]);
+
+            for ($j = 1; $j <= rand(0, 3); $j++) {
+                $product = Product::inRandomOrder()->first();
+                Item::factory()->create([
+                    'product_name' => $product->name,
+                    'unit_price' => $product->unit_price,
+                    'vat' => $product->vat,
+                    'order_id' => $order->id,
+                ]);
+            }
         }
 
         for ($i = 1; $i <= 20; $i++) {

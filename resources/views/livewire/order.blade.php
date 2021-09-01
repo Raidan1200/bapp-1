@@ -30,6 +30,10 @@
   <div class="mt-2">
     <livewire:bookings :bookings="$order->bookings->toArray()" :orderId="$order->id" />
   </div>
+
+  <div class="mt-2">
+    <livewire:items :items="$order->items->toArray()" :orderId="$order->id" />
+  </div>
   <form
     wire:submit.prevent="save"
     action="#"
@@ -97,7 +101,7 @@
         </div>
         <div>
           <div>Anzahlung: {{ $this->order->deposit }}</div>
-          <div>Gesamt: {{ $this->order->total }}</div>
+          <div>Gesamt: {{ $this->order->grossTotal }}</div>
         </div>
       @can('modify orders') {{-- TODO: New Permission? create/send invoices? --}}
         <x-dropdown align="left">
