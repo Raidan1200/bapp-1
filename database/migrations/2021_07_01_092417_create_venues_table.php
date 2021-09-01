@@ -18,8 +18,14 @@ class CreateVenuesTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('email');
-            $table->unsignedInteger('reminder_delay')->default(5);
-            $table->unsignedInteger('check_delay')->default(9);
+            $table->string('logo')->nullable();
+            // $table->json('invoice_data')->nullable(); // TODO bad name!
+            // TODO - be careful when changing reminder and delete fields
+            //        because reminders/deletions might get skipped/repeated
+            // TODO: Default Werte?
+            $table->unsignedInteger('reminder_delay')->default(7);
+            $table->unsignedInteger('check_delay')->default(7);
+            $table->unsignedInteger('delete_delay')->default(10);
             $table->timestamps();
         });
     }

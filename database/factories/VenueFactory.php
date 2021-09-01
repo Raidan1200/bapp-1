@@ -25,8 +25,10 @@ class VenueFactory extends Factory
             'name' => ucfirst($this->faker->word()) . (rand(0, 1) ? ' Mall' : ' Place'),
             'slug' => $this->faker->word(),
             'email' => $this->faker->email(),
+            'logo' => null,
             'reminder_delay' => 5,
             'check_delay' => 9,
+            'delete_delay' => 12,
         ];
     }
 }
