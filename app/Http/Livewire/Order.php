@@ -31,7 +31,8 @@ class Order extends Component
     ];
 
     protected $listeners = [
-        'updateBookings' => 'logBookingsChange', //$refresh',
+        'updateBookings' => 'logBookingsChange',     //$refresh',
+        'updateItems'    => 'logItemsChange',        //$refresh',
         'updateCustomer' => 'logCustomerDataChange', //$refresh'
     ];
 
@@ -134,32 +135,37 @@ class Order extends Component
     }
 
     // Action-Log
-    protected function stateHasChanged()
+    public function stateHasChanged()
     {
         return $this->order->state !== $this->selectedState;
     }
 
-    protected function logStateChange()
+    public function logStateChange()
     {
         if ($this->stateHasChanged()) {
             OrderHasChanged::dispatch($this->order, auth()->user(), 'state', $this->order->state, $this->selectedState);
         }
     }
 
-    protected function logNotesChange()
+    public function logNotesChange()
     {
         if ($this->order->notes !== $this->notes) {
             OrderHasChanged::dispatch($this->order, auth()->user(), 'notes', $this->order->notes, $this->notes);
         }
     }
 
-    protected function logCustomerDataChange()
+    public function logCustomerDataChange()
     {
         OrderHasChanged::dispatch($this->order, auth()->user(), 'customer', '', '');
     }
 
-    protected function logBookingsChange()
+    public function logBookingsChange()
     {
         OrderHasChanged::dispatch($this->order, auth()->user(), 'bookings', $this->order->bookings->count(), '');
+    }
+
+    public function logItemsChange()
+    {
+        OrderHasChanged::dispatch($this->order, auth()->user(), 'items', $this->order->items->count(), '');
     }
 }

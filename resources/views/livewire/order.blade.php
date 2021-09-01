@@ -23,17 +23,17 @@
       @endisset
     </div>
   </div>
-  {{-- Customer Data --}}
   <div x-cloak class="bg-primary-light" x-show="editCustomer">
     <livewire:customer :customer="$order->customer" />
   </div>
   <div class="mt-2">
     <livewire:bookings :bookings="$order->bookings->toArray()" :orderId="$order->id" />
   </div>
-
-  <div class="mt-2">
-    <livewire:items :items="$order->items->toArray()" :orderId="$order->id" />
-  </div>
+  @if ($order->items->count())
+    <div class="mt-2">
+        <livewire:items :items="$order->items->toArray()" :orderId="$order->id" />
+    </div>
+  @endif
   <form
     wire:submit.prevent="save"
     action="#"
@@ -103,28 +103,54 @@
           <div>Anzahlung: {{ $this->order->deposit }}</div>
           <div>Gesamt: {{ $this->order->grossTotal }}</div>
         </div>
-      @can('modify orders') {{-- TODO: New Permission? create/send invoices? --}}
-        <x-dropdown align="left">
+
+        <div class="flex justify-between">
+        @can('modify orders') {{-- TODO: New Permission? create/send invoices? --}}
+          <x-dropdown align="left">
             <x-slot name="trigger">
-            <button class="flex items-center hover:bg-gray-100 transition duration-150 ease-in-out">
+              <button class="flex items-center hover:bg-gray-100 transition duration-150 ease-in-out">
                 <div>Rechnungen</div>
                 <div class="ml-1">
                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
                 </div>
-            </button>
+              </button>
             </x-slot>
 
             <x-slot name="content">
-                <div wire:click="makeInvoice('deposit')">Anzahlung</div>
-                <div wire:click="makeInvoice('interim')">Zwischen</div>
-                <div wire:click="makeInvoice('final')">Abschluss</div>
+              <div wire:click="makeInvoice('deposit')">Anzahlung</div>
+              <div wire:click="makeInvoice('interim')">Zwischen</div>
+              <div wire:click="makeInvoice('final')">Abschluss</div>
             </x-slot>
-        </x-dropdown>
+          </x-dropdown>
         @else
-            Bla blubb
+          Bla blubb
         @endcan
+
+        @can('modify orders') {{-- TODO: New Permission? create/send invoices? --}}
+          <x-dropdown align="left">
+            <x-slot name="trigger">
+              <button class="flex items-center hover:bg-gray-100 transition duration-150 ease-in-out">
+                <div>Emails (TODO)</div>
+                <div class="ml-1">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                </div>
+              </button>
+            </x-slot>
+
+            <x-slot name="content">
+              <div wire:click="sendEmail('deposit')">Anzahlung</div>
+              <div wire:click="sendEmail('interim')">Zwischen</div>
+              <div wire:click="sendEmail('final')">Abschluss</div>
+            </x-slot>
+          </x-dropdown>
+        @else
+          Bla blubb
+        @endcan
+        </div>
       </div>
     </div>
     @if ($dirty)
