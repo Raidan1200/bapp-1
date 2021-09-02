@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anzahlungsrechnung {{ $order->invoice_id }}</title>
+  <title>Stornierungsrechnung {{ $order->invoice_id }}</title>
 </head>
 <body>
 
-  <h1>Anzahlungsrechnung</h1>
+  <h1>Stornierungsrechnung</h1>
 
   <div>Date (immutable): {{ $date }}</div>
   <div>Venue: {{ $venue->name }}</div>
@@ -28,7 +28,6 @@
       @endforeach
     </ul>
   @endif
-
 
   <div>Gesamt Netto: {{ $net_total }}</div>
 

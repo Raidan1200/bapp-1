@@ -11,20 +11,23 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class OrderReceived
+class SendEmailClicked
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $order;
+
+    public $type;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct(string $type, Order $order)
     {
         $this->order = $order;
+        $this->type = $type;
     }
 
     /**

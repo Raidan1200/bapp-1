@@ -48,7 +48,7 @@ class Order extends Model
         'cancelled_at' => 'datetime',
     ];
 
-    protected $with = ['bookings', 'customer'];
+    protected $with = ['bookings', 'items', 'customer'];
 
     /*
      * Relations

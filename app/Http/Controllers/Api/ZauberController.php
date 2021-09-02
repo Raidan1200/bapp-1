@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Models\Room;
 use App\Models\Venue;
 use App\Models\Package;
+use App\Events\NewOrder;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Events\OrderReceived;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -73,9 +73,12 @@ class ZauberController extends Controller
             return $order;
         });
 
+        // TODO: Maybe I should populate 'deposit_amount' and 'interim_amount' here???
+        //       Yes. YES!!!
+
         // TODO: A Model-Observer might be a better solution?
         // OTOH, we probably need a mail-queue for batch processing anyways
-        OrderReceived::dispatch($order->load('customer'));
+        NewOrder::dispatch($order->load('customer'));
 
         return $order;
     }

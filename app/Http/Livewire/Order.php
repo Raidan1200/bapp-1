@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Services\Invoice;
 use Illuminate\Support\Carbon;
 use App\Events\OrderHasChanged;
+use App\Events\SendEmailClicked;
 use App\Models\Order as OrderModel;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -134,7 +135,12 @@ class Order extends Component
             ->stream("invoice_{$this->order->invoice_id}.pdf"); // TODO: Filename?
     }
 
-    // Action-Log
+    public function sendEmail(string $type)
+    {
+        SendEmailClicked::dispatch($type, $this->order);
+    }
+
+    // Action Log
     public function stateHasChanged()
     {
         return $this->order->state !== $this->selectedState;

@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class DepositEmail extends Mailable
+class FinalEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,7 +23,7 @@ class DepositEmail extends Mailable
     {
         return $this
             ->from($this->order->venue->email)
-            ->subject('Anzahlung für ' . $this->order->venue->name)
-            ->view('emails.deposit');
+            ->subject('Schlussrechnung für ' . $this->order->venue->name)
+            ->view('emails.final');
     }
 }

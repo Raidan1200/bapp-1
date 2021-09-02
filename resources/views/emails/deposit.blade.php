@@ -1,3 +1,4 @@
+<h1>Anzahlungsrechnung</h1>
 <pre>
 Hallo {{ $order->customer->first_name }},
 

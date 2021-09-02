@@ -2,8 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Models\User;
-use App\Models\Order;
 use App\Models\Action;
 use App\Events\OrderHasChanged;
 use Illuminate\Queue\InteractsWithQueue;

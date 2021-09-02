@@ -8,16 +8,18 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class Invoice
 {
-    protected $type;
+    protected $type = '';
     protected $types = ['deposit', 'interim', 'final', 'cancelled'];
 
     protected $date;
 
-    protected array $data;
+    protected $vats = [];
+    protected $netTotal = 0;
+    protected $grossTotal = 0;
 
-    protected array $updatedFields;
+    protected $updatedFields = [];
 
-    protected Order $order;
+    protected $order;
 
     public function ofType(string $type)
     {
@@ -38,17 +40,8 @@ class Invoice
     public function calculate()
     {
         $this->setDate();
-
-        $invoiceClass = '\\App\\Services\\' . ucfirst($this->order->venue->slug) . 'Invoice';
-
-        $this->data = (new $invoiceClass)->prepareData($this->type, $this->order);
-
-        if (in_array($this->type, ['deposit', 'interim'])) {
-            $amount_field = $this->type . '_amount';
-
-            $this->updatedFields[$amount_field] = $this->data['gross_total'];
-        }
-
+        $this->prepareData();
+        $this->setUpdatedFields();
         return $this;
     }
 
@@ -65,7 +58,9 @@ class Invoice
                 'venue' => $this->order->venue,
                 'customer' => $this->order->customer,
                 'order' => $this->order,
-                'data' => $this->data,
+                'vats' => $this->vats,
+                'net_total' => $this->netTotal,
+                'gross_total' => $this->grossTotal,
             ]
         );
     }
@@ -76,5 +71,46 @@ class Invoice
 
         $this->date = $this->order->$at_field ?: Carbon::now();
         $this->updatedFields[$at_field] = $this->date;
+    }
+
+    protected function prepareData()
+    {
+        foreach ($this->order->bookings as $booking) {
+            if (isset($this->vats[$booking->vat])) {
+                $this->vats[$booking->vat] += $booking->vatAmount;
+            } else {
+                $this->vats[$booking->vat] = $booking->vatAmount;
+            }
+
+            $this->netTotal += $booking->netTotal;
+            $this->grossTotal += $booking->grossTotal;
+        }
+
+        foreach ($this->order->items as $item) {
+            if (isset($vat[$item->vat])) {
+                $vat[$item->vat] += $item->vatAmount;
+            } else {
+                $vat[$item->vat] = $item->vatAmount;
+            }
+
+            $this->netTotal += $item->netTotal;
+            $this->netTotal += $item->grossTotal;
+        }
+
+        foreach ($this->vats as &$value) {
+            $value = round($value);
+        }
+    }
+
+    protected function setUpdatedFields()
+    {
+        // TODO: Always? Or just if it is not already set?
+        //       Maybe this should be set in the corresponding Controller!
+        //       Because after the deposit email was sent, it's supposed to be immutable
+        if (in_array($this->type, ['deposit', 'interim'])) {
+            $amount_field = $this->type . '_amount';
+
+            $this->updatedFields[$amount_field] = $this->grossTotal;
+        }
     }
 }
