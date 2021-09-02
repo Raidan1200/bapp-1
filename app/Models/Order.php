@@ -117,18 +117,18 @@ class Order extends Model
         $vats = collect([]);
 
         foreach ($this->bookings as $booking) {
-            if ($vats->has($booking->vat)) {
-                $vats[$booking->vat] += $booking->vatAmount;
+            if ($vats->has((string) $booking->vat)) {
+                $vats[(string) $booking->vat] += $booking->vatAmount;
             } else {
-                $vats[$booking->vat] = $booking->vatAmount;
+                $vats[(string) $booking->vat] = $booking->vatAmount;
             }
         }
 
         foreach ($this->items as $item) {
-            if ($vats->has($item->vat)) {
-                $vats[$item->vat] += $item->vatAmount;
+            if ($vats->has((string) $item->vat)) {
+                $vats[(string) $item->vat] += $item->vatAmount;
             } else {
-                $vats[$item->vat] = $item->vatAmount;
+                $vats[(string) $item->vat] = $item->vatAmount;
             }
         }
 
