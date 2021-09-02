@@ -25,9 +25,19 @@
         </x-form-field>
 
         <x-form-field>
+            <x-label for="slug">Slug</x-label>
+            <x-input type="text" name="slug" class="w-full" value="{{ old('slug') ?? $venue->slug ?? '' }}" id="slug" />
+          </x-form-field>
+
+        <x-form-field>
           <x-label for="email">E-Mail</x-label>
           <x-input type="text" name="email" class="w-full" value="{{ old('email') ?? $venue->email ?? '' }}" id="email" />
         </x-form-field>
+
+        <x-form-field>
+            <x-label for="invoice_blocks">Rechnungs-Blöcke</x-label>
+            <x-textarea type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ json_encode(old('invoice_blocks') ?? $venue->invoice_blocks ?? '') }}</x-textarea>
+          </x-form-field>
 
         <x-form-field>
           <x-label for="reminder_delay">Tage bis Erinnerungsmail</x-label>
@@ -38,6 +48,11 @@
           <x-label for="check_delay">Tage bis Mitarbeiternotitz</x-label>
           <x-input type="number" min="0" name="check_delay" class="w-full" value="{{ old('check_delay') ?? $venue->check_delay ?? '' }}"  id="check_delay" />
         </x-form-field>
+
+        <x-form-field>
+            <x-label for="delete_delay">Tage bis Löschung</x-label>
+            <x-input type="number" min="0" name="delete_delay" class="w-full" value="{{ old('delete_delay') ?? $venue->delete_delay ?? '' }}"  id="delete_delay" />
+          </x-form-field>
 
         <div class="mt-2 text-right">
           <a href="{{ route('venues.index') }}">

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Venue;
-use Illuminate\Http\Request;
 use App\Http\Requests\CreateVenueRequest;
 
 class VenueController extends Controller

@@ -25,9 +25,12 @@ class CreateVenueRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'slug' => 'required',
             'email' => 'nullable|email',
+            'invoice_blocks' => 'nullable|json',
             'reminder_delay' => 'nullable|integer',
             'check_delay' => 'nullable|integer|gte:reminder_delay',
+            'delete_delay' => 'nullable|integer|gte:check_delay',
         ];
     }
 }
