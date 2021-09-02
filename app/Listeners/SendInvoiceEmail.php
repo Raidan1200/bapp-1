@@ -6,7 +6,7 @@ use App\Mail\FinalEmail;
 use App\Mail\DepositEmail;
 use App\Mail\InterimEmail;
 use App\Mail\CancelledEmail;
-use App\Events\SendEmailClicked;
+use App\Events\InvoiceEmailRequested;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,7 +29,7 @@ class SendInvoiceEmail implements ShouldQueue
      * @param  object  $event
      * @return void
      */
-    public function handle(SendEmailClicked $event)
+    public function handle(InvoiceEmailRequested $event)
     {
         $email = Mail::to($event->order->customer->email);
 

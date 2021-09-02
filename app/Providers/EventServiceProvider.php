@@ -2,11 +2,10 @@
 
 namespace App\Providers;
 
-use App\Events\NewOrder;
 use App\Events\OrderHasChanged;
-use App\Events\SendEmailClicked;
 use App\Listeners\LogOrderChange;
 use App\Listeners\SendInvoiceEmail;
+use App\Events\InvoiceEmailRequested;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,10 +21,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        NewOrder::class => [
-            SendInvoiceEmail::class,
-        ],
-        SendEmailClicked::class => [
+        InvoiceEmailRequested::class => [
             SendInvoiceEmail::class,
         ],
         OrderHasChanged::class => [

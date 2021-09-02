@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Models\Room;
 use App\Models\Venue;
 use App\Models\Package;
-use App\Events\NewOrder;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ZauberRequest;
-use Illuminate\Support\Facades\Validator;
+use App\Events\InvoiceEmailRequested;
 
 class ZauberController extends Controller
 {
@@ -62,7 +61,6 @@ class ZauberController extends Controller
                 'invoice_id' => rand(), // TODO ROLAND: How to generate?
                 'state' => 'fresh',
                 'cash_payment' => rand(0, 1), // TODO ROLAND: This has no effect whatsoever? It's just info?
-                'deposit' => 0,
                 'venue_id' => $venue->id,
                 'starts_at' => new Carbon($firstBookingDate),
             ]);
@@ -75,7 +73,7 @@ class ZauberController extends Controller
         // TODO: Maybe I should populate 'deposit_amount' and 'interim_amount' here???
         //       Yes. YES!!!
 
-        NewOrder::dispatch($order->load('customer'));
+        InvoiceEmailRequested::dispatch('deposit', $order->load('customer'));
 
         return $order;
     }

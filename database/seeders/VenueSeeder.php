@@ -61,6 +61,7 @@ class VenueSeeder extends Seeder
         $v1 = Venue::factory()->create([
             'name' => 'Hüttenzauber',
             'slug' => 'zauber',
+            'email' => 'info@huettenzauber.de',
             'invoice_blocks' => $this->zauber_json,
         ]);
 
