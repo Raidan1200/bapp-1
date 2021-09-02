@@ -125,8 +125,7 @@ class Order extends Component
 
         $invoice = (new Invoice)
             ->ofType($type)
-            ->forOrder($order)
-            ->calculate();
+            ->forOrder($order);
 
         $order->update($invoice->updatedFields());
 

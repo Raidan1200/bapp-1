@@ -37,9 +37,6 @@ class CreatePackagesTable extends Migration
             $table->unsignedFloat('deposit');
             $table->boolean('is_flat')->default(false);
 
-            // TODO: I don't like those extra flat-fields stuff
-            // IMHO  flat and non-flat should be 2 different packages
-            //    OR price, vat, deposit, is_flat belong in a separate prices table
             $table->unsignedInteger('price_flat')->nullable();
             $table->unsignedFloat('vat_flat')->nullable();
             $table->unsignedFloat('deposit_flat')->nullable();;

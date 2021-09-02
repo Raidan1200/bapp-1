@@ -93,16 +93,46 @@ class Order extends Model
         });
     }
 
+    public function getNetTotalAttribute()
+    {
+        return $this->getTotal('netTotal');
+    }
+
     public function getGrossTotalAttribute()
     {
-        return
-            $this->bookings->reduce(function ($sum, $booking) {
-                return $sum += $booking->quantity * $booking->unit_price;
-            })
+        return $this->getTotal('grossTotal');
+    }
+
+    protected function getTotal(string $type)
+    {
+        return round(
+            collect($this->bookings)->sum($type)
             +
-            $this->items->reduce(function ($deposit, $item) {
-                return $deposit += $item->quantity * $item->unit_price;
-            });
+            collect($this->items)->sum($type)
+        );
+    }
+
+    public function getVatsAttribute()
+    {
+        $vats = collect([]);
+
+        foreach ($this->bookings as $booking) {
+            if ($vats->has($booking->vat)) {
+                $vats[$booking->vat] += $booking->vatAmount;
+            } else {
+                $vats[$booking->vat] = $booking->vatAmount;
+            }
+        }
+
+        foreach ($this->items as $item) {
+            if ($vats->has($item->vat)) {
+                $vats[$item->vat] += $item->vatAmount;
+            } else {
+                $vats[$item->vat] = $item->vatAmount;
+            }
+        }
+
+        return $vats->map(fn($vat) => round($vat));
     }
 
     /*

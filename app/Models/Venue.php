@@ -22,6 +22,10 @@ class Venue extends Model
         'check_delay',
     ];
 
+    protected $casts = [
+        'invoice_blocks' => 'array',
+    ];
+
     public function users()
     {
         return $this->belongsToMany(User::class);

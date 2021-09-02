@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Venue;
 use App\Models\Package;
 use App\Models\Product;
+use Faker\Provider\ar_JO\Text;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,12 +18,50 @@ class VenueSeeder extends Seeder
      *
      * @return void
      */
+
+    public $zauber_json = [
+        'header' => [
+            'left' => [
+                'i(s)s anders Catering & Event GmbH * Schützenhöhe 11 * 01099 Dresden',
+            ],
+            'right' => [
+                '<b>Telefon:</b> 0351 8053280',
+                '<b>Fax:</b> 0351 8053281',
+                '',
+                '<b>E-</b>Mail: info@huettenzauber-dresden.de',
+                '<b>Internet:</b> www.huettenzauber-dresden.de',
+                '',
+                'Ostsächsische Sparkasse Dresden',
+                '<b>IBAN:</b> DE94 8505 0300 0221 0877 96',
+                '<b>BIC:</b> OSDDDE81XXX',
+            ],
+        ],
+        'footer' => [
+            'left' => [
+                'i(s)s anders Catering & Event GmbH',
+                'Geschäftsführer',
+                'Nico Thierbach',
+            ],
+            'center' => [
+                'SteuerNr.: 202/111/06930',
+                'HRB 34457',
+                'Amtsgericht Dresden',
+            ],
+            'right' => [
+                'Firmensitz Dresden',
+                'Schützenhöhe 11',
+                '01099 Dresden',
+            ],
+        ],
+    ];
+
     public function run()
     {
         // Venue 1
         $v1 = Venue::factory()->create([
             'name' => 'Hüttenzauber',
             'slug' => 'zauber',
+            'invoice_blocks' => $this->zauber_json,
         ]);
 
         $v1->createToken('api-token')->plainTextToken;

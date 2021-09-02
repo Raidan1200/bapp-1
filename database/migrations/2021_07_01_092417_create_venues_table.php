@@ -19,10 +19,7 @@ class CreateVenuesTable extends Migration
             $table->string('slug');
             $table->string('email');
             $table->string('logo')->nullable();
-            // $table->json('invoice_data')->nullable(); // TODO bad name!
-            // TODO - be careful when changing reminder and delete fields
-            //        because reminders/deletions might get skipped/repeated
-            // TODO: Default Werte?
+            $table->json('invoice_blocks')->nullable();
             $table->unsignedInteger('reminder_delay')->default(7);
             $table->unsignedInteger('check_delay')->default(7);
             $table->unsignedInteger('delete_delay')->default(10);

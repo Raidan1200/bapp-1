@@ -40,7 +40,7 @@ class CreatePackageRequest extends FormRequest
 
             'unit_price'      => 'required|integer',
             'vat'             => 'required|numeric',
-            'is_flat'         => 'sometimes',  // 'sometimes|boolean' TODO how to handle boolean here???
+            'is_flat'         => 'sometimes',
             'deposit'         => 'required|numeric',
 
             'venue_id'        => 'exists:venues,id'

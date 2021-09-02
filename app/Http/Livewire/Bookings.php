@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Models\Booking;
 use Livewire\Component;
-use App\Events\OrderHasChanged;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Bookings extends Component

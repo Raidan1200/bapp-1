@@ -11,6 +11,11 @@
 
   <div>Date (immutable): {{ $date }}</div>
   <div>Venue: {{ $venue->name }}</div>
+
+  <div>
+      <div>{{ $venue->invoice_blocks['header']['left'][0] }}</div>
+  </div>
+
   <div>Customer: {{ $customer->name }}</div>
 
   <h2>Pakete</h2>
@@ -30,14 +35,14 @@
   @endif
 
 
-  <div>Gesamt Netto: {{ $net_total }}</div>
+  <div>Gesamt Netto: {{ $order->net_total }}</div>
 
   <ul>
-    @foreach ($vats as $vat => $amount)
+    @foreach ($order->vats as $vat => $amount)
       <li>zzgl. {{ $vat }}% MwSt: {{ $amount }}</li>
     @endforeach
   </ul>
 
-  <div>Gesamt Brutto: {{ $gross_total }}</div>
+  <div>Gesamt Brutto: {{ $order->gross_total }}</div>
 </body>
 </html>

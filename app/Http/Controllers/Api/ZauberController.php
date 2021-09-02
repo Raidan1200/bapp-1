@@ -44,7 +44,6 @@ class ZauberController extends Controller
 
         $bookings = [];
 
-        // TODO: This is actually an "n + 1" query, but I guess it's OK
         foreach ($validated['bookings'] as $booking) {
             $package = package::findOrFail($booking['package_id']);
             $booking['package_name'] = $package->name;
@@ -60,9 +59,9 @@ class ZauberController extends Controller
             $customer = Customer::create($validated['customer']);
 
             $order = $customer->orders()->create([
-                'invoice_id' => rand(), // TODO ROLAND
+                'invoice_id' => rand(), // TODO ROLAND: How to generate?
                 'state' => 'fresh',
-                'cash_payment' => rand(0, 1), // TODO ROLAND
+                'cash_payment' => rand(0, 1), // TODO ROLAND: This has no effect whatsoever? It's just info?
                 'deposit' => 0,
                 'venue_id' => $venue->id,
                 'starts_at' => new Carbon($firstBookingDate),
@@ -76,8 +75,6 @@ class ZauberController extends Controller
         // TODO: Maybe I should populate 'deposit_amount' and 'interim_amount' here???
         //       Yes. YES!!!
 
-        // TODO: A Model-Observer might be a better solution?
-        // OTOH, we probably need a mail-queue for batch processing anyways
         NewOrder::dispatch($order->load('customer'));
 
         return $order;

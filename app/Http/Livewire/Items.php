@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Models\Item;
 use Livewire\Component;
-use App\Events\OrderHasChanged;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Items extends Component
@@ -54,9 +53,6 @@ class Items extends Component
         $this->authorize('modify orders');
 
         $this->validate();
-
-        // TODO IMPORTANT:
-        //      Check if the new quantiy exceeds the capacity!
 
         // TODO This is REAAAALLY inefficient
         //      Does Laravel have something like "bulkUpdate" or "updateMany"?
