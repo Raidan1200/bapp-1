@@ -23,7 +23,7 @@ class ReminderEmail extends Mailable
     {
         return $this
         ->from($this->order->venue->email)
-        ->subject('Anzahlung für ' . $this->order->venue->name)
+        ->subject('Zahlungserinnerung für ' . $this->order->venue->name)
         ->view('emails.reminder');
     }
 }

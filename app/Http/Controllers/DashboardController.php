@@ -6,9 +6,6 @@ use App\Models\Order;
 use App\Models\Venue;
 use Illuminate\Http\Request;
 use App\Filters\OrderFilters;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -20,6 +17,15 @@ class DashboardController extends Controller
             }]);
         }])->get();
 
+        // TODO IMPORTANT: This is highly inefficient!!!
+        //     Just store a cached count during the nightly cron run
+        //     and move this to a separate page
+        $reminders = collect([]);
+
+        foreach ($venues as $venue) {
+            $reminders = $reminders->merge($venue->duePaymentChecks());
+        }
+
         $orders = Order::with('latestAction')
             ->whereIn('venue_id', $venues->pluck('id'))
             ->filter($filters)
@@ -27,6 +33,6 @@ class DashboardController extends Controller
             ->paginate()
             ->withQueryString();
 
-        return view('dashboard.index', compact('venues', 'orders'));
+        return view('dashboard.index', compact('venues', 'orders', 'reminders'));
     }
 }

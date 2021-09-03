@@ -46,11 +46,33 @@ class Venue extends Model
         return $this->hasMany(Product::class)->orderBy('name');
     }
 
-    public function getOverdueOrdersAttribute()
+    public function orders()
     {
-        return Order::whereBetween('starts_at', [
-            now()->addDays($this->reminder_delay),
-            now()->addDays($this->reminder_delay + 1)
-        ])->get();
+        return $this->hasMany(Order::class);
+    }
+
+    public function dueEmailReminders()
+    {
+        return $this->due('reminder')->get();
+    }
+
+    public function duePaymentChecks()
+    {
+        return $this->due('check')->get();
+    }
+
+    public function dueOrderDeletions()
+    {
+        return $this->due('delete')->get();
+    }
+
+    public function scopeDue($query, string $thing)
+    {
+        $attribute = $thing . '_delay';
+
+        return $this->orders()->whereBetween('created_at', [
+            now()->startOfDay()->subDays($this->$attribute),
+            now()->startOfDay()->subDays($this->$attribute - 1)
+        ]);
     }
 }

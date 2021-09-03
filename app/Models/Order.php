@@ -11,6 +11,7 @@ use App\Filters\QueryFilter;
 use Brick\Math\RoundingMode;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
@@ -48,7 +49,7 @@ class Order extends Model
         'cancelled_at' => 'datetime',
     ];
 
-    protected $with = ['bookings', 'items', 'customer'];
+    protected $with = ['bookings', 'items', 'customer', 'venue'];
 
     /*
      * Relations
@@ -82,6 +83,7 @@ class Order extends Model
     {
         return $this->hasOne(Action::class)->latestOfMany();
     }
+
 
     /*
      * Accessors / Mutators
@@ -138,7 +140,7 @@ class Order extends Model
     /*
      * Misc
      */
-    public function scopeFilter($query, QueryFilter $filters)
+    public function scopeFilter(Builder $query, QueryFilter $filters)
     {
         return $filters->apply($query);
     }

@@ -2,27 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Order;
 use App\Models\Venue;
-use App\Mail\ReminderEmail;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 
-class SendReminderEmails extends Command
+class DeleteOverdueOrders extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bapp:reminder-emails';
+    protected $signature = 'bapp:delete-orders';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send payment reminder emails to customers';
+    protected $description = 'Delete orders where deposit grace period is over.';
 
     /**
      * Create a new command instance.
@@ -42,17 +39,11 @@ class SendReminderEmails extends Command
     public function handle()
     {
         foreach (Venue::all() as $venue) {
-            $venue->dueEmailReminders()->map(function($order) {
-                $this->sendReminderEmail($order);
+            $venue->dueOrderDeletions()->map(function($order) {
+                $order->delete();
             });
         }
 
         return 0;
-    }
-
-    public function sendReminderEmail(Order $order)
-    {
-        Mail::to($order->customer->email)
-            ->send(new ReminderEmail($order));
     }
 }

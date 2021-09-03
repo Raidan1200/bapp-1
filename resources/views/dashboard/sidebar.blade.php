@@ -31,4 +31,10 @@
     <div class="text-xl">Kundensuche</div>
     <livewire:customer-search />
   </div>
+  <div class="border-t-2 my-2 py-2 text-xl font-semibold">
+    <a href="{{ route('dashboard', ['unpaid']) }}">
+      Nicht angezahlt: {{ $reminders->count() }}
+      (Link doesn't work)
+    </a>
+  </div>
 </div>
