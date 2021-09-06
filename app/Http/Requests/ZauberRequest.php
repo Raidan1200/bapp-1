@@ -36,9 +36,9 @@ class ZauberRequest extends FormRequest
 
             'bookings.*.starts_at' => 'required|date',
             'bookings.*.ends_at' => 'required|date',
-            'bookings.*.package_id' => 'exists:packages,id',
-            'bookings.*.room_id' => 'exists:rooms,id',
-            'bookings.*.quantity' => 'required|numeric',
+            'bookings.*.package_id' => 'required|exists:packages,id',
+            'bookings.*.room_id' => 'required|exists:rooms,id',
+            'bookings.*.quantity' => 'required|integer',
         ];
     }
 }
