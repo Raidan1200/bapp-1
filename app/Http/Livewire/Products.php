@@ -117,8 +117,14 @@ class Products extends Component
 
     public function render()
     {
-        $this->products = Venue::findOrFail($this->venue)->products->toArray();
+        $products = Venue::findOrFail($this->venue)->products;
+        $this->products = $products->toArray();
 
-        return view('livewire.products');
+        return view('livewire.products', [
+            'productss' => $products->map(function($product) {
+                $product['unit_price'] = money($product['unit_price']);
+                return $product;
+            })
+        ]);
     }
 }

@@ -83,7 +83,7 @@
             {{ $item['quantity'] }}
           </td>
           <td class="text-right">
-            {{ number_format($item['unit_price'] / 100, 2, ',', '.') }}
+            {{ money($item['unit_price']) }}
           </td>
           <td class="text-right">
             {{ $item['vat'] }}%

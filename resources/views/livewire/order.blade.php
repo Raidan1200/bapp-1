@@ -101,8 +101,8 @@
           @endcan
         </div>
         <div>
-          <div>Anzahlung: {{ $this->order->deposit }}</div>
-          <div>Gesamt: {{ $this->order->grossTotal }}</div>
+          <div>Anzahlung: {{ money($this->order->deposit) }}</div>
+          <div>Gesamt: {{ money($this->order->grossTotal) }}</div>
         </div>
       </div>
     </div>
@@ -118,7 +118,7 @@
                 x-data
                 @click.prevent="$dispatch('open-delete-modal', {
                   route: '{{ route('orders.destroy', $order) }}',
-                  entity: '{{ "von {$order->customer->first_name} {$order->customer->last_name}" }}',
+                  entity: '{{ "von {$order->customer->name}" }}',
                   subText: '',
                 })"
               >
@@ -159,11 +159,6 @@
           <div wire:click="makeInvoice('cancelled')">Storno</div>
         </x-slot>
       </x-dropdown>
-    @else
-      Bla blubb
-    @endcan
-
-    @can('modify orders') {{-- TODO: New Permission? create/send invoices? --}}
       <x-dropdown align="left">
         <x-slot name="trigger">
           <button class="flex items-center hover:bg-gray-100 transition duration-150 ease-in-out">
@@ -183,6 +178,14 @@
           <div wire:click="sendEmail('cancelled')">Stornierung</div>
         </x-slot>
       </x-dropdown>
+      <div class="ml-4">
+        <input
+          type="checkbox"
+          wire:click="toggleCashPayment"
+          id="cash"
+        />
+        <label for="cash">Cash</label>
+      </div>
     @else
       Bla blubb
     @endcan

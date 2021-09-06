@@ -139,6 +139,13 @@ class Order extends Component
         InvoiceEmailRequested::dispatch($type, $this->order);
     }
 
+    public function toggleCashPayment()
+    {
+        $this->order->update([
+            'cash' => ! $this->order->cash
+        ]);
+    }
+
     // Action Log
     public function stateHasChanged()
     {

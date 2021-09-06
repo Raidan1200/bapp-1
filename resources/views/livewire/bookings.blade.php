@@ -102,7 +102,7 @@
             {{ $booking['quantity'] }}
           </td>
           <td class="text-right">
-            {{ number_format($booking['unit_price'] / 100, 2, ',', '.') }}
+            {{ money($booking['unit_price']) }}
           </td>
           <td class="text-right">
             {{ $booking['vat'] }}%
@@ -111,7 +111,7 @@
             {{ $booking['deposit'] }}%
           </td>
           <td class="text-right">
-            {{ number_format($booking['quantity'] * $booking['unit_price'] / 100, 2, ',', '.') }}
+            {{ money($booking['quantity'] * $booking['unit_price']) }}
           </td>
         </tr>
       @endif

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Room;
+use App\Models\Order;
 use App\Models\Venue;
 use App\Models\Package;
 use App\Models\Customer;
@@ -23,8 +24,6 @@ class ZauberController extends Controller
 
     public function bookings(Request $request, Room $room)
     {
-        abort_if(auth()->user()->id !== $room->venue->id, 403);
-
         $from = Carbon::createFromDate(...explode('-', $request->input('from')))->hour(0)->minute(0)->second(0);
         $to = Carbon::createFromDate(...explode('-', $request->input('to')))->hour(23)->minute(59)->second(59);
 
@@ -33,18 +32,61 @@ class ZauberController extends Controller
 
     public function order(ZauberRequest $request, Venue $venue)
     {
-        $validated = $request->validated();
+        $order = $this->store($request->validated(), $venue);
 
-        $firstBookingDate = collect($validated['bookings'])
-            ->pluck('starts_at')
-            ->sort()
-            ->values()
-            ->first();
+        InvoiceEmailRequested::dispatch('deposit', $order->load('customer'));
 
+        return $order;
+    }
+
+    protected function store(array $validated, Venue $venue)
+    {
+        return DB::transaction(function () use ($validated, $venue)
+        {
+            $customer = $this->createCustomer($validated['customer']);
+
+            $order = $this->createOrder($venue, $validated['bookings'], $customer);
+
+            $bookings = $this->makeBookings($validated['bookings']);
+
+            $bookings = $this->applyBookingRules($bookings);
+            $order->bookings()->createMany($bookings);
+
+            $order = $this->applyOrderRules($order);
+            $order->save();
+
+            return $order;
+        });
+    }
+
+    protected function createCustomer($customerData)
+    {
+        return Customer::create($customerData);
+    }
+
+    protected function createOrder($venue, $bookings, $customer)
+    {
+        $order = new Order;
+
+        $order->invoice_id = rand();   // TODO ROLAND: How to generate?
+        // $order->invoice_id = $venue->makeInvoiceId(),
+        $order->state = 'fresh';
+        $order->cash_payment = false;
+        $order->venue_id = $venue->id;
+        $order->starts_at = $this->firstBookingDate($bookings);
+        $order->customer_id = $customer->id;
+
+        $order->save();
+
+        return $order;
+    }
+
+    protected function makeBookings($bookingData)
+    {
         $bookings = [];
 
-        foreach ($validated['bookings'] as $booking) {
-            $package = package::findOrFail($booking['package_id']);
+        foreach ($bookingData as $booking) {
+            $package = Package::findOrFail($booking['package_id']);
             $booking['package_name'] = $package->name;
             $booking['unit_price'] = $package->unit_price;
             $booking['vat'] = $package->vat;
@@ -54,28 +96,31 @@ class ZauberController extends Controller
             $bookings[] = $booking;
         }
 
-        $order = DB::transaction(function () use ($validated, $venue, $firstBookingDate, $bookings) {
-            $customer = Customer::create($validated['customer']);
+        return $bookings;
+    }
 
-            $order = $customer->orders()->create([
-                'invoice_id' => rand(), // TODO ROLAND: How to generate?
-                'state' => 'fresh',
-                'cash_payment' => rand(0, 1), // TODO ROLAND: This has no effect whatsoever? It's just info?
-                'venue_id' => $venue->id,
-                'starts_at' => new Carbon($firstBookingDate),
-            ]);
+    protected function applyBookingRules(array $bookings)
+    {
+        return $bookings;
+    }
 
-            $order->bookings()->createMany($bookings);
-
-            return $order;
-        });
-
-        // TODO: Maybe I should populate 'deposit_amount' and 'interim_amount' here???
-        //       Yes. YES!!!
-
-        InvoiceEmailRequested::dispatch('deposit', $order->load('customer'));
+    protected function applyOrderRules(Order $order)
+    {
+        $order->deposit_amount = ($deposit = $order->deposit);
+        $order->interim_amount = $order->grossTotal - $deposit;
 
         return $order;
+    }
+
+    protected function firstBookingDate($bookings)
+    {
+        return new Carbon(
+            collect($bookings)
+                ->pluck('starts_at')
+                ->sort()
+                ->values()
+                ->first()
+            );
     }
 
     protected function packageSnapshot($package)

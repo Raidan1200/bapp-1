@@ -59,7 +59,7 @@
             </td>
           @else
             <td>{{ $product['name'] }}</td>
-            <td>{{ $product['unit_price'] }}</td>
+            <td>{{ money($product['unit_price']) }}</td>
             <td>{{ $product['vat'] }}</td>
             <td>
               @can('modify products')
