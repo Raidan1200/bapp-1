@@ -20,6 +20,7 @@ class Venue extends Model
         'email',
         'reminder_delay',
         'check_delay',
+        'delete_delay'
     ];
 
     protected $casts = [

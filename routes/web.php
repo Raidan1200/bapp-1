@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Order;
+use App\Services\Invoice;
 use App\Http\Livewire\Products;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -47,6 +49,15 @@ Route::get('seed', function () {
 Route::get('config', function () {
     Artisan::call('config:clear');
     dd(Artisan::output());
+});
+
+Route::get('pdf', function () {
+    $order = Order::findOrFail(1);
+
+    return (new Invoice)
+        ->ofType('deposit')
+        ->forOrder($order)
+        ->makeHtml();
 });
 
 require __DIR__.'/auth.php';

@@ -18,6 +18,7 @@ class Order extends Component
 
     public $notes;
     public $selectedState;
+    public $cash;
 
     public $dirty = false;
 
@@ -31,6 +32,10 @@ class Order extends Component
         'final_paid' => 'border-green-500',
     ];
 
+    public $rules = [
+        'order.cash_payment' => 'required|boolean',
+    ];
+
     protected $listeners = [
         'updateBookings' => 'logBookingsChange',     //$refresh',
         'updateItems'    => 'logItemsChange',        //$refresh',
@@ -42,6 +47,7 @@ class Order extends Component
         $this->order = $order;
         $this->notes = $order->notes;
         $this->selectedState = $order->state;
+        $this->cash = $order->cash_payment;
     }
 
     public function updated()
@@ -60,6 +66,7 @@ class Order extends Component
             array_merge([
                 'notes' => $this->notes,
                 'state' => $this->selectedState,
+                'cash_payment' => $this->cash,
             ], $this->updatedTimestamps())
         );
 
@@ -69,7 +76,9 @@ class Order extends Component
 
     public function cancel()
     {
+        $this->notes = $this->order->notes;
         $this->selectedState = $this->order->state;
+        $this->cash = $this->order->cash_payment;
 
         $this->dirty = false;
         $this->editingNote = false;
@@ -131,19 +140,12 @@ class Order extends Component
 
         return $invoice
             ->makePdf()
-            ->stream("invoice_{$this->order->invoice_id}.pdf"); // TODO: Filename?
+            ->stream("invoice_{$order->invoice_id}.pdf"); // TODO: Filename?
     }
 
     public function sendEmail(string $type)
     {
         InvoiceEmailRequested::dispatch($type, $this->order);
-    }
-
-    public function toggleCashPayment()
-    {
-        $this->order->update([
-            'cash' => ! $this->order->cash
-        ]);
     }
 
     // Action Log

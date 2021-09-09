@@ -15,10 +15,7 @@ FROM php:7.4-fpm
 RUN docker-php-ext-install pdo pdo_mysql
 
 RUN apt update \
- && apt install -y \
-      libxrender1 \
-      libfontconfig \
-      libxext6 \
+ && apt install -y libxrender1 libfontconfig libxext6
  && apt clean
 ```
 

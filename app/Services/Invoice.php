@@ -46,14 +46,22 @@ class Invoice
 
     public function makePdf()
     {
-        return PDF::loadView(
-            "pdf.{$this->type}_invoice", [
-                'date' => $this->date,
-                'venue' => $this->order->venue,
-                'customer' => $this->order->customer,
-                'order' => $this->order,
-            ]
-        );
+        return PDF::view("pdf.invoice_{$this->type}", [
+            'date' => $this->date,
+            'venue' => $this->order->venue,
+            'customer' => $this->order->customer,
+            'order' => $this->order,
+        ]);
+    }
+
+    public function makeHtml()
+    {
+        return view("pdf.invoice_{$this->type}", [
+            'date' => $this->date,
+            'venue' => $this->order->venue,
+            'customer' => $this->order->customer,
+            'order' => $this->order,
+        ]);
     }
 
     protected function setDate()

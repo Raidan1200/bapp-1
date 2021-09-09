@@ -20,39 +20,22 @@ class VenueSeeder extends Seeder
      */
 
     public $zauber_json = [
-        'header' => [
-            'left' => [
-                'i(s)s anders Catering & Event GmbH * Schützenhöhe 11 * 01099 Dresden',
-            ],
-            'right' => [
-                '<b>Telefon:</b> 0351 8053280',
-                '<b>Fax:</b> 0351 8053281',
-                '',
-                '<b>E-</b>Mail: info@huettenzauber-dresden.de',
-                '<b>Internet:</b> www.huettenzauber-dresden.de',
-                '',
-                'Ostsächsische Sparkasse Dresden',
-                '<b>IBAN:</b> DE94 8505 0300 0221 0877 96',
-                '<b>BIC:</b> OSDDDE81XXX',
-            ],
-        ],
-        'footer' => [
-            'left' => [
-                'i(s)s anders Catering & Event GmbH',
-                'Geschäftsführer',
-                'Nico Thierbach',
-            ],
-            'center' => [
-                'SteuerNr.: 202/111/06930',
-                'HRB 34457',
-                'Amtsgericht Dresden',
-            ],
-            'right' => [
-                'Firmensitz Dresden',
-                'Schützenhöhe 11',
-                '01099 Dresden',
-            ],
-        ],
+        'company' => 'i(s)s anders Catering & Event GmbH',
+        'street' => 'Schützenhöhe',
+        'street_no' => '11',
+        'zip' => '01099',
+        'city' => 'Dresden',
+        'phone' => '0351 8053280',
+        'fax' => '0351 8053281',
+        'email' => 'info@huettenzauber-dresden.de',
+        'web' => 'www.huettenzauber-dresden.de',
+        'bank' => 'Ostsächsische Sparkasse Dresden',
+        'iban' => 'DE94 8505 0300 0221 0877 96',
+        'bic' => 'OSDDDE81XXX',
+        'manager' => 'Nico Thierbach',
+        'tax_id' => '202/111/06930',
+        'hrb' => '34457',
+        'court' => 'Amtsgericht Dresden',
     ];
 
     public function run()
