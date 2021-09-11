@@ -51,6 +51,8 @@ class Invoice
             'venue' => $this->order->venue,
             'customer' => $this->order->customer,
             'order' => $this->order,
+        ])->setOptions([
+            'enable-local-file-access' => true,
         ]);
     }
 

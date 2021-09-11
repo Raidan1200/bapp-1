@@ -16,7 +16,7 @@
   </div>
   <div class="w-2/5">
     <div>
-      <img src="{{ asset('storage/' . $venue->slug . '_logo.jpg') }}" alt="">
+      <img src="{{ public_path() . '/images/' . $venue->slug . '_logo.svg' }}" alt="">
     </div>
     <table>
       <tr>

@@ -25,7 +25,10 @@ class VenueController extends Controller
 
     public function store(CreateVenueRequest $request)
     {
-        $venue = Venue::create($request->validated());
+        $validated = $request->validated();
+        $validated['invoice_blocks'] = str_replace(["\r", "\n"], '', $validated['invoice_blocks']);
+
+        $venue = Venue::create($validated);
 
         return redirect()
             ->route('venues.show', $venue)
@@ -50,7 +53,10 @@ class VenueController extends Controller
 
     public function update(CreateVenueRequest $request, Venue $venue)
     {
-        $venue->update($request->validated());
+        $validated = $request->validated();
+        $validated['invoice_blocks'] = json_decode($validated['invoice_blocks']);
+
+        $venue->update($validated);
 
         return redirect()
             ->route('venues.show', $venue)

@@ -18,4 +18,3 @@ RUN apt update \
  && apt install -y libxrender1 libfontconfig libxext6
  && apt clean
 ```
-

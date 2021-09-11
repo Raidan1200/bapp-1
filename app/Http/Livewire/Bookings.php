@@ -59,8 +59,7 @@ class Bookings extends Component
 
         $this->validate();
 
-        // TODO IMPORTANT:
-        //      Check if the new quantiy exceeds the capacity!
+        // TODO: Check if the new quantiy exceeds the capacity!
 
         // TODO This is REAAAALLY inefficient
         //      Does Laravel have something like "bulkUpdate" or "updateMany"?

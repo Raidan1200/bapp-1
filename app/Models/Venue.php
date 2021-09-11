@@ -17,7 +17,9 @@ class Venue extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'email',
+        'invoice_blocks',
         'reminder_delay',
         'check_delay',
         'delete_delay'
@@ -77,3 +79,5 @@ class Venue extends Model
         ]);
     }
 }
+
+

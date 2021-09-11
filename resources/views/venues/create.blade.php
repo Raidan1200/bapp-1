@@ -36,7 +36,7 @@
 
         <x-form-field>
             <x-label for="invoice_blocks">Rechnungs-Blöcke</x-label>
-            <x-textarea type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ json_encode(old('invoice_blocks') ?? $venue->invoice_blocks ?? '') }}</x-textarea>
+            <x-textarea rows=10 type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ json_encode(old('invoice_blocks') ?? $venue->invoice_blocks ?? '', JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}</x-textarea>
           </x-form-field>
 
         <x-form-field>
