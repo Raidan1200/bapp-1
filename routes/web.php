@@ -32,15 +32,40 @@ Route::get('client-demo', function() {
     return view('client-demo');
 });
 
+Route::get('dropall', function () {
+    Artisan::call('db:wipe', ['--force' => true]);
+    return DB::select('SHOW TABLES');
+});
+
 Route::get('migrate', function () {
-    Artisan::call('migrate:fresh', [
-        '--force' => true
-    ]);
+    Artisan::call('migrate', ['--force' => true]);
+    dd(Artisan::output());
+});
+
+Route::get('migrate.fresh', function () {
+    set_time_limit(0);
+    try {
+        Artisan::call('migrate:fresh', ['--force' => true]);
+    } catch (Exception $ex) {
+        dd(Artisan::output());
+    }
+});
+
+Route::get('migrations', function () {
+    return DB::table('migrations')->select('*')->get();
+});
+
+Route::get('tables', function () {
+    return DB::select('SHOW TABLES');
+});
+
+Route::get('migrate.status', function () {
+    Artisan::call('migrate:status', []);
     dd(Artisan::output());
 });
 
 Route::get('seed', function () {
-    Artisan::call('db:seed');
+    Artisan::call('db:seed', ['--force' => true]);
     dd(Artisan::output());
 });
 
