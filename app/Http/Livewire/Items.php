@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Item;
+use App\Models\Product;
 use Livewire\Component;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -17,6 +18,9 @@ class Items extends Component
     public $orderId;
 
     public bool $editing = false;
+
+    public $foundProducts = [];
+    public $row;
 
     public $rules = [
         'items.*.id' => 'nullable',
@@ -97,8 +101,6 @@ class Items extends Component
             'quantity' => 1,
             'unit_price' => 0,
             'vat' => 20,
-            'package_id' => null,
-            'room_id' => null,
             'state' => 'new'
         ];
     }
@@ -120,6 +122,36 @@ class Items extends Component
                 array_splice($this->items, $key, 1);
                 break;
         }
+    }
+
+    public function updating($row, $search)
+    {
+        $this->row = str_replace(['items.', '.product_name'], ['', ''], $row);
+
+        if (mb_strlen($search) >= 3) {
+            $this->foundProducts = $this->findProducts($search);
+        } else {
+            $this->foundProducts = [];
+        }
+    }
+
+    public function findProducts($search) {
+        return Product::where('name', 'like', "%{$search}%")
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function fillFields($key, $product)
+    {
+        $this->items[$key] = [
+            'product_name' => $product['name'],
+            'quantity' => 1,
+            'unit_price' => $product['unit_price'],
+            'vat' => $product['vat'],
+            'state' => 'new'
+        ];
+
+        $this->foundProducts = [];
     }
 
     public function render()

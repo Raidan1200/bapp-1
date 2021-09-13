@@ -19,7 +19,7 @@
   @include ('pdf.totals', ['order' => $order])
 
   <p class="mt-8">
-    Bitte überweisen Sie den Betrag von {{ money($order->gross_total) }} Euro bis
+    Bitte überweisen Sie den Betrag von {{ money($order->deposit_amount) }} Euro bis
     {{ $order->created_at->addDays($venue->reminder_delay)->format('d.m.Y') }}
     unter Angabe der Rechnungsnummer ({{ $order->invoice_id }}) auf das unten genannte Konto
     bei {{ $venue->invoice_blocks['bank'] }}.

@@ -4,7 +4,7 @@
       <tr class="bg-gray-100">
         <td class="w-5/12 border-r px-1 border-white">
           Paket
-          @can('modify orders')
+          @can('admin orders')
             @if(!$editing)
               <button
                 class="float-right p-2"
@@ -19,16 +19,18 @@
         <td class="w-1/12 text-center px-1 border-r border-white">Ende</td>
         <td class="w-1/12 text-center px-1 border-r border-white">Flat</td>
         <td class="w-1/12 text-right px-1 border-r border-white">#</td>
-        <td class="w-1/12 text-right px-1 border-r border-white">Preis</td>
-        <td class="w-1/12 text-right px-1 border-r border-white">MwSt</td>
-        <td class="w-1/12 text-right px-1 border-r border-white">Anz.</td>
-        @if ($editing)
-          <td class="w-1/12 text-right px-1 font-semibold">
-            Löschen
-          </td>
-        @else
-          <td class="w-1/12 text-right px-1">Gesamt</td>
-        @endif
+        @can('admin orders')
+          <td class="w-1/12 text-right px-1 border-r border-white">Preis</td>
+          <td class="w-1/12 text-right px-1 border-r border-white">MwSt</td>
+          <td class="w-1/12 text-right px-1 border-r border-white">Anz.</td>
+          @if ($editing)
+            <td class="w-1/12 text-right px-1 font-semibold">
+              Löschen
+            </td>
+          @else
+            <td class="w-1/12 text-right px-1">Gesamt</td>
+          @endif
+        @endcan
       </tr>
     </thead>
     <tbody>
@@ -51,9 +53,16 @@
           >
             <td>
               <x-input
-                wire:model.defer="bookings.{{ $key }}.package_name"
+                wire:model="bookings.{{ $key }}.package_name"
                 class="w-full"
               />
+              @if (count($foundPackages) && $key == $row)
+                <ul class="absolute bg-white z-10">
+                  @foreach ($foundPackages as $package)
+                    <li wire:click="fillFields({{ $row }}, {{ $package }})">{{ $package->name }}</li>
+                  @endforeach
+                </ul>
+              @endif
             </td>
             <td>
               <x-input
@@ -122,18 +131,20 @@
             <td class="text-right">
               {{ $booking['quantity'] }}
             </td>
-            <td class="text-right">
-              {{ money($booking['unit_price']) }}
-            </td>
-            <td class="text-right">
-              {{ $booking['vat'] }}%
-            </td>
-            <td class="text-right">
-              {{ $booking['deposit'] }}%
-            </td>
-            <td class="text-right">
-              {{ money($booking['quantity'] * $booking['unit_price']) }}
-            </td>
+            @can('admin orders')
+              <td class="text-right">
+                {{ money($booking['unit_price']) }}
+              </td>
+              <td class="text-right">
+                {{ $booking['vat'] }}%
+              </td>
+              <td class="text-right">
+                {{ $booking['deposit'] }}%
+              </td>
+              <td class="text-right">
+                {{ money($booking['quantity'] * $booking['unit_price']) }}
+              </td>
+            @endcan
           </tr>
         @endif
       @endforeach

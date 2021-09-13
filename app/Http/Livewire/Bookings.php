@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Booking;
+use App\Models\Package;
 use Livewire\Component;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -15,13 +16,17 @@ class Bookings extends Component
     public $data;
 
     public $orderId;
+    public $venueId;
 
     public bool $editing = false;
 
+    public $foundPackages = [];
+    public $row;
+
     public $rules = [
         'bookings.*.id' => 'nullable',
-        'bookings.*.starts_at' => 'nullable|date',
-        'bookings.*.ends_at' => 'nullable|date',
+        'bookings.*.starts_at' => 'required|date',
+        'bookings.*.ends_at' => 'required|date',
         'bookings.*.package_name' => 'required|string|max:255',
         'bookings.*.is_flat' => 'required',
         'bookings.*.quantity' => 'required|integer',
@@ -55,7 +60,7 @@ class Bookings extends Component
 
     public function save()
     {
-        $this->authorize('modify orders');
+        $this->authorize('admin orders');
 
         $this->validate();
 
@@ -131,6 +136,43 @@ class Bookings extends Component
                 array_splice($this->bookings, $key, 1);
                 break;
         }
+    }
+
+    public function updating($row, $search)
+    {
+        $this->row = str_replace(['bookings.', '.package_name'], ['', ''], $row);
+
+        if (mb_strlen($search) >= 3) {
+            $this->foundPackages = $this->findPackages($search);
+        } else {
+            $this->foundPackages = [];
+        }
+    }
+
+    public function findPackages($search) {
+        return Package::where('venue_id', 1)
+            ->where('name', 'like', "%{$search}%")
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function fillFields($key, $package)
+    {
+        $this->bookings[$key] = [
+            'package_name' => $package['name'],
+            'starts_at' => null,
+            'ends_at' => null,
+            'quantity' => 1,
+            'unit_price' => $package['unit_price'],
+            'vat' => $package['vat'],
+            'deposit' => 0,
+            'is_flat' => false,
+            'package_id' => $package['id'],
+            'room_id' => null, // TODO: $package['roomId'],
+            'state' => 'new'
+        ];
+
+        $this->foundPackages = [];
     }
 
     public function render()

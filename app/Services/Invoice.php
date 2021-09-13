@@ -35,7 +35,6 @@ class Invoice
     {
         $this->order = $order;
         $this->setDate();
-        $this->setAmount();
         return $this;
     }
 
@@ -72,17 +71,5 @@ class Invoice
 
         $this->date = $this->order->$at_field ?: Carbon::now();
         $this->updatedFields[$at_field] = $this->date;
-    }
-
-    protected function setAmount()
-    {
-        // TODO: Always? Or just if it is not already set?
-        //       Maybe this should be set in the corresponding Controller!
-        //       Because after the deposit email was sent, it's supposed to be immutable
-        if (in_array($this->type, ['deposit', 'interim'])) {
-            $amount_field = $this->type . '_amount';
-
-            $this->updatedFields[$amount_field] = $this->order->grossTotal;
-        }
     }
 }

@@ -27,13 +27,11 @@
     <livewire:customer :customer="$order->customer" />
   </div>
   <div class="mt-2">
-    <livewire:bookings :bookings="$order->bookings->toArray()" :orderId="$order->id" />
+    <livewire:bookings :bookings="$order->bookings->toArray()" :orderId="$order->id" :venueId="$order->venueId" />
   </div>
-  @if ($order->items->count())
-    <div class="mt-2">
-        <livewire:items :items="$order->items->toArray()" :orderId="$order->id" />
-    </div>
-  @endif
+  <div class="mt-2">
+      <livewire:items :items="$order->items->toArray()" :orderId="$order->id" />
+  </div>
   <form
     wire:submit.prevent="save"
     action="#"
@@ -74,7 +72,7 @@
       <div>
         <div>
           {{-- TODO not sure about the permissions here --}}
-          @can('modify orders')
+          @can('admin orders')
             <select
               wire:model="selectedState"
               class="py-0"
@@ -97,14 +95,14 @@
               <option value="cancelled">Storniert</option>
             </select>
           @else
-            {{ $selectedState }}
+            {{ __('app.'.$selectedState) }}
           @endcan
         </div>
         <div>
           <div>Anzahlung: {{ money($this->order->deposit) }}</div>
           <div>Gesamt: {{ money($this->order->grossTotal) }}</div>
           {{-- TODO not sure about the permissions here --}}
-          @can('modify orders') {{-- TODO: New Permission? create/send invoices? --}}
+          @can('admin orders') {{-- TODO: New Permission? create/send invoices? --}}
             <div>
               <input
                 type="checkbox"
@@ -148,7 +146,7 @@
       </div>
     @endif
   </form>
-  @can('modify orders') {{-- TODO: New Permission? create/send invoices? --}}
+  @can('admin orders') {{-- TODO: New Permission? create/send invoices? --}}
     <div class="flex">
       <x-dropdown align="left">
         <x-slot name="trigger">

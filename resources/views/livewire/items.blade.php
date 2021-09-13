@@ -44,11 +44,18 @@
           wire:key="{{ $key }}"
           class="{{ $item['state'] === 'delete' ? 'bg-red-200' : '' }} {{ $item['state'] === 'new' ? 'bg-green-200' : '' }}"
         >
-          <td>
+          <td class="relative">
             <x-input
-              wire:model.defer="items.{{ $key }}.product_name"
+              wire:model="items.{{ $key }}.product_name"
               class="w-full"
             />
+            @if (count($foundProducts) && $key == $row)
+              <ul class="absolute bg-white z-10">
+                @foreach ($foundProducts as $product)
+                  <li wire:click="fillFields({{ $row }}, {{ $product }})">{{ $product->name }}</li>
+                @endforeach
+              </ul>
+            @endif
           </td>
           <td class="text-right">
             <x-input
@@ -89,7 +96,7 @@
             {{ $item['vat'] }}%
           </td>
           <td class="text-right">
-            {{ number_format($item['quantity'] * $item['unit_price'] / 100, 2, ',', '.') }}
+            {{ money($item['quantity'] * $item['unit_price']) }}
           </td>
         </tr>
       @endif

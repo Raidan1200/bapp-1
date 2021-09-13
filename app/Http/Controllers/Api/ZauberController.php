@@ -53,6 +53,7 @@ class ZauberController extends Controller
             $order->bookings()->createMany($bookings);
 
             $order = $this->applyOrderRules($order);
+
             $order->save();
 
             return $order;
