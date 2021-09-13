@@ -128,6 +128,13 @@ class OrderSeeder extends Seeder
                 'quantity' => rand(2, 4),
             ]);
         }
+
+        foreach (Order::all() as $order) {
+            $order->deposit_amount = $order->deposit;
+            $order->interim_amount = $order->grossTotal - $order->deposit;
+
+            $order->save();
+        }
     }
 
     public function makeSee($venue) {
