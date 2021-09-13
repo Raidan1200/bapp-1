@@ -69,7 +69,6 @@ class ZauberController extends Controller
         $order = new Order;
 
         $order->invoice_id = rand();   // TODO ROLAND: How to generate?
-        // $order->invoice_id = $venue->makeInvoiceId(),
         $order->state = 'fresh';
         $order->cash_payment = false;
         $order->venue_id = $venue->id;
