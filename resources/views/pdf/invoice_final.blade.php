@@ -5,7 +5,7 @@
 
   <div>
     <div>Rechnungsnummer: {{ $order->invoice_id }}</div>
-    <div>Rechnungsdatum: {{ $date->format("d.m.Y") }}</div>
+    <div>Rechnungsdatum: {{ $date->timezone('Europe/Berlin')->format("d.m.Y") }}</div>
   </div>
 
   <h2 class="text-xl mt-6">Pakete</h2>

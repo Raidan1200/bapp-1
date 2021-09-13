@@ -118,10 +118,10 @@
               {{ $booking['package_name'] }}
             </td>
             <td class="text-right">
-              {{ (new Carbon\Carbon($booking['starts_at']))->format('H:i') }}
+              {{ (new Carbon\Carbon($booking['starts_at']))->timezone('Europe/Berlin')->format('H:i') }}
             </td>
             <td class="text-right">
-              {{ (new Carbon\Carbon($booking['ends_at']))->format('H:i') }}
+              {{ (new Carbon\Carbon($booking['ends_at']))->timezone('Europe/Berlin')->format('H:i') }}
             </td>
             <td class="flex justify-center">
               @if ($booking['is_flat'])

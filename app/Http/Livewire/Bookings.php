@@ -64,6 +64,8 @@ class Bookings extends Component
 
         $this->validate();
 
+        // TODO: !!!! Take care with TIMEZONES HERE
+
         // TODO: Check if the new quantiy exceeds the capacity!
 
         // TODO This is REAAAALLY inefficient

@@ -20,6 +20,7 @@ Route::get('truncate', function () {
         DB::table($table->Tables_in_order_66)->truncate();
     }
     Schema::enableForeignKeyConstraints();
+    return DB::select('SHOW TABLES');
 });
 
 Route::get('migrate', function () {

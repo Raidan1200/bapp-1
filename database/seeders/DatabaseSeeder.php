@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use Database\Seeders\RoleAndPermissionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,10 +23,12 @@ class DatabaseSeeder extends Seeder
 
         $admin->assignRole('admin');
 
-        // if (App::environment('local')) {
+        $this->call(ZauberSeeder::class);
+
+        if (App::environment('local')) {
             $this->call(UserSeeder::class);
             $this->call(VenueSeeder::class);
-            // $this->call(OrderSeeder::class);
-        // }
+            $this->call(OrderSeeder::class);
+        }
     }
 }

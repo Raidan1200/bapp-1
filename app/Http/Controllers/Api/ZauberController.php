@@ -24,6 +24,8 @@ class ZauberController extends Controller
 
     public function bookings(Request $request, Room $room)
     {
+        abort_unless(auth()->user(), 403);
+
         $from = Carbon::createFromDate(...explode('-', $request->input('from')))->hour(0)->minute(0)->second(0);
         $to = Carbon::createFromDate(...explode('-', $request->input('to')))->hour(23)->minute(59)->second(59);
 
@@ -32,6 +34,8 @@ class ZauberController extends Controller
 
     public function order(ZauberRequest $request, Venue $venue)
     {
+        abort_unless(auth()->user(), 403);
+
         $order = $this->store($request->validated(), $venue);
 
         InvoiceEmailRequested::dispatch('deposit', $order->load('customer'));
