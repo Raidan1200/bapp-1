@@ -1,6 +1,6 @@
 <x-app-layout>
   @isset ($package)
-    <h1 class="px-4 text-2xl">Produkt {{ $package->name }} editieren</h1>
+    <h1 class="px-4 text-2xl">Paket {{ $package->name }} editieren</h1>
   @else
     <h1 class="px-4 text-2xl">Neues Paket anlegen</h1>
   @endisset
@@ -44,7 +44,7 @@
 
         <x-form-field>
           <x-label for="capacity">Angeboten bis</x-label>
-          <x-input type="date" name="ends_at" class="w-full" value="{{ old('ends_at') ?? (isset($package) ? $package->starts_at->format('Y-m-d') : '') }}" id="ends_at" />
+          <x-input type="date" name="ends_at" class="w-full" value="{{ old('ends_at') ?? (isset($package) ? $package->ends_at->format('Y-m-d') : '') }}" id="ends_at" />
         </x-form-field>
 
         <x-form-field>
