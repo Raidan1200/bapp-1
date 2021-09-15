@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Booking;
 use App\Models\Package;
 use Livewire\Component;
+use Illuminate\Support\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Bookings extends Component
@@ -30,7 +31,7 @@ class Bookings extends Component
         'bookings.*.package_name' => 'required|string|max:255',
         'bookings.*.is_flat' => 'required',
         'bookings.*.quantity' => 'required|integer',
-        'bookings.*.unit_price' => 'required|numeric',  // TODO: numeric or integer? or custom regex?
+        'bookings.*.unit_price' => 'required|numeric',
         'bookings.*.vat' => 'required|numeric',
         'bookings.*.deposit' => 'required|numeric',
         'bookings.*.state' => 'required|in:stored,new,delete',

@@ -31,10 +31,27 @@
     <div class="text-xl">Kundensuche</div>
     <livewire:customer-search />
   </div>
-  <div class="border-t-2 my-2 py-2 text-xl font-semibold">
-    <a href="{{ route('dashboard', ['unpaid']) }}">
-      Nicht angezahlt: {{ $reminders->count() }}
-      (Link doesn't work)
-    </a>
+  <div class="border-t-2 my-2 py-2">
+    <div class="text-xl">
+      <a href="{{ route('dashboard', ['check' => true]) }}">
+        Checks
+      </a>
+    </div>
+    @if ($due = $venues->where('check_count', '>', 0))
+      <ul>
+        @foreach ($due as $item)
+          <li>
+            <a href="{{ route('dashboard', array_filter(array_merge($filters, [
+                'check' => true,
+                'venue' => $item->id
+              ]))) }}">
+              {{ $item->name }}: {{ $item->check_count }}
+            </a>
+          </li>
+        @endforeach
+      </ul>
+    @else
+      Heute keine Checks
+    @endif
   </div>
 </div>

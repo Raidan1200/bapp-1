@@ -60,7 +60,7 @@
     </form>
   @else
     <div>
-      @can('modify orders')
+      @can('admin orders')
         <button
           class="float-right p-2"
           wire:click="startEditing"

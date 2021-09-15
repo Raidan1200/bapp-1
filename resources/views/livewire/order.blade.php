@@ -186,6 +186,7 @@
           <div wire:click="sendEmail('cancelled')">Stornierung</div>
         </x-slot>
       </x-dropdown>
+      <div class="ml-8">Id: {{ $order->id }}</div>
     </div>
   @endcan
 </article>

@@ -22,7 +22,8 @@ class Venue extends Model
         'invoice_blocks',
         'reminder_delay',
         'check_delay',
-        'delete_delay'
+        'check_count',
+        'delete_delay',
     ];
 
     protected $casts = [
@@ -56,17 +57,17 @@ class Venue extends Model
 
     public function dueEmailReminders()
     {
-        return $this->due('reminder')->get();
+        return $this->due('reminder')->fresh()->get();
     }
 
     public function duePaymentChecks()
     {
-        return $this->due('check')->get();
+        return $this->due('check')->fresh()->get();
     }
 
     public function dueOrderDeletions()
     {
-        return $this->due('delete')->get();
+        return $this->due('delete')->fresh()->get();
     }
 
     public function scopeDue($query, string $thing)
@@ -79,5 +80,3 @@ class Venue extends Model
         ]);
     }
 }
-
-

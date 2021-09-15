@@ -28,6 +28,7 @@ class Order extends Model
         'venue_id',
         'starts_at',
         'deposit_invoice_at',
+        'needs_check',
         'deposit_paid_at',
         'deposit_amount',
         'interim_invoice_at',
@@ -143,5 +144,10 @@ class Order extends Model
     public function scopeFilter(Builder $query, QueryFilter $filters)
     {
         return $filters->apply($query);
+    }
+
+    public function scopeFresh(Builder $query)
+    {
+        return $query->where('state', 'fresh');
     }
 }

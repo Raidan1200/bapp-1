@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('customer_id')->constrained();
             $table->datetime('starts_at');
             $table->datetime('deposit_invoice_at')->nullable();
+            $table->boolean('needs_check')->default(false);
             $table->datetime('deposit_paid_at')->nullable();
             $table->integer('deposit_amount')->nullable();
             $table->datetime('interim_invoice_at')->nullable();

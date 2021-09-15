@@ -28,6 +28,7 @@ class VenueFactory extends Factory
             'logo' => null,
             'reminder_delay' => 5,
             'check_delay' => 9,
+            'check_count' => 0,
             'delete_delay' => 12,
         ];
     }

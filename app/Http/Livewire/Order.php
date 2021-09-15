@@ -6,7 +6,9 @@ use Livewire\Component;
 use App\Services\Invoice;
 use Illuminate\Support\Carbon;
 use App\Events\OrderHasChanged;
+use App\Mail\ConfirmationEmail;
 use App\Models\Order as OrderModel;
+use Illuminate\Support\Facades\Mail;
 use App\Events\InvoiceEmailRequested;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -22,8 +24,6 @@ class Order extends Component
 
     public $dirty = false;
 
-    public $test = 'Nix';
-
     protected $colors = [
         'fresh' => 'border-red-500',
         'cancelled' => 'border-red-500',
@@ -34,6 +34,7 @@ class Order extends Component
 
     public $rules = [
         'order.cash_payment' => 'required|boolean',
+        'order.state' => 'required|string',
     ];
 
     protected $listeners = [
@@ -59,7 +60,8 @@ class Order extends Component
     {
         $this->authorize('modify orders', $this->order);
 
-        $this->logStateChange();
+        // TODO: Update should happen before the log and email stuff
+        $this->handleStateChange();
         $this->logNotesChange();
 
         $this->order->update(
@@ -148,10 +150,26 @@ class Order extends Component
         InvoiceEmailRequested::dispatch($type, $this->order);
     }
 
-    // Action Log
     public function stateHasChanged()
     {
         return $this->order->state !== $this->selectedState;
+    }
+
+    public function handleStateChange()
+    {
+        if ($this->stateHasChanged()) {
+            $this->logStateChange();
+
+            if ($this->selectedState === 'deposit_paid') {
+                $this->sendConfirmationEmail();
+            }
+        }
+    }
+
+    public function sendConfirmationEmail()
+    {
+        Mail::to($this->order->customer->email)
+            ->queue(new ConfirmationEmail($this->order));
     }
 
     public function logStateChange()
@@ -161,10 +179,12 @@ class Order extends Component
         }
     }
 
+    // public function
+
     public function logNotesChange()
     {
         if ($this->order->notes !== $this->notes) {
-            OrderHasChanged::dispatch($this->order, auth()->user(), 'notes', $this->order->notes, $this->notes);
+            OrderHasChanged::dispatch($this->order, auth()->user(), 'notes', $this->order->notes ?? '', $this->notes);
         }
     }
 

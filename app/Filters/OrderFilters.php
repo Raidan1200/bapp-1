@@ -31,4 +31,9 @@ class OrderFilters extends QueryFilter
             (new Carbon($from))->addDays($days),
         ]);
     }
+
+    public function check()
+    {
+        return $this->builder->where('needs_check', true);
+    }
 }
