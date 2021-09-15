@@ -110,6 +110,4 @@
       @include('dashboard.main')
     </div>
 	</div>
-  {{ config('app.locale')}}
-
 </x-app-layout>
