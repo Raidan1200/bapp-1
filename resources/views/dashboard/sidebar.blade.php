@@ -37,21 +37,23 @@
         Checks
       </a>
     </div>
-    @if ($due = $venues->where('check_count', '>', 0))
-      <ul>
-        @foreach ($due as $item)
-          <li>
-            <a href="{{ route('dashboard', array_filter(array_merge($filters, [
-                'check' => true,
-                'venue' => $item->id
-              ]))) }}">
-              {{ $item->name }}: {{ $item->check_count }}
-            </a>
-          </li>
-        @endforeach
-      </ul>
-    @else
-      Heute keine Checks
-    @endif
+    @can ('manage orders')
+      @if ($due = $venues->where('check_count', '>', 0))
+        <ul>
+          @foreach ($due as $item)
+            <li>
+              <a href="{{ route('dashboard', array_filter(array_merge($filters, [
+                  'check' => true,
+                  'venue' => $item->id
+                ]))) }}">
+                {{ $item->name }}: {{ $item->check_count }}
+              </a>
+            </li>
+          @endforeach
+        </ul>
+      @else
+        Heute keine Checks
+      @endif
+    @endcan
   </div>
 </div>

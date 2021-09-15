@@ -72,7 +72,7 @@
       <div>
         <div>
           {{-- TODO not sure about the permissions here --}}
-          @can('admin orders')
+          @can('modify orders')
             <select
               wire:model="selectedState"
               class="py-0"

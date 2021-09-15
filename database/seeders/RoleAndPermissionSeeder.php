@@ -33,7 +33,7 @@ class RoleAndPermissionSeeder extends Seeder
             ->givePermissionTo([
                 'create users', 'modify users',
                 'modify venues', 'modify rooms', 'modify packages',
-                'admin orders', 'delete orders'
+                'modify orders', 'delete orders'
             ]);
 
         Role::create(['name' => 'employee'])
