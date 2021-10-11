@@ -8,6 +8,8 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class Invoice
 {
+    protected $invoiceId;
+
     protected $type = '';
     protected $types = ['deposit', 'interim', 'final', 'cancelled'];
 
@@ -35,12 +37,19 @@ class Invoice
     {
         $this->order = $order;
         $this->setDate();
+        $this->setInvoiceId();
+
         return $this;
     }
 
     public function updatedFields()
     {
         return $this->updatedFields;
+    }
+
+    public function invoiceId()
+    {
+        return $this->invoiceId;
     }
 
     public function makePdf()
@@ -69,7 +78,25 @@ class Invoice
     {
         $at_field = $this->type . '_invoice_at';
 
-        $this->date = $this->order->$at_field ?: Carbon::now();
-        $this->updatedFields[$at_field] = $this->date;
+        if (!$this->order->$at_field) {
+            $this->date = $this->order->$at_field ?: Carbon::now();
+            $this->updatedFields[$at_field] = $this->date;
+        }
+
+        return $this;
+    }
+
+    protected function setInvoiceId()
+    {
+        $id_field = $this->type . '_invoice_id';
+
+        if ($this->order->$id_field) {
+            $this->invoiceId = $this->order->$id_field;
+        } else {
+            $this->invoiceId = $this->order->venue->getNextInvoiceId();
+            $this->updatedFields[$id_field] = $this->invoiceId;
+        }
+
+        return $this;
     }
 }

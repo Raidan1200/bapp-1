@@ -27,15 +27,26 @@ class Order extends Model
         'customer_id',
         'venue_id',
         'starts_at',
+
+        'deposit_invoice_id',
         'deposit_invoice_at',
-        'needs_check',
+        'deposit_email_at',
         'deposit_paid_at',
         'deposit_amount',
+        'needs_check',
+
+        'interim_invoice_id',
         'interim_invoice_at',
+        'interim_email_at',
         'interim_paid_at',
         'interim_amount',
+        'interim_is_final',
+
+        'final_invoice_id',
         'final_invoice_at',
+        'final_email_at',
         'final_paid_at',
+
         'cancelled_at',
     ];
 

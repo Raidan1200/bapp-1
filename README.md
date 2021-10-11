@@ -8,7 +8,7 @@ apt-get install language-pack-de
 ```
 
 ## Docker
-```d
+```
 FROM php:7.4-fpm
 # FROM php:8.0-fpm
 

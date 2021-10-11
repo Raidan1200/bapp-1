@@ -4,8 +4,8 @@
   <h1 class="text-2xl">Abschlussrechnung</h1>
 
   <div>
-    <div>Rechnungsnummer: {{ $order->invoice_id }}</div>
-    <div>Rechnungsdatum: {{ $date->timezone('Europe/Berlin')->format("d.m.Y") }}</div>
+    <div>Rechnungsnummer: {{ $order->final_invoice_id }}</div>
+    <div>Rechnungsdatum: {{ $order->final_invoice_at->timezone('Europe/Berlin')->format("d.m.Y") }}</div>
   </div>
 
   <h2 class="text-xl mt-6">Pakete</h2>

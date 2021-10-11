@@ -41,6 +41,8 @@ abstract class NewOrderController extends Controller
 
         $order = $this->store($request->validated(), $venue);
 
+        $order->load(['customer', 'venue']);
+
         InvoiceEmailRequested::dispatch('deposit', $order->load('customer'));
 
         return $order;
@@ -77,7 +79,6 @@ abstract class NewOrderController extends Controller
     {
         $order = new Order;
 
-        $order->invoice_id = rand();   // TODO ROLAND: How to generate?
         $order->state = 'fresh';
         $order->cash_payment = false;
         $order->venue_id = $venue->id;

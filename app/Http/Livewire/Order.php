@@ -51,6 +51,11 @@ class Order extends Component
         $this->cash = $order->cash_payment;
     }
 
+    public function render()
+    {
+        return view('livewire.order');
+    }
+
     public function updated()
     {
         $this->dirty = true;
@@ -89,11 +94,6 @@ class Order extends Component
     public function getColorProperty() : string
     {
         return $this->colors[$this->order->state] ?? '';
-    }
-
-    public function render()
-    {
-        return view('livewire.order');
     }
 
     public function updatedTimestamps() : array
@@ -138,11 +138,13 @@ class Order extends Component
             ->ofType($type)
             ->forOrder($order);
 
-        $order->update($invoice->updatedFields());
-
+        if ($updatedFields = $invoice->updatedFields()) {
+            $order->update($updatedFields);
+        }
+dd("{$invoice->invoiceId()}_{$type}_invoice.pdf");
         return $invoice
             ->makePdf()
-            ->stream("invoice_{$order->invoice_id}.pdf"); // TODO: Filename?
+            ->stream("{$invoice->invoiceId()}_{$type}_invoice.pdf");
     }
 
     public function sendEmail(string $type)
@@ -178,8 +180,6 @@ class Order extends Component
             OrderHasChanged::dispatch($this->order, auth()->user(), 'state', $this->order->state, $this->selectedState);
         }
     }
-
-    // public function
 
     public function logNotesChange()
     {

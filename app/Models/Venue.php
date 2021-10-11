@@ -24,6 +24,7 @@ class Venue extends Model
         'check_delay',
         'check_count',
         'delete_delay',
+        'invoice_id',
     ];
 
     protected $casts = [
@@ -78,5 +79,14 @@ class Venue extends Model
             now()->startOfDay()->subDays($this->$attribute),
             now()->startOfDay()->subDays($this->$attribute - 1)
         ]);
+    }
+
+    public function getNextInvoiceId()
+    {
+        $id = $this->next_invoice_id;
+
+        $this->increment('next_invoice_id');
+
+        return $id;
     }
 }
