@@ -37,6 +37,16 @@ class Bookings extends Component
         'bookings.*.state' => 'required|in:stored,new,delete',
     ];
 
+    public $validationAttributes = [
+        'bookings.*.package_name' => 'Paketname',
+        'bookings.*.starts_at' => 'Start',
+        'bookings.*.ends_at' => 'Ende',
+        'bookings.*.unit_price' => 'Bruttopreis',
+        'bookings.*.vat' => 'MwSt',
+        'bookings.*.quantity' => 'Menge',
+        'bookings.*.deposit' => 'Anzahlung',
+    ];
+
     public function mount()
     {
         foreach ($this->bookings as &$booking) {
@@ -67,7 +77,7 @@ class Bookings extends Component
 
         // TODO: !!!! Take care with TIMEZONES HERE
 
-        // TODO: Check if the new quantiy exceeds the capacity!
+        $newBookings = [];
 
         // TODO This is REAAAALLY inefficient
         //      Does Laravel have something like "bulkUpdate" or "updateMany"?

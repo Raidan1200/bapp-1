@@ -39,11 +39,9 @@
           @if ($errors->has("bookings.$key.*"))
             <tr>
               <td colspan="7" class="bg-red-300">
-                {{ var_dump($errors->all()) }}
-                Es fehlen:
-                @if ($errors->has("bookings.$key.package_name"))
-                  Paketname
-                @endif
+                @foreach ($errors->get("bookings.$key.*") as $error)
+                  <div>{{ $error[0] ?? '' }}</div>
+                @endforeach
               </td>
             </tr>
           @endif

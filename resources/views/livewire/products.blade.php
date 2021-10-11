@@ -8,7 +8,7 @@
           <div>{{ $errors->first("newProduct.name") }}</div>
         </x-form-field>
         <x-form-field>
-          <x-label for="name">Brutto-Preis</x-label>
+          <x-label for="name">Bruttopreis</x-label>
           <x-input wire:model.defer="newProduct.unit_price" />
           <div>{{ $errors->first("newProduct.unit_price") }}</div>
         </x-form-field>

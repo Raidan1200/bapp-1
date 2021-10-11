@@ -25,6 +25,7 @@ class Venue extends Model
         'check_count',
         'cancel_delay',
         'invoice_id',
+        'invoice_id_format',
     ];
 
     protected $casts = [
@@ -74,7 +75,7 @@ class Venue extends Model
     {
         return $this
             ->due('cancel')
-            ->whereNull('cancelled_at')
+            ->where('state', 'fresh')
             ->fresh()
             ->get();
     }
@@ -91,15 +92,15 @@ class Venue extends Model
 
         return $this->orders()
             ->whereNull('deposit_paid_at')
+            ->whereNull('cancelled_at')
             ->where('created_at', '<', $day);
     }
 
     public function getNextInvoiceId()
     {
-        $id = $this->next_invoice_id;
+        $invoice_id = sprintf($this->invoice_id_format, $this->next_invoice_id);
 
         $this->increment('next_invoice_id');
-
-        return $id;
+        return $invoice_id;
     }
 }

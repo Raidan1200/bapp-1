@@ -24,7 +24,8 @@ class CreateVenuesTable extends Migration
             $table->unsignedInteger('check_delay')->default(7);
             $table->unsignedInteger('check_count')->default(0);
             $table->unsignedInteger('cancel_delay')->default(10);
-            $table->unsignedInteger('next_invoice_id')->unique()->default(1);
+            $table->string('invoice_id_format')->default('%05d');
+            $table->unsignedInteger('next_invoice_id')->default(1);
             $table->timestamps();
         });
     }

@@ -29,18 +29,16 @@
     </thead>
     @foreach ($items as $key => $item)
       @if ($editing)
-        @if ($errors->has("items.$key.*"))
-          <tr>
-            <td colspan="7" class="bg-red-300">
-              {{ var_dump($errors->all()) }}
-              Es fehlen:
-              @if ($errors->has("items.$key.product_name"))
-                Paketname
-              @endif
-            </td>
-          </tr>
-        @endif
-        <tr
+      @if ($errors->has("items.$key.*"))
+      <tr>
+        <td colspan="7" class="bg-red-300">
+          @foreach ($errors->get("items.$key.*") as $error)
+            <div>{{ $error[0] ?? '' }}</div>
+          @endforeach
+        </td>
+      </tr>
+    @endif
+  <tr
           wire:key="{{ $key }}"
           class="{{ $item['state'] === 'delete' ? 'bg-red-200' : '' }} {{ $item['state'] === 'new' ? 'bg-green-200' : '' }}"
         >

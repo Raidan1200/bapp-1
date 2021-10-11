@@ -36,7 +36,7 @@
 
         <x-form-field>
             <x-label for="invoice_blocks">Rechnungs-Blöcke</x-label>
-            <x-textarea rows=10 type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ json_encode(old('invoice_blocks') ?? $venue->invoice_blocks ?? '', JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}</x-textarea>
+            <x-textarea rows=10 type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ trim(json_encode(old('invoice_blocks') ?? $venue->invoice_blocks ?? '', JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), '"') }}</x-textarea>
           </x-form-field>
 
         <x-form-field>
@@ -50,8 +50,13 @@
         </x-form-field>
 
         <x-form-field>
-            <x-label for="cancel_delay">Tage bis Stornierung</x-label>
-            <x-input type="number" min="0" name="cancel_delay" class="w-full" value="{{ old('cancel_delay') ?? $venue->cancel_delay ?? '' }}"  id="cancel_delay" />
+          <x-label for="cancel_delay">Tage bis Stornierung</x-label>
+          <x-input type="number" min="0" name="cancel_delay" class="w-full" value="{{ old('cancel_delay') ?? $venue->cancel_delay ?? '' }}"  id="cancel_delay" />
+        </x-form-field>
+
+        <x-form-field>
+          <x-label for="invoice_id_format">Rechnungsnummernformat</x-label>
+          <x-input type="text" name="invoice_id_format" class="w-full" value="{{ old('invoice_id_format') ?? $venue->invoice_id_format ?? '' }}" id="invoice_id_format" />
           </x-form-field>
 
         <div class="mt-2 text-right">

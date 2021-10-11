@@ -31,6 +31,13 @@ class Items extends Component
         'items.*.state' => 'required|in:stored,new,delete',
     ];
 
+    public $validationAttributes = [
+        'items.*.product_name' => 'Produktname',
+        'items.*.quantity' => 'Menge',
+        'items.*.unit_price' => 'Bruttopreis',
+        'items.*.vat' => 'MwSt',
+    ];
+
     public function mount()
     {
         foreach ($this->items as &$item) {
@@ -57,6 +64,8 @@ class Items extends Component
         $this->authorize('modify orders');
 
         $this->validate();
+
+        $newItems = [];
 
         // TODO This is REAAAALLY inefficient
         //      Does Laravel have something like "bulkUpdate" or "updateMany"?

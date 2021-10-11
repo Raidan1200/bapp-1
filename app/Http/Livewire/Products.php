@@ -22,7 +22,11 @@ class Products extends Component
     public $editingProduct = null;
 
     public $validationAttributes = [
-        'products.*.name' => 'name',
+        'products.*.vat' => 'MwSt',
+        'products.*.unit_price' => 'Bruttopreis',
+        'newProduct.name' => 'Produktname',
+        'newProduct.unit_price' => 'Bruttopreis',
+        'newProduct.vat' => 'MwSt',
     ];
 
     public function mount(Request $request)

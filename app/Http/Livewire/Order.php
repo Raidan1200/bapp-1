@@ -168,7 +168,7 @@ class Order extends Component
             ]);
 
             // TODO: ???
-            $this->order->venue->decrement('check_count');
+            // $this->order->venue->decrement('check_count');
 
             if ($this->selectedState === 'deposit_paid') {
                 $this->sendConfirmationEmail();
