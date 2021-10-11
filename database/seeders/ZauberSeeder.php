@@ -42,7 +42,7 @@ class ZauberSeeder extends Seeder
             'invoice_blocks' => $this->zauber_json,
             'reminder_delay' => 5,
             'check_delay' => 7,
-            'delete_delay' => 12,
+            'cancel_delay' => 12,
         ]);
 
         $v1->createToken('api-token')->plainTextToken;

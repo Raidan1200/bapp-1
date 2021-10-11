@@ -2,16 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Mail\FinalEmail;
-use App\Mail\DepositEmail;
-use App\Mail\InterimEmail;
-use App\Mail\CancelledEmail;
-use App\Events\InvoiceEmailRequested;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
+use App\Events\InvoiceEmailRequested;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendInvoiceEmail implements ShouldQueue
+class SendInvoiceEmail // implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -33,21 +30,13 @@ class SendInvoiceEmail implements ShouldQueue
     {
         $email = Mail::to($event->order->customer->email);
 
-        switch ($event->type) {
-            case 'deposit':
-                $email->send(new DepositEmail($event->order));
-                break;
-            case 'interim':
-                $email->send(new InterimEmail($event->order));
-                break;
-            case 'final':
-                $email->send(new FinalEmail($event->order));
-                break;
-            case 'cancelled':
-                $email->send(new CancelledEmail($event->order));
-                break;
-                default:
-                    throw new \Exception('Unknown email type: ' . $event->type);
-        }
+        $emailClass = '\\App\\Mail\\' . ucfirst($event->type) . 'Email';
+        $email_sent_field = $event->type . '_email_at';
+
+        $email->send(new $emailClass($event->order));
+        $event->order->$email_sent_field = Carbon::now();
+        $event->order->save();
+
+        // throw new \Exception('Unknown email type: ' . $event->type);
     }
 }

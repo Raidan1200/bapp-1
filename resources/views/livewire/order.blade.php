@@ -162,10 +162,30 @@
           </x-slot>
 
           <x-slot name="content">
-            <div wire:click="makeInvoice('deposit')">Anzahlung</div>
-            <div wire:click="makeInvoice('interim')">Zwischen</div>
-            <div wire:click="makeInvoice('final')">Abschluss</div>
-            <div wire:click="makeInvoice('cancelled')">Storno</div>
+            <div
+              wire:click="makeInvoice('deposit')"
+              class="m-2 cursor-pointer"
+            >
+              Anzahlung
+            </div>
+            <div
+              wire:click="makeInvoice('interim')"
+              class="m-2 cursor-pointer"
+            >
+              Zwischen
+            </div>
+            <div
+              wire:click="makeInvoice('final')"
+              class="m-2 cursor-pointer"
+            >
+              Abschluss
+            </div>
+            <div
+              wire:click="makeInvoice('cancelled')"
+              class="m-2 cursor-pointer"
+            >
+              Storno
+            </div>
           </x-slot>
         </x-dropdown>
         <x-dropdown align="left">
@@ -181,15 +201,44 @@
           </x-slot>
 
           <x-slot name="content">
-            <div wire:click="sendEmail('deposit')">Anzahlung</div>
-            <div wire:click="sendEmail('interim')">Zwischen</div>
-            <div wire:click="sendEmail('final')">Abschluss</div>
-            <div wire:click="sendEmail('cancelled')">Stornierung</div>
+            <div
+              wire:click="sendEmail('deposit')"
+              class="m-2 cursor-pointer"
+            >
+              Anzahlung
+              @if ($order->deposit_email_at)
+                <span>(resend)</span>
+              @endif
+            </div>
+            <div
+              wire:click="sendEmail('interim')"
+              class="m-2 cursor-pointer"
+            >
+              Zwischen
+              @if ($order->interim_email_at)
+                <span>(resend)</span>
+              @endif
+            </div>
+            <div
+              wire:click="sendEmail('final')"
+              class="m-2 cursor-pointer"
+            >
+              Abschluss
+              @if ($order->final_email_at)
+                <span>(resend)</span>
+              @endif
+            </div>
+            <div
+              wire:click="sendEmail('cancelled')"
+              class="m-2 cursor-pointer"
+            >
+              Stornierung
+              @if ($order->cancelled_email_at)
+                <span>(resend)</span>
+              @endif
+            </div>
           </x-slot>
         </x-dropdown>
-      </div>
-      <div>
-        <div class="ml-8">Rechnungsnr: {{ $order->invoice_id }}</div>
       </div>
     </div>
   @endcan

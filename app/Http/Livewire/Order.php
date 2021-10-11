@@ -141,7 +141,7 @@ class Order extends Component
         if ($updatedFields = $invoice->updatedFields()) {
             $order->update($updatedFields);
         }
-dd("{$invoice->invoiceId()}_{$type}_invoice.pdf");
+
         return $invoice
             ->makePdf()
             ->stream("{$invoice->invoiceId()}_{$type}_invoice.pdf");
@@ -161,6 +161,14 @@ dd("{$invoice->invoiceId()}_{$type}_invoice.pdf");
     {
         if ($this->stateHasChanged()) {
             $this->logStateChange();
+
+            // TODO: ???
+            $this->order->update([
+                'needs_check' => false
+            ]);
+
+            // TODO: ???
+            $this->order->venue->decrement('check_count');
 
             if ($this->selectedState === 'deposit_paid') {
                 $this->sendConfirmationEmail();

@@ -23,7 +23,7 @@ class Venue extends Model
         'reminder_delay',
         'check_delay',
         'check_count',
-        'delete_delay',
+        'cancel_delay',
         'invoice_id',
     ];
 
@@ -58,7 +58,11 @@ class Venue extends Model
 
     public function dueEmailReminders()
     {
-        return $this->due('reminder')->fresh()->get();
+        return $this
+            ->due('reminder')
+            ->whereNull('deposit_reminder_at')
+            ->fresh()
+            ->get();
     }
 
     public function duePaymentChecks()
@@ -66,19 +70,28 @@ class Venue extends Model
         return $this->due('check')->fresh()->get();
     }
 
-    public function dueOrderDeletions()
+    public function dueOrderCancellations()
     {
-        return $this->due('delete')->fresh()->get();
+        return $this
+            ->due('cancel')
+            ->whereNull('cancelled_at')
+            ->fresh()
+            ->get();
     }
 
     public function scopeDue($query, string $thing)
     {
-        $attribute = $thing . '_delay';
+        $field_name = $thing . '_delay';
+        $delay = $this->$field_name;
 
-        return $this->orders()->whereBetween('created_at', [
-            now()->startOfDay()->subDays($this->$attribute),
-            now()->startOfDay()->subDays($this->$attribute - 1)
-        ]);
+        // TODO - delay syntax
+        // $this->$field_name - 1  => act on the configured delay day
+        // $this->$field_name - 1  => act after at least delay days have passed
+        $day = now()->startOfDay()->subDays($this->$field_name);
+
+        return $this->orders()
+            ->whereNull('deposit_paid_at')
+            ->where('created_at', '<', $day);
     }
 
     public function getNextInvoiceId()

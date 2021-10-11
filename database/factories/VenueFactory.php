@@ -29,7 +29,7 @@ class VenueFactory extends Factory
             'reminder_delay' => 5,
             'check_delay' => 9,
             'check_count' => 0,
-            'delete_delay' => 12,
+            'cancel_delay' => 12,
         ];
     }
 }

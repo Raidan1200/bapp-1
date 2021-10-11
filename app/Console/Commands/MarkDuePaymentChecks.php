@@ -47,13 +47,13 @@ class MarkDuePaymentChecks extends Command
                 $order->update(['needs_check' => true]);
             });
 
-            $orders = Order::where('venue_id', $venue->id)
+            $count = Order::where('venue_id', $venue->id)
                 ->where('deposit_paid_at', null)
                 ->where('needs_check', true)
-                ->get();
+                ->count();
 
             $venue->update([
-                'check_count' => $orders->count(),
+                'check_count' => $count,
             ]);
         });
 

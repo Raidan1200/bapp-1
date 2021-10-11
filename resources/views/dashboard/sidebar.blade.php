@@ -37,15 +37,15 @@
         Checks
       </a>
     </div>
-    @can ('manage orders')
+    @can ('modify orders')
       @if ($due = $venues->where('check_count', '>', 0))
         <ul>
           @foreach ($due as $item)
             <li>
-              <a href="{{ route('dashboard', array_filter(array_merge($filters, [
+              <a href="{{ route('dashboard', array_filter([
                   'check' => true,
                   'venue' => $item->id
-                ]))) }}">
+                ])) }}">
                 {{ $item->name }}: {{ $item->check_count }}
               </a>
             </li>

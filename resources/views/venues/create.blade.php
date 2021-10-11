@@ -50,8 +50,8 @@
         </x-form-field>
 
         <x-form-field>
-            <x-label for="delete_delay">Tage bis Löschung</x-label>
-            <x-input type="number" min="0" name="delete_delay" class="w-full" value="{{ old('delete_delay') ?? $venue->delete_delay ?? '' }}"  id="delete_delay" />
+            <x-label for="cancel_delay">Tage bis Stornierung</x-label>
+            <x-input type="number" min="0" name="cancel_delay" class="w-full" value="{{ old('cancel_delay') ?? $venue->cancel_delay ?? '' }}"  id="cancel_delay" />
           </x-form-field>
 
         <div class="mt-2 text-right">

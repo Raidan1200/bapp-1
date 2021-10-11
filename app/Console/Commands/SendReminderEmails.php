@@ -44,6 +44,8 @@ class SendReminderEmails extends Command
         foreach (Venue::all() as $venue) {
             $venue->dueEmailReminders()->map(function($order) {
                 $this->sendReminderEmail($order);
+                $order->deposit_reminder_at = now();
+                $order->save();
             });
         }
 

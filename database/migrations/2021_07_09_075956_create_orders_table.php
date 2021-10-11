@@ -25,6 +25,7 @@ class CreateOrdersTable extends Migration
             $table->string('deposit_invoice_id')->nullable();
             $table->datetime('deposit_invoice_at')->nullable();
             $table->datetime('deposit_email_at')->nullable();
+            $table->datetime('deposit_reminder_at')->nullable();
             $table->datetime('deposit_paid_at')->nullable();
             $table->integer('deposit_amount')->nullable();  // TODO: nullable() ?
             $table->boolean('needs_check')->default(false);
