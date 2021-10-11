@@ -52,12 +52,20 @@ class Order extends Model
 
     protected $casts = [
         'starts_at' => 'datetime',
+
         'deposit_invoice_at' => 'datetime',
+        'deposit_email_at' => 'datetime',
+        'deposit_reminder_at' => 'datetime',
         'deposit_paid_at' => 'datetime',
+
         'interim_invoice_at' => 'datetime',
+        'interim_email_at' => 'datetime',
         'interim_paid_at' => 'datetime',
+
         'final_invoice_at' => 'datetime',
+        'final_email_at' => 'datetime',
         'final_paid_at' => 'datetime',
+
         'cancelled_at' => 'datetime',
     ];
 

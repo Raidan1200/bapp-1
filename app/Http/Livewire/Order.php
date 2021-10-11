@@ -104,7 +104,7 @@ class Order extends Component
 
         $timestamps = [];
 
-        switch ($this->order->state) {
+        switch ($this->selectedState) {
             case 'fresh':
                 $timestamps['deposit_paid_at'] = null;
                 $timestamps['interim_paid_at'] = null;
@@ -161,18 +161,6 @@ class Order extends Component
     {
         if ($this->stateHasChanged()) {
             $this->logStateChange();
-
-            // TODO: ???
-            $this->order->update([
-                'needs_check' => false
-            ]);
-
-            // TODO: ???
-            // $this->order->venue->decrement('check_count');
-
-            if ($this->selectedState === 'deposit_paid') {
-                $this->sendConfirmationEmail();
-            }
         }
     }
 

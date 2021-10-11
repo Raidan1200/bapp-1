@@ -37,6 +37,7 @@ class ZauberController extends NewOrderController
 
     protected function applyOrderRules(Order $order)
     {
+        // Duplicated in Livewire\Order ... BAAAAD!!!!
         $order->deposit_amount = ($deposit = $order->deposit);
         $order->interim_amount = $order->grossTotal - $deposit;
 

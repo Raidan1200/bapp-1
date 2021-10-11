@@ -11,7 +11,7 @@
       @click="editCustomer = !editCustomer"
       class="flex-1 text-left hover:text-primary-dark rounded px-2 -mx-2 py-1 font-semibold"
     >
-      {{ $order->customer->name }}
+      {{ $order->customer->name }} ({{ $order->id }} - {{ $order->interim_is_final }})
     </button>
     <div>
       <div class="font-semibold text-right">{{ $order->starts_at->timezone('Europe/Berlin')->formatLocalized('%a %d.%m %H:%M') }}</div>
@@ -71,7 +71,6 @@
       </div>
       <div>
         <div>
-          {{-- TODO not sure about the permissions here --}}
           @can('modify orders')
             <select
               wire:model="selectedState"
@@ -99,10 +98,9 @@
           @endcan
         </div>
         <div>
-          <div>Anzahlung: {{ money($this->order->deposit) }}</div>
+          <div>Anzahlung: {{ money($this->order->deposit_amount) }}</div>
           <div>Gesamt: {{ money($this->order->grossTotal) }}</div>
-          {{-- TODO not sure about the permissions here --}}
-          @can('admin orders') {{-- TODO: New Permission? create/send invoices? --}}
+          @can('admin orders')
             <div>
               <input
                 type="checkbox"
@@ -146,7 +144,7 @@
       </div>
     @endif
   </form>
-  @can('admin orders') {{-- TODO: New Permission? create/send invoices? --}}
+  @can('admin orders')
     <div class="flex justify-between">
       <div class="flex">
         <x-dropdown align="left">
@@ -168,12 +166,14 @@
             >
               Anzahlung
             </div>
-            <div
-              wire:click="makeInvoice('interim')"
-              class="m-2 cursor-pointer"
-            >
-              Zwischen
-            </div>
+            {{-- @unless ($order->interim_is_final) --}}
+              <div
+                wire:click="makeInvoice('interim')"
+                class="m-2 cursor-pointer"
+              >
+                Zwischen
+              </div>
+            {{-- @endunless --}}
             <div
               wire:click="makeInvoice('final')"
               class="m-2 cursor-pointer"
@@ -210,15 +210,17 @@
                 <span>(resend)</span>
               @endif
             </div>
-            <div
-              wire:click="sendEmail('interim')"
-              class="m-2 cursor-pointer"
-            >
-              Zwischen
-              @if ($order->interim_email_at)
-                <span>(resend)</span>
-              @endif
-            </div>
+            {{-- @unless ($order->interim_is_final) --}}
+              <div
+                wire:click="sendEmail('interim')"
+                class="m-2 cursor-pointer"
+              >
+                Zwischen
+                @if ($order->interim_email_at)
+                  <span>(resend)</span>
+                @endif
+              </div>
+            {{-- @endunless --}}
             <div
               wire:click="sendEmail('final')"
               class="m-2 cursor-pointer"
