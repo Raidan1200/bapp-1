@@ -4,11 +4,9 @@ namespace App\Models;
 
 use App\Models\Item;
 use App\Models\Venue;
-// use Brick\Money\Money;
 use App\Models\Action;
 use App\Models\Booking;
 use App\Filters\QueryFilter;
-use Brick\Math\RoundingMode;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -110,9 +108,11 @@ class Order extends Model
      */
     public function getDepositAttribute()
     {
-        return $this->bookings->reduce(function ($deposit, $booking) {
+        $deposit = $this->bookings->reduce(function ($deposit, $booking) {
             return $deposit += ($booking->quantity * $booking->unit_price) * ($booking->deposit / 100);
         });
+
+        return round($deposit);
     }
 
     public function getNetTotalAttribute()
@@ -165,8 +165,10 @@ class Order extends Model
         return $filters->apply($query);
     }
 
-    public function scopeFresh(Builder $query)
-    {
-        return $query->where('state', 'fresh');
-    }
+    // TODO: Disabled because this is a REALLY bad name
+    //       There is an Eloquent function called fresh()
+    // public function scopeFresh(Builder $query)
+    // {
+    //     return $query->where('state', 'fresh');
+    // }
 }

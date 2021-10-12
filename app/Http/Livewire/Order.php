@@ -38,8 +38,8 @@ class Order extends Component
     ];
 
     protected $listeners = [
-        'updateBookings' => 'logBookingsChange',     //$refresh',
-        'updateItems'    => 'logItemsChange',        //$refresh',
+        'updateBookings' => 'bookingsUpdated',       //$refresh',
+        'updateItems'    => 'itemsUpdated',          //$refresh',
         'updateCustomer' => 'logCustomerDataChange', //$refresh'
     ];
 
@@ -104,26 +104,35 @@ class Order extends Component
 
         $timestamps = [];
 
+        // TODO TODO: Was machen wir hier jetzt?
         switch ($this->selectedState) {
             case 'fresh':
-                $timestamps['deposit_paid_at'] = null;
-                $timestamps['interim_paid_at'] = null;
-                $timestamps['final_paid_at'] = null;
+                // $timestamps['deposit_paid_at'] = null;
+                // $timestamps['interim_paid_at'] = null;
+                // $timestamps['final_paid_at'] = null;
+                // $timestamps['cancelled_at'] = null;
                 break;
 
             case 'deposit_paid':
                 $timestamps['deposit_paid_at'] = Carbon::now();
-                $timestamps['interim_paid_at'] = null;
-                $timestamps['final_paid_at'] = null;
+                // $timestamps['interim_paid_at'] = null;
+                // $timestamps['final_paid_at'] = null;
+                // $timestamps['cancelled_at'] = null;
                 break;
 
             case 'interim_paid':
                 $timestamps['interim_paid_at'] = Carbon::now();
-                $timestamps['final_paid_at'] = null;
+                // $timestamps['final_paid_at'] = null;
+                // $timestamps['cancelled_at'] = null;
                 break;
 
             case 'final_paid':
                 $timestamps['final_paid_at'] = Carbon::now();
+                // $timestamps['cancelled_at'] = null;
+                break;
+
+            case 'cancelled':
+                $timestamps['cancelled_at'] = Carbon::now();
                 break;
         }
 
@@ -161,6 +170,10 @@ class Order extends Component
     {
         if ($this->stateHasChanged()) {
             $this->logStateChange();
+
+            if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
+                $this->sendConfirmationEmail();
+            }
         }
     }
 
@@ -170,6 +183,54 @@ class Order extends Component
             ->queue(new ConfirmationEmail($this->order));
     }
 
+    public function bookingsUpdated()
+    {
+        $bookingData['starts_at'] = $this->firstBookingDate($this->order->bookings);
+
+        // If deposit has not been paid, recalculate deposit and iterim amounts
+        if ($this->order->deposit_paid_at === null) {
+            // TODO: Logic Duplicated from ZauberController ... BAAAAD!!!!
+            $bookingData['deposit_amount'] = $deposit = $this->order->deposit;
+            $bookingData['interim_amount'] = $this->order->grossTotal - $deposit;
+        } else {
+            // If deposit has been paid, and the new amount differs from what was paid
+            // there is a separate interim invoice
+            if ($this->order->deposit_amount !== (int) $this->order->deposit) {
+                $bookingData['interim_is_final'] = false;
+            }
+        }
+
+        $this->order->update($bookingData);
+
+        $this->logBookingsChange();
+    }
+
+    // TODO: Duplicated in Livewire\Order ... BAAAAD!!!
+    protected function firstBookingDate($bookings)
+    {
+        return new Carbon(
+            collect($bookings)
+                ->pluck('starts_at')
+                ->sort()
+                ->values()
+                ->first()
+            );
+    }
+
+    public function itemsUpdated()
+    {
+        // TODO: I guess this might produce a lot of false positives
+        if ($this->order->items->count()) {
+            $this->order->update([
+                'interim_is_final' => false
+            ]);
+        }
+    }
+
+
+    ////////////////
+    // Action Log //
+    ////////////////
     public function logStateChange()
     {
         if ($this->stateHasChanged()) {

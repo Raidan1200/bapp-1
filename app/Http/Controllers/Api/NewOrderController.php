@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ZauberRequest;
 use App\Events\InvoiceEmailRequested;
 
 abstract class NewOrderController extends Controller
@@ -35,10 +36,8 @@ abstract class NewOrderController extends Controller
         return $room->bookings()->where('starts_at', '<=', $to)->where('ends_at', '>=', $from)->get();
     }
 
-    public function newOrder(Request $request, Venue $venue)
+    public function newOrder(ZauberRequest $request, Venue $venue)
     {
-        abort_unless(auth()->user(), 403);
-
         $order = $this->store($request->validated(), $venue);
 
         $order->load(['customer', 'venue']);
@@ -108,6 +107,7 @@ abstract class NewOrderController extends Controller
         return $bookings;
     }
 
+    // TODO: Duplicated in Livewire\Order ... BAAAAD!!!
     protected function firstBookingDate($bookings)
     {
         return new Carbon(

@@ -24,13 +24,21 @@
     </div>
   </div>
   <div x-cloak class="bg-primary-light" x-show="editCustomer">
-    <livewire:customer :customer="$order->customer" />
+    <livewire:customer
+      :customer="$order->customer"
+    />
   </div>
   <div class="mt-2">
-    <livewire:bookings :bookings="$order->bookings->toArray()" :orderId="$order->id" :venueId="$order->venueId" />
+    <livewire:bookings
+      :bookings="$order->bookings->toArray()"
+      :order="$order"
+    />
   </div>
   <div class="mt-2">
-      <livewire:items :items="$order->items->toArray()" :orderId="$order->id" />
+      <livewire:items
+        :items="$order->items->toArray()"
+        :order="$order"
+      />
   </div>
   <form
     wire:submit.prevent="save"
@@ -166,14 +174,14 @@
             >
               Anzahlung
             </div>
-            {{-- @unless ($order->interim_is_final) --}}
+            @unless ($order->interim_is_final)
               <div
                 wire:click="makeInvoice('interim')"
                 class="m-2 cursor-pointer"
               >
                 Zwischen
               </div>
-            {{-- @endunless --}}
+            @endunless
             <div
               wire:click="makeInvoice('final')"
               class="m-2 cursor-pointer"
@@ -210,7 +218,7 @@
                 <span>(resend)</span>
               @endif
             </div>
-            {{-- @unless ($order->interim_is_final) --}}
+            @unless ($order->interim_is_final)
               <div
                 wire:click="sendEmail('interim')"
                 class="m-2 cursor-pointer"
@@ -220,7 +228,7 @@
                   <span>(resend)</span>
                 @endif
               </div>
-            {{-- @endunless --}}
+            @endunless
             <div
               wire:click="sendEmail('final')"
               class="m-2 cursor-pointer"

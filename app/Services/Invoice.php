@@ -78,8 +78,10 @@ class Invoice
     {
         $at_field = $this->type . '_invoice_at';
 
-        if (!$this->order->$at_field) {
-            $this->date = $this->order->$at_field ?: Carbon::now();
+        $this->date = $this->order->$at_field;
+
+        if ($this->date === null) {
+            $this->date = Carbon::now();
             $this->updatedFields[$at_field] = $this->date;
         }
 
@@ -90,9 +92,9 @@ class Invoice
     {
         $id_field = $this->type . '_invoice_id';
 
-        if ($this->order->$id_field) {
-            $this->invoiceId = $this->order->$id_field;
-        } else {
+        $this->invoiceId = $this->order->$id_field;
+
+        if ($this->invoiceId === null) {
             $this->invoiceId = $this->order->venue->getNextInvoiceId();
             $this->updatedFields[$id_field] = $this->invoiceId;
         }

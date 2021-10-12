@@ -62,21 +62,22 @@ class Venue extends Model
         return $this
             ->due('reminder')
             ->whereNull('deposit_reminder_at')
-            ->fresh()
             ->get();
     }
 
     public function duePaymentChecks()
     {
-        return $this->due('check')->fresh()->get();
+        return $this
+            ->due('check')
+            ->where('needs_check', false)
+            ->get();
     }
 
     public function dueOrderCancellations()
     {
         return $this
             ->due('cancel')
-            ->where('state', 'fresh')
-            ->fresh()
+            ->where('state', '<>', 'cancelled')
             ->get();
     }
 
@@ -91,8 +92,8 @@ class Venue extends Model
         $day = now()->startOfDay()->subDays($this->$field_name);
 
         return $this->orders()
-            ->whereNull('deposit_paid_at')
-            ->whereNull('cancelled_at')
+            // TODO TODO: This or ->whereNull('deposit_paid_at')->whereNull('cancelled_at')...
+            ->where('state', 'fresh')
             ->where('created_at', '<', $day);
     }
 

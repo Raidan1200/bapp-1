@@ -30,13 +30,19 @@ class SendInvoiceEmail // implements ShouldQueue
     {
         $email = Mail::to($event->order->customer->email);
 
+        // TODO: Handle invalid types ... try catch?
+        //       throw new \Exception('Unknown email type: ' . $event->type);
         $emailClass = '\\App\\Mail\\' . ucfirst($event->type) . 'Email';
         $email_sent_field = $event->type . '_email_at';
 
-        $email->send(new $emailClass($event->order));
-        $event->order->$email_sent_field = Carbon::now();
-        $event->order->save();
+        // TODO TODO: Attach Invoice!!!
 
-        // throw new \Exception('Unknown email type: ' . $event->type);
+        // TODO: Handle mail-sent errors ... try catch?
+        $email->send(new $emailClass($event->order));
+
+        $event->order->update([
+            $email_sent_field => Carbon::now()
+        ]);
+
     }
 }

@@ -40,9 +40,10 @@ class ZauberSeeder extends Seeder
             'email' => 'info@huettenzauber.de',
             'logo' => null, // TODO
             'invoice_blocks' => $this->zauber_json,
+            'invoice_id_format' => 'R-HUE-%05d',
             'reminder_delay' => 5,
             'check_delay' => 7,
-            'cancel_delay' => 12,
+            'cancel_delay' => 11,
         ]);
 
         $v1->createToken('api-token')->plainTextToken;

@@ -48,7 +48,6 @@ class MarkDuePaymentChecks extends Command
             });
 
             $count = Order::where('venue_id', $venue->id)
-                ->where('deposit_paid_at', null)
                 ->where('needs_check', true)
                 ->count();
 

@@ -19,12 +19,12 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
-        $zauber = Venue::with(['rooms', 'packages'])->first();
-        $this->makeZauber($zauber);
+        $zauber = Venue::with(['rooms', 'packages'])->where('slug', 'zauber')->first();
+        $this->makeZauberBookings($zauber);
     }
 
     // TODO: DRY up code!
-    public function makeZauber($venue) {
+    public function makeZauberBookings($venue) {
         $rooms = $venue->rooms;
         $packages = $venue->packages;
 

@@ -18,8 +18,16 @@
 
   @include ('pdf.totals', ['order' => $order])
 
+  Bereits bezahlt: {{ money($order->deposit_amount + $order->interim_amount) }}
+
   <p class="mt-8">
-    Bitte überweisen Sie den Betrag von {{ money($order->grossTotal - $order->deposit_amount - $order->interim_amount) }} Euro
+    Bitte überweisen Sie den Betrag von
+    {{-- TODO TODO: THIS SHOULD NOT BE IN THE VIEW, BUT IN THE INVOICE SERVICE??? --}}
+    {{ money($order->interim_is_final
+        ? $order->grossTotal - $order->deposit_amount
+        : $order->grossTotal - $order->deposit_amount - $order->interim_amount
+      )
+    }} Euro
     unter Angabe der Rechnungsnummer ({{ $order->invoice_id }}) auf das unten genannte Konto
     bei {{ $venue->invoice_blocks['bank'] }}.
   </p>

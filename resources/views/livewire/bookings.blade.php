@@ -99,10 +99,14 @@
               />
             </td>
             <td class="text-right">
-              <x-input
-                wire:model.defer="bookings.{{ $key }}.deposit"
-                class="w-full"
-              />
+              @if ($order->deposit_paid_at)
+                <span >{{ $bookings[$key]['deposit'] }}%</span>
+              @else
+                <x-input
+                  wire:model.defer="bookings.{{ $key }}.deposit"
+                  class="w-full"
+                />
+              @endif
             </td>
             <td class="text-right">
               <button wire:click="removeRow({{ $key }})">

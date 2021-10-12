@@ -15,7 +15,7 @@ class Items extends Component
 
     public $data;
 
-    public $orderId;
+    public $order;
 
     public bool $editing = false;
 
@@ -85,7 +85,7 @@ class Items extends Component
             }
 
             if ($item['state'] === 'new') {
-                $item['order_id'] = $this->orderId;
+                $item['order_id'] = $this->order->id;
 
                 $newItem = Item::create($item);
                 $item['id'] = $newItem->id;
@@ -145,7 +145,8 @@ class Items extends Component
     }
 
     public function findProducts($search) {
-        return Product::where('name', 'like', "%{$search}%")
+        return Product::where('venue_id', $this->order->venue_id)
+            ->where('name', 'like', "%{$search}%")
             ->orderBy('name')
             ->get();
     }

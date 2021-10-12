@@ -18,15 +18,16 @@ class ZauberController extends NewOrderController
 
     protected function applyBookingRules(array $bookings)
     {
+        // TODO TODO
         $bookings = collect($bookings);
 
         $hpc = $bookings->firstWhere('package_name', 'Hüttenpaket Classic');
         $hpp = $bookings->firstWhere('package_name', 'Hüttenpaket Premium');
         $cur = $bookings->firstWhere('package_name', 'Curlingbahn');
 
-        if ($hpc) {
-            $hpc['deposit'] = 99;
-        }
+        // if ($hpc) {
+        //     $hpc['deposit'] = 99;
+        // }
 
         if ($cur && !($hpc || $hpp)) {
             $cur['deposit'] = 100;
@@ -37,7 +38,7 @@ class ZauberController extends NewOrderController
 
     protected function applyOrderRules(Order $order)
     {
-        // Duplicated in Livewire\Order ... BAAAAD!!!!
+        // TODO: Duplicated in Livewire\Bookings ... BAAAAD!!!!
         $order->deposit_amount = ($deposit = $order->deposit);
         $order->interim_amount = $order->grossTotal - $deposit;
 
