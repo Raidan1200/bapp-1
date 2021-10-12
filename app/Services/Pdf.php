@@ -180,6 +180,23 @@ class Pdf
             $this->pdf->write(6, utf8_decode(money($booking->grossTotal).' Euro'));
         }
 
+        foreach ($this->order->items as $item) {
+            $this->pdf->ln();
+            $this->pdf->write(6, $i++);
+            $this->pdf->setX(33);
+            $this->pdf->write(6, utf8_decode('ART NR?')); // TODO
+            $this->pdf->setX(50);
+            $this->pdf->write(6, utf8_decode($item->product_name));
+            $this->pdf->setX(96);
+            $this->pdf->write(6, '');
+            $this->pdf->setX(128);
+            $this->pdf->write(6, utf8_decode($item->quantity));
+            $this->pdf->setX(141);
+            $this->pdf->write(6, utf8_decode(money($item->unit_price).' Euro'));
+            $this->pdf->setX(167);
+            $this->pdf->write(6, utf8_decode(money($item->grossTotal).' Euro'));
+        }
+
         $this->pdf->ln();
         $this->pdf->write(6, $i);
         $this->pdf->setX(33);
