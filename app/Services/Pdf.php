@@ -221,7 +221,7 @@ class Pdf
         foreach ($this->order->vats as $vat => $amount) {
             $this->pdf->ln();
             $this->pdf->setX(141);
-            $this->pdf->write(5, $vat . ' MwSt.');
+            $this->pdf->write(5, $vat . '% MwSt.');
             $this->pdf->setX(167);
             $this->pdf->write(5, money($amount) . ' Euro');
         }
