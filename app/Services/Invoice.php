@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use Illuminate\Support\Carbon;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use App\Services\Pdf;
 
 class Invoice
 {
@@ -54,24 +54,13 @@ class Invoice
 
     public function makePdf()
     {
-        return PDF::view("pdf.invoice_{$this->type}", [
-            'date' => $this->date,
-            'venue' => $this->order->venue,
-            'customer' => $this->order->customer,
-            'order' => $this->order,
-        ])->setOptions([
-            'enable-local-file-access' => true,
-        ]);
-    }
-
-    public function makeHtml()
-    {
-        return view("pdf.invoice_{$this->type}", [
-            'date' => $this->date,
-            'venue' => $this->order->venue,
-            'customer' => $this->order->customer,
-            'order' => $this->order,
-        ]);
+        return response()->streamDownload(fn() =>
+            (new Pdf(
+                $this->invoiceId,
+                $this->date,
+                $this->order
+            ))->output()
+        );
     }
 
     protected function setDate()

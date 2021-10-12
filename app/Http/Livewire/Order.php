@@ -151,9 +151,7 @@ class Order extends Component
             $order->update($updatedFields);
         }
 
-        return $invoice
-            ->makePdf()
-            ->stream("{$invoice->invoiceId()}_{$type}_invoice.pdf");
+        return $invoice->makePdf();
     }
 
     public function sendEmail(string $type)

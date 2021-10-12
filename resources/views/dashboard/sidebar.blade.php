@@ -38,7 +38,7 @@
       </a>
     </div>
     @can ('modify orders')
-      @if ($due = $venues->where('check_count', '>', 0))
+      @if ($due = $venues->where('check_count', '>', 0)->count())
         <ul>
           @foreach ($due as $item)
             <li>
