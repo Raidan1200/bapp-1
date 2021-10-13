@@ -33,6 +33,12 @@ class DashboardController extends Controller
             ->paginate()
             ->withQueryString();
 
-        return view('dashboard.index', compact('venues', 'orders', 'reminders'));
+        $newOrderCount = Order::where('state', 'fresh')
+            ->whereBetween(
+                'created_at',
+                [now()->startOfDay()->subDays(1), now()]
+            )->count();
+
+        return view('dashboard.index', compact('venues', 'orders', 'reminders', 'newOrderCount'));
     }
 }

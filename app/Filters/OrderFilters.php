@@ -36,4 +36,14 @@ class OrderFilters extends QueryFilter
     {
         return $this->builder->where('needs_check', true);
     }
+
+    public function new()
+    {
+        return $this->builder
+            ->where('state', 'fresh')
+            ->whereBetween(
+                'created_at',
+                [now()->startOfDay()->subDays(1), now()]
+            );
+    }
 }

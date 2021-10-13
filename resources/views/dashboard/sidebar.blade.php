@@ -38,22 +38,39 @@
       </a>
     </div>
     @can ('modify orders')
+      {{-- TODO: I guess the View shouldn't fire DB queries --}}
       @if ($due = $venues->where('check_count', '>', 0)->count())
         <ul>
           @foreach ($due as $item)
             <li>
               <a href="{{ route('dashboard', array_filter([
-                  'check' => true,
-                  'venue' => $item->id
-                ])) }}">
+                'check' => true,
+                'venue' => $item->id
+              ])) }}">
                 {{ $item->name }}: {{ $item->check_count }}
               </a>
             </li>
           @endforeach
         </ul>
       @else
-        Heute keine Checks
+        <p>Heute keine Checks</p>
       @endif
     @endcan
+    <div class="border-t-2 my-2 py-2">
+      {{-- TODO: I guess the View shouldn't fire DB queries --}}
+      <div class="text-xl">
+        Neu
+        <span class="text-xs">(seit gestern morgen)</span>
+      </div>
+      @if ($newOrderCount)
+        <a href="{{ route('dashboard', array_filter([
+          'new' => true,
+        ])) }}">
+          {{ $newOrderCount }} Anfragen
+        </a>
+      @else
+        <p>Keine neuen Bestellungen</p>
+      @endif
+    </div>
   </div>
 </div>

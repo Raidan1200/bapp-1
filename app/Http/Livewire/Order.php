@@ -178,7 +178,9 @@ class Order extends Component
     public function sendConfirmationEmail()
     {
         Mail::to($this->order->customer->email)
-            ->queue(new ConfirmationEmail($this->order));
+            ->send(new ConfirmationEmail($this->order));
+            // TODO TODO: To queue or not to queue?
+            // ->queue(new ConfirmationEmail($this->order));
     }
 
     public function bookingsUpdated()
