@@ -36,7 +36,7 @@
       Checks
     </div>
     @can ('modify orders')
-      @if ($paymentChecks)
+      @if ($paymentChecks->isNotEmpty())
         <ul>
           @foreach ($paymentChecks as $venue)
             <li>
@@ -59,7 +59,7 @@
         Neu
         <span class="text-xs">(seit gestern morgen)</span>
       </div>
-      @if ($newOrderCount)
+      @if ($newOrderCount > 0)
         <a href="{{ route('dashboard', array_filter([
           'new' => true,
         ])) }}">
