@@ -22,7 +22,7 @@
 
   <p class="mt-8">
     Bitte überweisen Sie den Betrag von
-    {{-- TODO TODO: THIS SHOULD NOT BE IN THE VIEW, BUT IN THE INVOICE SERVICE??? --}}
+    {{-- TODO: THIS SHOULD NOT BE IN THE VIEW, BUT IN THE INVOICE SERVICE??? --}}
     {{ money($order->interim_is_final
         ? $order->grossTotal - $order->deposit_amount
         : $order->grossTotal - $order->deposit_amount - $order->interim_amount

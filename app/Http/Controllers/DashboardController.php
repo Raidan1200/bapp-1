@@ -11,9 +11,9 @@ class DashboardController extends Controller
 {
     public function index(OrderFilters $filters, Request $request)
     {
+        // TODO: duplicated in CustomerController ... DRY!!!
         $venues = auth()->user()->venues()->get();
 
-        // TODO: duplicated in CustomerController ... DRY!!!
         $paymentChecks = $venues->filter(
             fn($venue) => $venue->where('check_count', '>', 0)
         );
