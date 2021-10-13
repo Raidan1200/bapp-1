@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $venues = auth()->user()->venues()->get();
 
         $paymentChecks = $venues->filter(
-            fn($venue) => $venue->where('check_count', '>', 0)
+            fn($venue) => $venue->check_count > 0
         );
 
         $orders = Order::with('latestAction')
