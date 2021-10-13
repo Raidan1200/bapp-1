@@ -101,7 +101,13 @@ class Pdf
     {
         $this->pdf->setFont("Arial","", 7);
         $this->pdf->setY(46);
-        $this->pdf->write(10, utf8_decode($this->order->venue->invoice_blocks['company']));
+        $this->pdf->write(10, utf8_decode(
+            $this->order->venue->invoice_blocks['company'] . ' * ' .
+            $this->order->venue->invoice_blocks['street'] .
+            $this->order->venue->invoice_blocks['street_no'] . ' * ' .
+            $this->order->venue->invoice_blocks['zip'] .
+            $this->order->venue->invoice_blocks['city']
+        ));
     }
 
     private function writeAnschrift()

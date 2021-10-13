@@ -54,6 +54,12 @@ class Invoice
 
     public function makePdf()
     {
+        // Dynamic Data:
+        //   Betreff: Anzahlungsrechnung
+        //   Text: Bitte überweisen Sie
+        //     mit 2 Platzhaltern für Betrag und Datum
+
+
         return response()->streamDownload(fn() =>
             (new Pdf(
                 $this->invoiceId,
