@@ -100,24 +100,11 @@
     </div>
   </div>
 
-  @can('delete venues')
-    <div class="sm:text-right mt-8">
-      <x-button
-        type="button"
-        class="hover:bg-red-500"
-      >
-        <div
-          x-data
-          @click.prevent="$dispatch('open-delete-modal', {
-            route: '{{ route('venues.destroy', $venue) }}',
-            entity: '{{ $venue->name }}',
-            subText: '',
-          })"
-        >
-          Veranstaltungsort löschen
-        </div>
-      </x-button>
+  @can('modify venues')
+  <div class="sm:text-right mt-8">
+    <a href="{{ route('venues.edit', $venue->id) }}" title="{{ $venue->name }} editieren">
+        <x-button>{{ $venue->name }} editieren</x-button>
+      </a>
     </div>
   @endcan
-
 </x-app-layout>

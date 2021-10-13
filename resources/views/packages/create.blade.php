@@ -111,20 +111,12 @@
                   subText: '',
                 })"
               >
-                Produkt löschen
+                Paket löschen
               </div>
             </x-button>
           </div>
         @endcan
       @endisset
     </div>
-
-    {{-- @isset ($package)
-      <div class="sm:w-1/2">
-        <x-form-field>
-          <livewire:package-room :user="$package" id="packageroom" />
-        </x-form-field>
-      </div>
-    @endisset --}}
   </div>
 </x-app-layout>

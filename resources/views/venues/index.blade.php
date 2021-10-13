@@ -7,9 +7,11 @@
             {{ $venue->name }}
           </x-link>
           <div>
-            <x-link :href="route('venues.edit', $venue->id)">
-              <x-icons.edit />
-            </x-link>
+            @can('modify venues')
+              <x-link :href="route('venues.edit', $venue->id)">
+                <x-icons.edit />
+              </x-link>
+            @endcan
           </div>
         </div>
       </li>

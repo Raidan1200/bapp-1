@@ -65,6 +65,27 @@
           </a>
           <x-button>Save</x-button>
         </div>
+
+        @can('delete venues')
+        {{-- TODO TODO: Löschen nur für Super Mega Hyper Universal ADMIN??? --}}
+          <div class="sm:text-right mt-24">
+            <x-button
+              type="button"
+              class="hover:bg-red-500"
+            >
+              <div
+                x-data
+                @click.prevent="$dispatch('open-delete-modal', {
+                  route: '{{ route('venues.destroy', $venue) }}',
+                  entity: '{{ $venue->name }}',
+                  subText: '',
+                })"
+              >
+                Veranstaltungsort löschen
+              </div>
+            </x-button>
+          </div>
+        @endcan
       </div>
     </form>
   </div>
