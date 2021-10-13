@@ -33,21 +33,18 @@
   </div>
   <div class="border-t-2 my-2 py-2">
     <div class="text-xl">
-      <a href="{{ route('dashboard', ['check' => true]) }}">
-        Checks
-      </a>
+      Checks
     </div>
     @can ('modify orders')
-      {{-- TODO: I guess the View shouldn't fire DB queries --}}
-      @if ($due = $venues->where('check_count', '>', 0)->count())
+      @if ($paymentChecks)
         <ul>
-          @foreach ($due as $item)
+          @foreach ($paymentChecks as $venue)
             <li>
               <a href="{{ route('dashboard', array_filter([
                 'check' => true,
-                'venue' => $item->id
+                'venue' => $venue->id
               ])) }}">
-                {{ $item->name }}: {{ $item->check_count }}
+                {{ $venue->name }}: {{ $venue->check_count }}
               </a>
             </li>
           @endforeach

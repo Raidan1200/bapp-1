@@ -66,6 +66,7 @@ class Order extends Component
         $this->authorize('modify orders', $this->order);
 
         // TODO: Update should happen before the log and email stuff
+        //       But it cannot :)
         $this->handleStateChange();
         $this->logNotesChange();
 
@@ -171,16 +172,25 @@ class Order extends Component
 
             if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
                 $this->sendConfirmationEmail();
+                $this->updatePaymentChecks();
             }
+        }
+    }
+
+    public function updatePaymentChecks()
+    {
+        if ($this->order->needs_check) {
+            $this->order->update(['needs_check' => false]);
+            $this->order->venue->decrement('check_count');
         }
     }
 
     public function sendConfirmationEmail()
     {
         Mail::to($this->order->customer->email)
-            ->send(new ConfirmationEmail($this->order));
             // TODO TODO: To queue or not to queue?
             // ->queue(new ConfirmationEmail($this->order));
+            ->send(new ConfirmationEmail($this->order));
     }
 
     public function bookingsUpdated()

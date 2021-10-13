@@ -79,7 +79,7 @@
       </div>
       <div>
         <div>
-          @can('modify orders')
+          @can('admin orders')
             <select
               wire:model="selectedState"
               class="py-0"
@@ -102,7 +102,9 @@
               <option value="cancelled">Storniert</option>
             </select>
           @else
-            {{ __('app.'.$selectedState) }}
+            <div class="w-64">
+              {{ __('app.'.$selectedState) }}
+            </div>
           @endcan
         </div>
         <div>
