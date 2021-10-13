@@ -16,20 +16,24 @@ class UserSeeder extends Seeder
     public function run()
     {
         // Users
-        User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Manni Manager',
             'email' => 'manni@bapp.de',
         ])->assignRole('manager');
+
+        $user->venues()->attach(1);
 
         User::factory()->create([
             'name' => 'Maria Manager',
             'email' => 'maria@bapp.de',
         ])->assignRole('manager');
 
-        User::factory()->create([
+        $user = User::factory()->create([
             'name' => 'Emily Employee',
             'email' => 'emily@bapp.de',
         ])->assignRole('employee');
+
+        $user->venues()->attach(1);
 
         User::factory()->create([
             'name' => 'Erwin Employee',
