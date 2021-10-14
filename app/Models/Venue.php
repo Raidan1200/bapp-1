@@ -77,7 +77,6 @@ class Venue extends Model
     {
         return $this
             ->due('cancel')
-            ->where('state', '<>', 'cancelled')
             ->get();
     }
 
@@ -88,11 +87,10 @@ class Venue extends Model
 
         // TODO - delay syntax
         // $this->$field_name - 1  => act on the configured delay day
-        // $this->$field_name - 1  => act after at least delay days have passed
+        // $this->$field_name  => act after at least delay days have passed
         $day = now()->startOfDay()->subDays($this->$field_name);
 
         return $this->orders()
-            // TODO TODO: This or ->whereNull('deposit_paid_at')->whereNull('cancelled_at')...
             ->where('state', 'fresh')
             ->where('created_at', '<', $day);
     }

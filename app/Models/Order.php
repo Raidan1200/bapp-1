@@ -164,11 +164,4 @@ class Order extends Model
     {
         return $filters->apply($query);
     }
-
-    // TODO: Disabled because this is a REALLY bad name
-    //       There is an Eloquent function called fresh()
-    // public function scopeFresh(Builder $query)
-    // {
-    //     return $query->where('state', 'fresh');
-    // }
 }
