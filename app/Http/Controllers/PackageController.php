@@ -52,12 +52,13 @@ class PackageController extends Controller
 
         $validated['is_flat'] = $request->has('is_flat');
 
-        if ($request->file('image')) {
-            Storage::delete($package->image); // TODO: Test this
+        // LATER: Package image upload
+        // if ($request->file('image')) {
+        //     Storage::delete($package->image);
 
-            $path = $request->file('image')->store('images');
-            $validated['image'] = $path;
-        }
+        //     $path = $request->file('image')->store('images');
+        //     $validated['image'] = $path;
+        // }
 
         $package->update($validated);
 
@@ -72,7 +73,7 @@ class PackageController extends Controller
 
         Storage::delete($package->image);
 
-        $package->rooms()->sync([]); // TODO: Do I need this? DB cascade?
+        $package->rooms()->sync([]); // LATER: Do I need this? DB cascade?
         $package->delete();
 
         return redirect()

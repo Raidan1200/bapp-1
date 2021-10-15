@@ -90,7 +90,7 @@ class UserController extends Controller
                 ->with('error', 'Der letzte Administrator kann nicht gelöscht werden.');
         }
 
-        $user->venues()->sync([]); // TODO: Do I need this? DB cascade?
+        $user->venues()->sync([]); // LATER: Do I need this? DB cascade?
         $user->delete();
 
         return redirect(route('users.index'));

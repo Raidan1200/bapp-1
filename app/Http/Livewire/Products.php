@@ -51,7 +51,7 @@ class Products extends Component
 
         $this->validate([
             'newProduct.name' => 'required',
-            'newProduct.unit_price' => 'required|numeric', // TODO: numeric or integer? or custom regex?
+            'newProduct.unit_price' => 'required|numeric',
             'newProduct.vat' => 'required|numeric'
         ]);
 

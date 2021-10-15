@@ -20,7 +20,7 @@
               @click="open = !open"
             >
             @php
-              // TODO: How to do this in a cleaner way? This is kinda ugly!
+              // LATER: How to do this in a cleaner way? This is kinda ugly!
               if ($filters['venue']) echo ($venue = $venues->first(fn($v) => $v->id == $filters['venue']))->name;
               if ($filters['room']) echo ' - ' . $venue->rooms->first(fn($r) => $r->id == $filters['room'])->name;
               if (!$filters['venue'] && !$filters['room']) echo 'Alle Orte';

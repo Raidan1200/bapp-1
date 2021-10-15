@@ -65,8 +65,6 @@ class Order extends Component
     {
         $this->authorize('modify orders', $this->order);
 
-        // TODO: Update should happen before the log and email stuff
-        //       But it cannot :)
         $this->handleStateChange();
         $this->logNotesChange();
 
@@ -105,7 +103,6 @@ class Order extends Component
 
         $timestamps = [];
 
-        // TODO TODO: Was machen wir hier jetzt?
         switch ($this->selectedState) {
             case 'fresh':
                 // $timestamps['deposit_paid_at'] = null;
@@ -190,8 +187,7 @@ class Order extends Component
     {
         if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
             Mail::to($this->order->customer->email)
-                // TODO TODO: To queue or not to queue?
-                // ->queue(new ConfirmationEmail($this->order));
+                ->queue(new ConfirmationEmail($this->order))
                 ->send(new ConfirmationEmail($this->order));
         }
     }
@@ -203,7 +199,7 @@ class Order extends Component
         // If deposit has not been paid, recalculate deposit and iterim amounts
         // TODO TODO TODO: deposit_paid_at und interim_paid_at unterscheiden
         if ($this->order->deposit_paid_at === null) {
-            // TODO: Logic Duplicated from ZauberController ... BAAAAD!!!!
+            // LATER: Logic Duplicated from ZauberController ... BAAAAD!!!!
             $bookingData['deposit_amount'] = $deposit = $this->order->deposit;
             $bookingData['interim_amount'] = $this->order->grossTotal - $deposit;
         } else {
@@ -219,7 +215,7 @@ class Order extends Component
         $this->logBookingsChange();
     }
 
-    // TODO: Duplicated in Livewire\Order ... BAAAAD!!!
+    // LATER: Duplicated in Livewire\Order ... BAAAAD!!!
     protected function firstBookingDate($bookings)
     {
         return new Carbon(
@@ -233,7 +229,7 @@ class Order extends Component
 
     public function itemsUpdated()
     {
-        // TODO: I guess this might produce a lot of false positives
+        // TODO TODO: I guess this might produce a lot of false positives
         if ($this->order->items->count()) {
             $this->order->update([
                 'interim_is_final' => false

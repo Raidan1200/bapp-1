@@ -25,7 +25,6 @@ class PackageRoom extends Component
         return $this->room->venue->packages()->whereNotIn('id', $this->room->packages->pluck('id'))->get();
     }
 
-    // TODO: Is this the correct permission?
     public function add(Package $package)
     {
         $this->authorize('modify rooms');

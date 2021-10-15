@@ -28,7 +28,7 @@ class BookingFactory extends Factory
         return [
             'starts_at' => $starts_at = Carbon::now()->setHour($this->faker->numberBetween(12, 18))->addDays(rand(1, 21)),
             'ends_at' => $starts_at->clone()->addHours($this->faker->numberBetween(2, 4)),
-            'package_name' => 'Dummy',  // TODO: I know how this works!
+            'package_name' => 'Dummy',  // LATER: I know how this works! DO I???
             'quantity' => $this->faker->numberBetween(20, 50),
             'unit_price' => 0,
             'vat' => $this->faker->numberBetween(7, 20),

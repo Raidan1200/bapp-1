@@ -74,12 +74,10 @@ class Bookings extends Component
 
         $this->validate();
 
-        // TODO: !!!! Take care with TIMEZONES HERE
-
         $newBookings = [];
 
-        // TODO This is REAAAALLY inefficient
-        //      Does Laravel have something like "bulkUpdate" or "updateMany"?
+        // LATER This is REAAAALLY inefficient
+        //       Does Laravel have something like "bulkUpdate" or "updateMany"?
 
         foreach ($this->bookings as $booking) {
             if ($booking['state'] === 'delete' || $booking['state'] === 'stored') {

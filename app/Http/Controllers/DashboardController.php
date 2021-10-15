@@ -11,7 +11,7 @@ class DashboardController extends Controller
 {
     public function index(OrderFilters $filters, Request $request)
     {
-        // TODO: duplicated in CustomerController ... DRY!!!
+        // LATER: duplicated in CustomerController ... DRY!!!
         $venues = auth()->user()->venues()->get();
 
         $paymentChecks = $venues->filter(
@@ -25,7 +25,7 @@ class DashboardController extends Controller
             ->paginate()
             ->withQueryString();
 
-        // TODO: duplicated in CustomerController ... DRY!!!
+        // LATER: duplicated in CustomerController ... DRY!!!
         $newOrderCount = Order::where('state', 'fresh')
             ->whereBetween(
                 'created_at',

@@ -27,14 +27,14 @@ class CreateOrdersTable extends Migration
             $table->datetime('deposit_email_at')->nullable();
             $table->datetime('deposit_reminder_at')->nullable();
             $table->datetime('deposit_paid_at')->nullable();
-            $table->integer('deposit_amount')->nullable();  // TODO: nullable() ?
+            $table->integer('deposit_amount')->nullable();  // LATER: nullable() ?
             $table->boolean('needs_check')->default(false);
             // Interim
             $table->string('interim_invoice_id')->nullable();
             $table->datetime('interim_invoice_at')->nullable();
             $table->datetime('interim_email_at')->nullable();
             $table->datetime('interim_paid_at')->nullable();
-            $table->integer('interim_amount')->nullable();  // TODO: nullable() ?
+            $table->integer('interim_amount')->nullable();
             $table->boolean('interim_is_final')->default(true);
             // Final
             $table->string('final_invoice_id')->nullable();

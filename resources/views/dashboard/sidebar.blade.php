@@ -54,7 +54,6 @@
       @endif
     @endcan
     <div class="border-t-2 my-2 py-2">
-      {{-- TODO: I guess the View shouldn't fire DB queries --}}
       <div class="text-xl">
         Neu
         <span class="text-xs">(seit gestern morgen)</span>

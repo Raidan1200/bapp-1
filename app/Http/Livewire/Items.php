@@ -67,8 +67,8 @@ class Items extends Component
 
         $newItems = [];
 
-        // TODO This is REAAAALLY inefficient
-        //      Does Laravel have something like "bulkUpdate" or "updateMany"?
+        // LATER This is REAAAALLY inefficient
+        //       Does Laravel have something like "bulkUpdate" or "updateMany"?
 
         foreach ($this->items as $item) {
             if ($item['state'] === 'delete' || $item['state'] === 'stored') {

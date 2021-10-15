@@ -10,14 +10,14 @@ class CustomerController extends Controller
 {
     public function show(Customer $customer)
     {
-        // TODO: duplicated from DashboardController ... DRY!!!
+        // LATER: duplicated from DashboardController ... DRY!!!
         $venues = auth()->user()->venues()->get();
 
         $paymentChecks = $venues->filter(
             fn($venue) => $venue->check_count > 0
         );
 
-        // TODO: duplicated from DashboardController ... DRY!!!
+        // LATER: duplicated from DashboardController ... DRY!!!
         $newOrderCount = Order::where('state', 'fresh')
             ->whereBetween(
                 'created_at',

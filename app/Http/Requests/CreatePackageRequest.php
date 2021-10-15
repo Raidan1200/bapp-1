@@ -34,8 +34,8 @@ class CreatePackageRequest extends FormRequest
             'image' => 'nullable|url',
             'starts_at'       => 'required|date',
             'ends_at'         => 'required|date',
-            'opens_at'        => 'required|string', // TODO: Needs better validation
-            'closes_at'       => 'required|string', // TODO: Needs better validation
+            'opens_at'        => 'required|string', // LATER: Needs better validation
+            'closes_at'       => 'required|string', // LATER: Needs better validation
             'min_occupancy'   => 'sometimes|integer|min:0',
             'unit_price'      => 'required|numeric|min:0',
             'vat'             => 'required|numeric|min:0',

@@ -4,7 +4,7 @@
   <h1 class="text-2xl">Anzahlungsrechnung</h1>
 
   <div>
-    <div>Rechnungsnummer: TODO {{ $order->cancelled_invoice_id }}</div>
+    <div>Rechnungsnummer: {{ $order->cancelled_invoice_id }}</div>
     <div>Rechnungsdatum: {{ $order->cancelled_at->timezone('Europe/Berlin')->format("d.m.Y") }}</div>
   </div>
 

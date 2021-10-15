@@ -34,7 +34,7 @@
       <div class="flex my-2">
         <h2 class="text-xl my-2">Pakete</h2>
         @can('create packages')
-          {{-- TODO: Somehow I don't like the Query String Param. Use a REST route instead? /venues/1/products/create ? --}}
+          {{-- LATER: Somehow I don't like the Query String Param. Use a REST route instead? /venues/1/products/create ? --}}
           <x-link href="{{ route('packages.create', ['venue' => $venue->id]) }}">
             <x-icons.add class="h-6 w-6" />
           </x-link>
@@ -63,7 +63,7 @@
       <div class="flex my-2">
         <h2 class="text-xl my-2">Produkte</h2>
         @canany('create products', 'modify products', 'delete products')
-          {{-- TODO: Somehow I don't like the Query String Param. Use a REST route instead? /venues/1/products/create ? --}}
+          {{-- LATER: Somehow I don't like the Query String Param. Use a REST route instead? /venues/1/products/create ? --}}
           <x-link href="{{ route('products', ['venue' => $venue->id]) }}">
             <x-icons.add class="h-6 w-6" />
           </x-link>

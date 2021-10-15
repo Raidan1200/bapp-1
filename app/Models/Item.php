@@ -22,7 +22,7 @@ class Item extends Model
         return $this->belongsTo(Order::class);
     }
 
-    // TODO: Duplicated from Booking-Model
+    // LATER: Duplicated from Booking-Model
     public function getGrossTotalAttribute()
     {
         return $this->unit_price * $this->quantity;

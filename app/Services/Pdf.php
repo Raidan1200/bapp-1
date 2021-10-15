@@ -125,11 +125,11 @@ class Pdf
         $this->pdf->write(5, utf8_decode($customer->zip).', '.utf8_decode($customer->city));
     }
 
-    private function writeBetreff() // TODO
+    private function writeBetreff()
     {
         $this->pdf->setFontSize(11);
         $this->pdf->ln(30);
-        $this->pdf->write(5, 'TODO BETREFF');
+        $this->pdf->write(5, 'TODO BETREFF'); // TODO
 
         $this->pdf->setFontSize(9);
         $this->pdf->ln(7);
@@ -145,7 +145,7 @@ class Pdf
         $this->pdf->cell(170, 0, "", true);
     }
 
-    private function drawPositionen() // TODO
+    private function drawPositionen()
     {
         $this->pdf->ln(8);
         $this->pdf->setFont("Arial","B", 8);
@@ -172,8 +172,8 @@ class Pdf
         foreach ($this->order->bookings as $booking) {
             $this->pdf->ln();
             $this->pdf->write(6, $i++);
-            $this->pdf->setX(33);
-            $this->pdf->write(6, utf8_decode('ART NR?')); // TODO
+            // $this->pdf->setX(33);
+            // $this->pdf->write(6, utf8_decode('ART NR?')); // LATER
             $this->pdf->setX(50);
             $this->pdf->write(6, utf8_decode($booking->package_name));
             $this->pdf->setX(96);
@@ -189,8 +189,8 @@ class Pdf
         foreach ($this->order->items as $item) {
             $this->pdf->ln();
             $this->pdf->write(6, $i++);
-            $this->pdf->setX(33);
-            $this->pdf->write(6, utf8_decode('ART NR?')); // TODO
+            // $this->pdf->setX(33);
+            // $this->pdf->write(6, utf8_decode('ART NR?')); // LATER
             $this->pdf->setX(50);
             $this->pdf->write(6, utf8_decode($item->product_name));
             $this->pdf->setX(96);
@@ -270,7 +270,7 @@ class Pdf
 
     }
 
-    private function writeFuss() // TODO
+    private function writeFuss()
     {
         $blocks = $this->order->venue->invoice_blocks;
 

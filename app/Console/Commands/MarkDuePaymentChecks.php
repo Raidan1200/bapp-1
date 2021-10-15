@@ -42,7 +42,7 @@ class MarkDuePaymentChecks extends Command
         Venue::all()->map(function ($venue) {
             $dueToday = $venue->duePaymentChecks();
 
-            // TODO: Is there some kind of bulk update in Laravel?
+            // LATER: Is there some kind of bulk update in Laravel?
             $dueToday->map(function ($order) {
                 $order->update(['needs_check' => true]);
             });

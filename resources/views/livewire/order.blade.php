@@ -11,13 +11,12 @@
       @click="editCustomer = !editCustomer"
       class="flex-1 text-left hover:text-primary-dark rounded px-2 -mx-2 py-1 font-semibold"
     >
-      {{-- TODO TODO --}}
       @isset ($order->customer->company)
         {{ "{$order->customer->company} ({$order->customer->name})" }}
       @else
         {{ $order->customer->name }}
       @endisset
-      ({{ $order->deposit_invoice_id ?? $order->interim_invoice_id ?? $order->final_invoice_id ?? '' }})
+      ({{ $order->deposit_invoice_id ?? $order->interim_invoice_id ?? $order->final_invoice_id ?? 'Noch keine Rechnung' }})
     </button>
     <div>
       <div class="font-semibold text-right">{{ $order->starts_at->timezone('Europe/Berlin')->formatLocalized('%a %d.%m %H:%M') }}</div>
@@ -92,7 +91,7 @@
               name="order-status"
               id="order-status"
             >
-              {{-- TODO: Find a more elegant solution ... please :) --}}
+              {{-- LATER: Find a more elegant solution ... please :) --}}
               <option value="fresh"
                 {{ (in_array($order->state, ['deposit_paid', 'interim_paid', 'final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
               >Nicht bestätigt</option>

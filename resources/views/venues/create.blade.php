@@ -66,7 +66,6 @@
         </div>
 
         @can('delete venues')
-        {{-- TODO TODO: Löschen nur für Super Mega Hyper Universal ADMIN??? --}}
           <div class="sm:text-right mt-24">
             <x-button
               type="button"

@@ -29,9 +29,9 @@ class ZauberController extends NewOrderController
         //     $hpc['deposit'] = 99;
         // }
 
-        if ($cur && !($hpc || $hpp)) {
-            $cur['deposit'] = 100;
-        }
+        // if ($cur && !($hpc || $hpp)) {
+        //     $cur['deposit'] = 100;
+        // }
 
         return array_filter([$hpc, $hpp, $cur]);
     }
