@@ -201,6 +201,7 @@ class Order extends Component
         $bookingData['starts_at'] = $this->firstBookingDate($this->order->bookings);
 
         // If deposit has not been paid, recalculate deposit and iterim amounts
+        // TODO TODO TODO: deposit_paid_at und interim_paid_at unterscheiden
         if ($this->order->deposit_paid_at === null) {
             // TODO: Logic Duplicated from ZauberController ... BAAAAD!!!!
             $bookingData['deposit_amount'] = $deposit = $this->order->deposit;

@@ -13,7 +13,7 @@
     >
       {{-- TODO TODO --}}
       @isset ($order->customer->company)
-        {{ $order->customer->company .' - (' . $order->customer->name . ')' }}
+        {{ "{$order->customer->company} ({$order->customer->name})" }}
       @else
         {{ $order->customer->name }}
       @endisset

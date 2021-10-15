@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
         $this->call(ZauberSeeder::class);
 
         // TODO: remove comment!!!
-        // if (App::environment('local')) {
+        if (App::environment('local')) {
             $this->call(UserSeeder::class);
             $this->call(OrderSeeder::class);
-        // }
+        }
     }
 }
