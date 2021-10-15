@@ -37,7 +37,7 @@ class Customer extends Component
 
     public function save()
     {
-        $this->authorize('modify orders');
+        $this->authorize('modify customers');
 
         $this->validate();
         $this->customer->save();

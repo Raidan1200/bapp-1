@@ -13,13 +13,20 @@ class RoleAndPermissionSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = collect([
-            'create users',    'modify users',                      'delete users',
-            'create tokens',                                        'delete tokens',
-            'create venues',   'modify venues',   'admin venues',   'delete venues',
-            'create rooms',    'modify rooms',    'admin rooms',    'delete rooms',
-            'create packages', 'modify packages', 'admin packages', 'delete packages',
-            'create products', 'modify products',                   'delete products',
-                               'modify orders',   'admin orders',   'delete orders',
+            // All about config
+            'create users',    'modify users',    'delete users',
+            'create tokens',                      'delete tokens',
+            'create venues',   'modify venues',   'delete venues',
+            'create rooms',    'modify rooms',    'delete rooms',
+            'create packages', 'modify packages', 'delete packages',
+            'create products', 'modify products', 'delete products',
+
+            // All about orders
+            'modify orders',   'admin orders',   'delete orders',
+            'modify bookings',
+            'modify items',
+            'modify customers',
+            // We need more permission here!!!
         ])->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];
         });
@@ -32,16 +39,19 @@ class RoleAndPermissionSeeder extends Seeder
         Role::create(['name' => 'manager'])
             ->givePermissionTo([
                 'create users', 'modify users',
-                'modify venues', 'admin venues',
-                'modify rooms', 'admin rooms',
-                'modify packages', 'admin packages',
+                'modify venues',
+                'modify rooms',
+                'modify packages',
                 'create products', 'modify products',
-                'modify orders', 'admin orders'
+                'modify orders',
+                'modify bookings',
+                'modify items',
+                'modify customers'
             ]);
 
         Role::create(['name' => 'employee'])
             ->givePermissionTo([
-                'modify orders'
+                'modify items',
             ]);
     }
 }

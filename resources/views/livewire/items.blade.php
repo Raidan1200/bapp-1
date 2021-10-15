@@ -4,7 +4,7 @@
       <tr class="bg-gray-100">
         <td class="w-5/12 border-r px-1 border-white">
           Produkt
-          @can('modify orders')
+          @can('modify items')
             @if(!$editing)
               <button
                 class="float-right p-2"

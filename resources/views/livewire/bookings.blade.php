@@ -4,7 +4,7 @@
       <tr class="bg-gray-100">
         <td class="w-5/12 border-r px-1 border-white">
           Paket
-          @can('admin orders')
+          @can('modify bookings')
             @if(!$editing)
               <button
                 class="float-right p-2"
@@ -19,7 +19,7 @@
         <td class="w-1/12 text-center px-1 border-r border-white">Ende</td>
         <td class="w-1/12 text-center px-1 border-r border-white">Flat</td>
         <td class="w-1/12 text-right px-1 border-r border-white">#</td>
-        @can('admin orders')
+        @can('modify bookings')
           <td class="w-1/12 text-right px-1 border-r border-white">Preis</td>
           <td class="w-1/12 text-right px-1 border-r border-white">MwSt</td>
           <td class="w-1/12 text-right px-1 border-r border-white">Anz.</td>
@@ -133,7 +133,7 @@
             <td class="text-right">
               {{ $booking['quantity'] }}
             </td>
-            @can('admin orders')
+            @can('modify bookings')
               <td class="text-right">
                 {{ money($booking['unit_price']) }}
               </td>

@@ -31,12 +31,12 @@
     <div class="text-xl">Kundensuche</div>
     <livewire:customer-search />
   </div>
-  <div class="border-t-2 my-2 py-2">
-    <div class="text-xl">
-      Checks
-    </div>
+  @if ($paymentChecks->isNotEmpty())
     @can ('modify orders')
-      @if ($paymentChecks->isNotEmpty())
+      <div class="border-t-2 my-2 py-2">
+        <div class="text-xl">
+          Offene Anzahlungen
+        </div>
         <ul>
           @foreach ($paymentChecks as $venue)
             <li>
@@ -49,24 +49,22 @@
             </li>
           @endforeach
         </ul>
-      @else
-        <p>Heute keine Checks</p>
-      @endif
-    @endcan
-    <div class="border-t-2 my-2 py-2">
-      <div class="text-xl">
-        Neu
-        <span class="text-xs">(seit gestern morgen)</span>
       </div>
-      @if ($newOrderCount > 0)
-        <a href="{{ route('dashboard', array_filter([
-          'new' => true,
-        ])) }}">
-          {{ $newOrderCount }} Anfragen
-        </a>
-      @else
-        <p>Keine neuen Bestellungen</p>
-      @endif
+    @endcan
+  @endif
+  <div class="border-t-2 my-2 py-2">
+    <div class="text-xl">
+      Neu
+      <span class="text-xs">(seit gestern morgen)</span>
     </div>
+    @if ($newOrderCount > 0)
+      <a href="{{ route('dashboard', array_filter([
+        'new' => true,
+      ])) }}">
+        {{ $newOrderCount }} Anfragen
+      </a>
+    @else
+      <p>Keine neuen Anfragen</p>
+    @endif
   </div>
 </div>

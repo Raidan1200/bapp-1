@@ -1,6 +1,6 @@
 <article
   x-data="{
-    editCustomer: false,
+    showCustomer: false,
     dirty: @entangle('dirty')
   }"
   class="sm:m-2 sm:p-2 lg:p-4 bg-white rounded-xl shadow text-sm sm:text-base border-l-4 {{ $this->color }}"
@@ -8,7 +8,7 @@
   {{-- Headline --}}
   <div class="flex justify-between">
     <button
-      @click="editCustomer = !editCustomer"
+      @click="showCustomer = !showCustomer"
       class="flex-1 text-left hover:text-primary-dark rounded px-2 -mx-2 py-1 font-semibold"
     >
       @isset ($order->customer->company)
@@ -28,7 +28,7 @@
       @endisset
     </div>
   </div>
-  <div x-cloak class="bg-primary-light" x-show="editCustomer">
+  <div x-cloak class="bg-primary-light" x-show="showCustomer">
     <livewire:customer
       :customer="$order->customer"
     />
@@ -84,7 +84,7 @@
       </div>
       <div>
         <div>
-          @can('admin orders')
+          @can('modify orders')
             <select
               wire:model="selectedState"
               class="py-0"
@@ -115,7 +115,7 @@
         <div>
           <div>Anzahlung: {{ money($this->order->deposit_amount) }}</div>
           <div>Gesamt: {{ money($this->order->grossTotal) }}</div>
-          @can('admin orders')
+          @can('modify orders')
             <div>
               <input
                 type="checkbox"
@@ -159,7 +159,7 @@
       </div>
     @endif
   </form>
-  @can('admin orders')
+  @can('modify orders')
     <div class="flex justify-between">
       <div class="flex">
         <x-dropdown align="left">

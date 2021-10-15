@@ -61,14 +61,11 @@ class Items extends Component
 
     public function save()
     {
-        $this->authorize('modify orders');
+        $this->authorize('modify items');
 
         $this->validate();
 
         $newItems = [];
-
-        // LATER This is REAAAALLY inefficient
-        //       Does Laravel have something like "bulkUpdate" or "updateMany"?
 
         foreach ($this->items as $item) {
             if ($item['state'] === 'delete' || $item['state'] === 'stored') {

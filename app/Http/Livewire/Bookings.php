@@ -70,7 +70,7 @@ class Bookings extends Component
 
     public function save()
     {
-        $this->authorize('admin orders');
+        $this->authorize('modify bookings');
 
         $this->validate();
 
