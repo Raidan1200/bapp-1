@@ -30,6 +30,11 @@
         </x-form-field>
 
         <x-form-field>
+          <x-label for="slug">Slug</x-label>
+          <x-input type="text" name="slug" class="w-full" value="{{ old('slug') ?? $room->slug ?? '' }}" id="slug" />
+        </x-form-field>
+
+        <x-form-field>
           <x-label for="slogan">Slogan</x-label>
           <x-input type="text" name="slogan" class="w-full" value="{{ old('slogan') ?? $room->slogan ?? '' }}" id="slogan" />
         </x-form-field>
@@ -44,6 +49,11 @@
         <x-form-field>
           <x-label for="capacity">Kapazität</x-label>
           <x-input type="number" min="0" name="capacity" class="w-full" value="{{ old('capacity') ?? $room->capacity ?? '' }}" id="capacity" />
+        </x-form-field>
+
+        <x-form-field>
+          <x-label for="image">Bildpfad</x-label>
+          <x-input type="text" name="image" class="w-full" value="{{ old('image') ?? $room->image ?? '' }}" id="image" />
         </x-form-field>
 
         <div class="mt-2 text-right">

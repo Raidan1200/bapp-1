@@ -24,14 +24,14 @@ class CreateVenueRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'slug' => 'required',
+            'name' => 'required|max:255',
+            'slug' => 'required|max:255',
             'email' => 'nullable|email',
             'invoice_blocks' => 'nullable|json',
-            'reminder_delay' => 'nullable|integer',
-            'check_delay' => 'nullable|integer|gte:reminder_delay',
-            'cancel_delay' => 'nullable|integer|gte:check_delay',
-            'invoice_id_format' => 'required|string'
+            'reminder_delay' => 'required|integer|min:0',
+            'check_delay' => 'required|integer|min:0|gte:reminder_delay',
+            'cancel_delay' => 'required|integer|min:0|gte:check_delay',
+            'invoice_id_format' => 'required'
         ];
     }
 }

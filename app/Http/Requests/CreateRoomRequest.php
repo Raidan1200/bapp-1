@@ -13,7 +13,7 @@ class CreateRoomRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('create rooms') || $this->user()->can('modify rooms');
+        return true;
     }
 
     /**
@@ -25,9 +25,11 @@ class CreateRoomRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'slogan' => 'sometimes',
-            'description' => 'sometimes',
-            'image' => 'sometimes|mimes:jpg,jpeg,png,webp',
+            'slug' => 'required|max:255',
+            'slogan' => 'nullable|string',
+            'description' => 'nullable|string',
+            // 'image' => 'sometimes|mimes:jpg,jpeg,png,webp',
+            'image' => 'nullable|url',
             'capacity' => 'required|integer',
             'venue_id' => 'required|exists:venues,id',
         ];
