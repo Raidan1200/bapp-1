@@ -28,19 +28,19 @@ class CreatePackageRequest extends FormRequest
 
         return [
             'name'            => 'required|max:255',
-            'slogan'          => 'sometimes',
-            'description'     => 'sometimes',
-            'image'           => 'sometimes|mimes:jpg,jpeg,png,webp',
+            'slogan'          => 'required|max:255',
+            'description'     => 'nullable|string',
+            // 'image' => 'sometimes|mimes:jpg,jpeg,png,webp',
+            'image' => 'nullable|url',
             'starts_at'       => 'required|date',
             'ends_at'         => 'required|date',
-            // TODO IMPORTANT: This is actually wrong!!! VERY WRONG!
-            'opens_at'        => ['required', 'min:0', 'max:24', fn($_, $value, $fail) => $value >= $request->closes_at ? $fail('Opening time cannot be equal to or after closing time.') : null],
-            'closes_at'       => 'required|min:0|max:24',
-            'min_occupancy'   => 'sometimes|integer',
-            'unit_price'      => 'required|numeric',  // TODO: numeric or integer? or custom regex?
-            'vat'             => 'required|numeric',
-            'is_flat'         => 'sometimes',
-            'deposit'         => 'required|numeric',
+            'opens_at'        => 'required|string', // TODO: Needs better validation
+            'closes_at'       => 'required|string', // TODO: Needs better validation
+            'min_occupancy'   => 'sometimes|integer|min:0',
+            'unit_price'      => 'required|numeric|min:0',
+            'vat'             => 'required|numeric|min:0',
+            'is_flat'         => 'sometimes|string',
+            'deposit'         => 'required|numeric|min:0',
             'venue_id'        => 'required|exists:venues,id'
         ];
     }

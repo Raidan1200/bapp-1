@@ -6,7 +6,7 @@
     <x-label for="image">Profilbild</x-label>
 
     @if ($user->image)
-      <img src="/{{ $user->image }}" alt="">
+      <img src="{{ Storage::url($user->image) }}" alt="">
     @else
       <div class="p-4">
         Es wurde noch kein Profilbild hochgeladen

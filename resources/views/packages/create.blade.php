@@ -78,14 +78,23 @@
         </x-form-field>
 
         <x-form-field>
-          <x-label for="is_flat">Preis ist Flatpreis
+          <x-label
+            for="is_flat"
+            class="flex items-center py-2"
+          >
             <input
               {{ (old('is_flat') ?? $package->is_flat ?? false ) ? 'checked' : '' }}
               type="checkbox"
               name="is_flat"
-              class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              class="w-6 h-6 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             >
+            <span class="pl-2">Preis ist Flatpreis</span>
           </x-label>
+        </x-form-field>
+
+        <x-form-field>
+          <x-label for="image">Bildpfad</x-label>
+          <x-input type="text" name="image" class="w-full" value="{{ old('image') ?? $room->image ?? '' }}" id="image" />
         </x-form-field>
 
         <div class="mt-2 text-right">

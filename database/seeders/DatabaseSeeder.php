@@ -41,7 +41,6 @@ class DatabaseSeeder extends Seeder
             'image' => null,
         ]);
 
-
         $admin->assignRole('admin');
         $nico->assignRole('admin');
         $salwa->assignRole('manager');

@@ -56,7 +56,7 @@
         <x-form-field>
           <x-label for="invoice_id_format">Rechnungsnummernformat</x-label>
           <x-input type="text" name="invoice_id_format" class="w-full" value="{{ old('invoice_id_format') ?? $venue->invoice_id_format ?? '' }}" id="invoice_id_format" />
-          </x-form-field>
+        </x-form-field>
 
         <div class="mt-2 text-right">
           <a href="{{ route('venues.index') }}">

@@ -28,7 +28,7 @@ class CreateRoomRequest extends FormRequest
             'slug' => 'required|max:255',
             'slogan' => 'nullable|string',
             'description' => 'nullable|string',
-            // 'image' => 'sometimes|mimes:jpg,jpeg,png,webp',
+            // 'image' => 'nullable|mimes:jpg,jpeg,png,webp',
             'image' => 'nullable|url',
             'capacity' => 'required|integer',
             'venue_id' => 'required|exists:venues,id',

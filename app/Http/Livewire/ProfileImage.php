@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -16,7 +17,6 @@ class ProfileImage extends Component
     public $user;
     public $idHack = 0;
 
-    // TODO: Test
     public function save()
     {
         if ($this->user->id !== auth()->id()) {
@@ -28,10 +28,11 @@ class ProfileImage extends Component
         ]);
 
         if ($this->user->image) {
-            Storage::delete($this->user->image);
+            Storage::disk('public')->delete($this->user->image);
         }
 
-        $path = $this->image->store('profileimages');
+        $filename = 'user_' . auth()->id() . '.' . $this->image->getClientOriginalExtension();
+        $path = $this->image->store('avatars', 'public');
 
         $this->user->update([
             'image' => $path,
@@ -52,7 +53,7 @@ class ProfileImage extends Component
         }
 
         if ($this->user->image) {
-            Storage::delete($this->user->image);
+            Storage::disk('public')->delete($this->user->image);
         }
 
         $this->user->update([
