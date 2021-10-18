@@ -187,8 +187,7 @@ class Order extends Component
     {
         if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
             Mail::to($this->order->customer->email)
-                ->queue(new ConfirmationEmail($this->order))
-                ->send(new ConfirmationEmail($this->order));
+                ->queue(new ConfirmationEmail($this->order));
         }
     }
 
