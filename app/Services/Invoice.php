@@ -59,7 +59,6 @@ class Invoice
         //   Text: Bitte überweisen Sie
         //     mit 2 Platzhaltern für Betrag und Datum
 
-
         return response()->streamDownload(fn() =>
             (new Pdf(
                 $this->invoiceId,

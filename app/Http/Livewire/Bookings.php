@@ -72,6 +72,17 @@ class Bookings extends Component
     {
         $this->authorize('modify bookings');
 
+        foreach ($this->bookings as &$booking) {
+            $starts_at = Carbon::createFromTimeString($booking['starts_time'], 'Europe/Berlin')
+                ->setDateFrom($booking['starts_at'])
+                ->setTimezone('UTC');
+            $ends_at = Carbon::createFromTimeString($booking['ends_time'], 'Europe/Berlin')
+                ->setDateFrom($booking['ends_at'])
+                ->setTimezone('UTC');
+            $booking['starts_at'] = $starts_at;
+            $booking['ends_at'] = $ends_at;
+        }
+
         $this->validate();
 
         $newBookings = [];
@@ -187,6 +198,11 @@ class Bookings extends Component
 
     public function render()
     {
+        foreach ($this->bookings as &$booking) {
+            $booking['starts_time'] = Carbon::create($booking['starts_at'])->timezone('Europe/Berlin')->format('H:i');
+            $booking['ends_time'] = Carbon::create($booking['ends_at'])->timezone('Europe/Berlin')->format('H:i');
+        }
+
         return view('livewire.bookings');
     }
 }

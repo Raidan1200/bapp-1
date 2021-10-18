@@ -64,13 +64,13 @@
             </td>
             <td>
               <x-input
-                wire:model.defer="bookings.{{ $key }}.starts_at"
+                wire:model.defer="bookings.{{ $key }}.starts_time"
                 class="w-full"
               />
             </td>
             <td>
               <x-input
-                wire:model.defer="bookings.{{ $key }}.ends_at"
+                wire:model.defer="bookings.{{ $key }}.ends_time"
                 class="w-full"
               />
             </td>
