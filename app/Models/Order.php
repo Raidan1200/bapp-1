@@ -134,6 +134,11 @@ class Order extends Model
         );
     }
 
+    public function getNetDepositTotalAttribute()
+    {
+        return collect($this->bookings)->sum('netDepositTotal');
+    }
+
     public function getVatsAttribute()
     {
         $vats = collect([]);
@@ -156,6 +161,22 @@ class Order extends Model
 
         return $vats->map(fn($vat) => round($vat));
     }
+
+    public function getDepositVatsAttribute()
+    {
+        $vats = collect([]);
+
+        foreach ($this->bookings as $booking) {
+            if ($vats->has((string) $booking->vat)) {
+                $vats[(string) $booking->vat] += $booking->depositVatAmount;
+            } else {
+                $vats[(string) $booking->vat] = $booking->depositVatAmount;
+            }
+        }
+
+        return $vats->map(fn($vat) => round($vat));
+    }
+
 
     /*
      * Misc

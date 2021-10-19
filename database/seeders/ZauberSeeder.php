@@ -37,7 +37,7 @@ class ZauberSeeder extends Seeder
         $v1 = Venue::create([
             'name' => 'Hüttenzauber',
             'slug' => 'zauber',
-            'email' => 'info@huettenzauber.de',
+            'email' => 'info@huettenzauber-dresden.de',
             'logo' => null, // TODO
             'invoice_blocks' => $this->zauber_json,
             'invoice_id_format' => 'R-HUE-%05d',

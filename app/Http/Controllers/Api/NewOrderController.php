@@ -50,6 +50,7 @@ abstract class NewOrderController extends Controller
     protected function store(array $validated, Venue $venue)
     {
         // TODO TODO: Check if requested vacancies are actually available!!!
+        // TODO TODO TODO: Echt wichtig!!!
         return DB::transaction(function () use ($validated, $venue)
         {
             $customer = $this->createCustomer($validated['customer']);

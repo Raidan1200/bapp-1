@@ -58,8 +58,28 @@ class Booking extends Model
         return $this->grossTotal / (($this->vat / 100) + 1);
     }
 
+    public function getGrossDepositAttribute()
+    {
+        return $this->unit_price * $this->deposit / 100;
+    }
+
+    public function getGrossDepositTotalAttribute()
+    {
+        return $this->grossDeposit * $this->quantity;
+    }
+
+    public function getNetDepositTotalAttribute()
+    {
+        return $this->grossDepositTotal / (($this->vat / 100) + 1);
+    }
+
     public function getVatAmountAttribute()
     {
         return $this->grossTotal - $this->netTotal;
+    }
+
+    public function getDepositVatAmountAttribute()
+    {
+        return $this->grossDepositTotal - $this->netDepositTotal;
     }
 }

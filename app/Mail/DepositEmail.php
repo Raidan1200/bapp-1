@@ -23,7 +23,7 @@ class DepositEmail extends Mailable
     {
         return $this
             ->from($this->order->venue->email)
-            ->subject('Anzahlung für ' . $this->order->venue->name)
+            ->subject('Reservierung für ' . $this->order->venue->name)
             ->view('emails.deposit');
     }
 }

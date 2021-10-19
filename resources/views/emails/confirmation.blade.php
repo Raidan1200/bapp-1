@@ -1,4 +1,4 @@
-<h1>Buchungsbestätigung</h1>
+<h1>Reservierungsbestätigung</h1>
 <pre>
 Hallo {{ $order->customer->first_name }},
 

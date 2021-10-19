@@ -8,20 +8,15 @@ use App\Services\Pdf;
 
 class Invoice
 {
-    protected $invoiceId;
+    public $invoiceId;
+    public $type = '';
+    public $date;
+    public $order;
+    public $subject = '';
+    public $text = [];
 
-    protected $type = '';
     protected $types = ['deposit', 'interim', 'final', 'cancelled'];
-
-    protected $date;
-
-    protected $vats = [];
-    protected $netTotal = 0;
-    protected $grossTotal = 0;
-
     protected $updatedFields = [];
-
-    protected $order;
 
     public function ofType(string $type)
     {
@@ -38,6 +33,7 @@ class Invoice
         $this->order = $order;
         $this->setDate();
         $this->setInvoiceId();
+        $this->setSubject();
 
         return $this;
     }
@@ -59,12 +55,10 @@ class Invoice
         //   Text: Bitte überweisen Sie
         //     mit 2 Platzhaltern für Betrag und Datum
 
+        // TODO: put subject line
+
         return response()->streamDownload(fn() =>
-            (new Pdf(
-                $this->invoiceId,
-                $this->date,
-                $this->order
-            ))->output()
+            (new Pdf($this))->output()
         );
     }
 
@@ -80,6 +74,57 @@ class Invoice
         }
 
         return $this;
+    }
+
+    protected function setSubject()
+    {
+        switch ($this->type) {
+            case 'deposit':
+                $this->subject = 'Anzahlungsrechnung';
+                break;
+            case 'interim':
+                $this->subject = 'Abschlussrechnung';
+                break;
+            case 'final':
+                $this->subject = 'Gesamtrechnung';
+                break;
+            case 'cancelled':
+                $this->subject = 'Stornorechnung';
+                break;
+            default:
+                $this->subject = 'Rechnung';
+        }
+    }
+
+    // BITTE BEACHTEN SIE: Der Geldeingang muss bis spätestens 7 Werktage nach Ihrer Reservierung erfolgt sein, spätere Eingänge
+    // werden nicht mehr berücksichtigt und die betreffende Bestellung wird automatisch storniert.
+    // Es gelten unser allgemeinen Geschäfts- und Vertragsbedingungen.
+
+    protected function setText()
+    {
+        $grace_days = 7;
+
+        switch ($this->type) {
+            case 'deposit':
+                $this->text[] =
+                    'Bitte überweisen Sie den Betrag von ' .
+                    money($this->order->deposit_amount) .
+                    ' Euro bis ' .
+                    $this->order->created_at->addDays($grace_days)->format('Y M.D.') .
+                    ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.';
+                break;
+            case 'interim':
+                $this->text = 'Abschlussrechnung';
+                break;
+            case 'final':
+                $this->text = 'Gesamtrechnung';
+                break;
+            case 'cancelled':
+                $this->text = 'Stornorechnung';
+                break;
+            default:
+                $this->text = 'Rechnung';
+        }
     }
 
     protected function setInvoiceId()

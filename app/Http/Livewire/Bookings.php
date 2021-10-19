@@ -83,6 +83,8 @@ class Bookings extends Component
             $booking['ends_at'] = $ends_at;
         }
 
+        unset($booking); // PHP. You gotta love it.
+
         $this->validate();
 
         $newBookings = [];
@@ -114,6 +116,8 @@ class Bookings extends Component
                 $newBookings[] = $booking;
             }
         }
+
+        // dd($newBookings);
 
         $this->editing = false;
         $this->bookings = $newBookings;

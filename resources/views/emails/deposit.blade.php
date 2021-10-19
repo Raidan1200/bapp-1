@@ -1,17 +1,17 @@
 <h1>Anzahlungsrechnung</h1>
-<pre>
-Hallo {{ $order->customer->first_name }},
 
-wir haben Deine Buchungsanfrage erhalten.
+Vielen Dank für ihr Buchung zum Dresdner Hüttenzauber.
 
-Sie haben für {{ $order->starts_at }} angefragt:
+Im Anhang erhalten sie ihre Reservierungsbestätigung mit der Bitte,
+die Anzahlung in Höhe von {{ money($order->deposit_amount) }}€
+innerhalb der nächsten 7 Werktage zu überweisen.
+{{-- TODO: Zahl konfigurierbar machen??? --}}
 
-@foreach ($order->bookings as $booking)
-- {{ $booking->quantity }} Mal {{ $booking->package_name }}
-@endforeach
+Aufgrund der großen Nachfrage können wir die Plätze leider nur eine Woche verbindlich für Sie reservieren.
+<br>
+Sollte die Anzahlung nicht erfolgen, werden die Plätze automatisch wieder vom System freigegeben.
+<br>
+Vielen Dank für ihr Verständnis.
+<br><br><br>
 
-Bitte überweisen Sie uns all ihr Geld.
-Alternativ genügt auch eine Anzahlung von {{ number_format($order->deposit / 100, 2, ',', '.') }}€.
-
-Bankdaten Trallalla.
-</pre>
+Bitte beachten Sie unsere <a href="https://www.huettenzauber-dresden.de/index.php?page=agb">Allgemeinen Geschäftsbedingungen</a>.
