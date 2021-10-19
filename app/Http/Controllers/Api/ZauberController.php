@@ -25,13 +25,13 @@ class ZauberController extends NewOrderController
         $hpp = $bookings->firstWhere('package_name', 'Hüttenpaket Premium');
         $cur = $bookings->firstWhere('package_name', 'Curlingbahn');
 
-        if ($cur && $hpc) {
-            $cur['deposit'] = $hpc['deposit'];
-        }
+        // if ($cur && $hpc) {
+        //     $cur['deposit'] = $hpc['deposit'];
+        // }
 
-        if ($cur && $hpp) {
-            $cur['deposit'] = $hpp['deposit'];
-        }
+        // if ($cur && $hpp) {
+        //     $cur['deposit'] = $hpp['deposit'];
+        // }
 
         return array_filter([$hpc, $hpp, $cur]);
     }
