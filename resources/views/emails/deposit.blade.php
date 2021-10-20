@@ -1,17 +1,19 @@
-<h1>Anzahlungsrechnung</h1>
+<x-app-layout>
+  <h1 class="text-2xl">Ihre Reservierung</h1>
 
-Vielen Dank für ihr Buchung zum Dresdner Hüttenzauber.
+  <p class="my-2">Vielen Dank für ihr Buchung bei {{ $order->venue->name }}.</p>
 
-Im Anhang erhalten sie ihre Reservierungsbestätigung mit der Bitte,
-die Anzahlung in Höhe von {{ money($order->deposit_amount) }}€
-innerhalb der nächsten 7 Werktage zu überweisen.
-{{-- TODO: Zahl konfigurierbar machen??? --}}
+  <p class="my-2">
+    Im Anhang erhalten sie ihre Reservierungsbestätigung mit der Bitte,
+    die Anzahlung in Höhe von {{ money($order->deposit_amount) }}€
+    innerhalb der nächsten 7 Werktage zu überweisen.
+    {{-- LATER Zahl konfigurierbar machen --}}
+  </p>
 
-Aufgrund der großen Nachfrage können wir die Plätze leider nur eine Woche verbindlich für Sie reservieren.
-<br>
-Sollte die Anzahlung nicht erfolgen, werden die Plätze automatisch wieder vom System freigegeben.
-<br>
-Vielen Dank für ihr Verständnis.
-<br><br><br>
+  <p class="my-2">Aufgrund der großen Nachfrage können wir die Plätze leider nur eine Woche verbindlich für Sie reservieren.</p>
 
-Bitte beachten Sie unsere <a href="https://www.huettenzauber-dresden.de/index.php?page=agb">Allgemeinen Geschäftsbedingungen</a>.
+  <p class="my-2">Sollte die Anzahlung nicht erfolgen, werden die Plätze automatisch wieder vom System freigegeben.</p>
+
+  <p class="my-2">Vielen Dank für ihr Verständnis.</p>
+
+</x-app-layout>

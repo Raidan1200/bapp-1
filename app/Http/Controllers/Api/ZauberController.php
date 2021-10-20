@@ -18,7 +18,6 @@ class ZauberController extends NewOrderController
 
     protected function applyBookingRules(array $bookings)
     {
-        // TODO TODO
         $bookings = collect($bookings);
 
         $hpc = $bookings->firstWhere('package_name', 'Hüttenpaket Classic');

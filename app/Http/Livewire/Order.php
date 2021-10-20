@@ -97,7 +97,7 @@ class Order extends Component
 
     public function updatedTimestamps() : array
     {
-        if (! $this->stateHasChanged()) {
+        if (! $this->stateWillChange()) {
             return [];
         }
 
@@ -156,8 +156,6 @@ class Order extends Component
 
     public function sendEmail(string $type)
     {
-        // InvoiceEmailRequested::dispatch($type, $this->order);
-
         $order = OrderModel::findOrFail($this->order->id)->load('venue');
 
         $invoice = (new Invoice)
@@ -171,27 +169,38 @@ class Order extends Component
         $emailClass = '\\App\\Mail\\' . ucfirst($type) . 'Email';
         $email_sent_field = $type . '_email_at';
 
-        // TODO: How do I handle mail-sent errors ... try catch?
-        $email->send(new $emailClass($this->order, $invoice));
+        // LATER: How do I handle mail-sent errors ... try catch?
+        // LATER: queue throws 'Attempt to read property "name" on null in /var/www/html/storage/framework/views/ed2533...'
+        $email->send(new $emailClass($order, $invoice));
 
         if ($type !== 'cancelled') {
-            $this->order->update([
+            $order->update([
                 $email_sent_field => Carbon::now()
             ]);
         }
-
     }
 
-    public function stateHasChanged()
+    public function sendConfirmationEmail()
+    {
+        $order = OrderModel::findOrFail($this->order->id)->load('venue');
+
+        Mail::to($this->order->customer->email)
+            // LATER: queue throws 'Attempt to read property "name" on null in /var/www/html/storage/framework/views/ed2533...'
+            ->send(new ConfirmationEmail($order));
+    }
+
+    public function stateWillChange()
     {
         return $this->order->state !== $this->selectedState;
     }
 
     public function handleStateChange()
     {
-        if ($this->stateHasChanged()) {
+        if ($this->stateWillChange()) {
             $this->logStateChange();
-            $this->sendConfirmationEmail();
+            if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
+                $this->sendConfirmationEmail();
+            }
             $this->updatePaymentChecks();
         }
     }
@@ -208,14 +217,6 @@ class Order extends Component
         }
     }
 
-    public function sendConfirmationEmail()
-    {
-        if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
-            Mail::to($this->order->customer->email)
-                ->queue(new ConfirmationEmail($this->order));
-        }
-    }
-
     public function bookingsUpdated()
     {
         $bookingData['starts_at'] = $this->firstBookingDate($this->order->bookings);
@@ -225,8 +226,7 @@ class Order extends Component
             $bookingData['interim_amount'] = $this->order->grossTotal - $this->order->deposit;
         } elseif ($this->order->deposit_paid_at && $this->order->interim_paid_at === null) {
             $bookingData['interim_amount'] = $this->order->grossTotal - $this->order->deposit;
-        } else {
-            // TODO FALSCH FALSCH FALSCH
+        } elseif ($this->order->deposit_paid_at && $this->order->interim_paid_at) {
             $bookingData['interim_is_final'] = false;
         }
 
@@ -249,7 +249,6 @@ class Order extends Component
 
     public function itemsUpdated()
     {
-        // TODO TODO: I guess this might produce a lot of false positives
         if ($this->order->items->count()) {
             $this->order->update([
                 'interim_is_final' => false
@@ -263,7 +262,7 @@ class Order extends Component
     ////////////////
     public function logStateChange()
     {
-        if ($this->stateHasChanged()) {
+        if ($this->stateWillChange()) {
             OrderHasChanged::dispatch($this->order, auth()->user(), 'state', $this->order->state, $this->selectedState);
         }
     }

@@ -1,12 +1,19 @@
-<h1>Gesamtrechnung</h1>
-<pre>
-Hallo {{ $order->customer->first_name }},
+<x-app-layout>
+  <h1 class="text-2xl">Ihre Gesamtrechnung</h1>
 
-Hier ist ihre Gesamtrechnung.
+  <p class="my-2">Vielen Dank für ihr Buchung bei {{ $order->venue->name }}.</p>
 
-@foreach ($order->bookings as $booking)
-- {{ $booking->quantity }} Mal {{ $booking->package_name }}
-@endforeach
+  <p class="my-2">
+    Im Anhang erhalten sie ihre Reservierungsbestätigung ROLAND FALSCH mit der Bitte
+    die Anzahlung in Höhe von {{ money($order->deposit_amount) }}€
+    innerhalb der nächsten 7 Werktage zu überweisen.
+    {{-- LATER Zahl konfigurierbar machen --}}
+  </p>
 
-Bankdaten Trallalla.
-</pre>
+  <p class="my-2">ROLAND Aufgrund der großen Nachfrage können wir die Plätze leider nur eine Woche verbindlich für Sie reservieren.</p>
+
+  <p class="my-2">ROLAND Sollte die Anzahlung nicht erfolgen, werden die Plätze automatisch wieder vom System freigegeben.</p>
+
+  <p class="my-2">Vielen Dank für ihr Verständnis.</p>
+
+</x-app-layout>
