@@ -33,7 +33,15 @@ abstract class NewOrderController extends Controller
         $from = Carbon::createFromDate(...explode('-', $request->input('from')))->hour(0)->minute(0)->second(0);
         $to = Carbon::createFromDate(...explode('-', $request->input('to')))->hour(23)->minute(59)->second(59);
 
-        return $room->bookings()->where('starts_at', '<=', $to)->where('ends_at', '>=', $from)->get();
+        // return $room->bookings()->where('starts_at', '<=', $to)->where('ends_at', '>=', $from)->get();
+
+        return $room->bookings()
+            ->where('starts_at', '<=', $to)
+            ->where('ends_at', '>=', $from)
+            ->withOnly('order:id,state')
+            ->get()
+            ->filter(fn ($booking) => !in_array($booking->order->state, ['cancelled', 'not-paid']))
+            ->values();
     }
 
     public function newOrder(ZauberRequest $request, Venue $venue)
