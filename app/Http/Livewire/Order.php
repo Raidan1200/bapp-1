@@ -149,7 +149,9 @@ class Order extends Component
             $order->update($updatedFields);
         }
 
-        return response()->streamDownload(fn() => $invoice->makePdf());
+        return response()->streamDownload(fn() =>
+            $invoice->asStream()->makePdf()
+        );
     }
 
     public function sendEmail(string $type)
@@ -158,11 +160,11 @@ class Order extends Component
 
         $order = OrderModel::findOrFail($this->order->id)->load('venue');
 
-        // TODO EMAIL: JSON error
-        // $invoice = (new Invoice)
-        //     ->ofType($type)
-        //     ->forOrder($order)
-        //     ->makePdf();
+        $invoice = (new Invoice)
+            ->ofType($type)
+            ->forOrder($order)
+            ->asString()
+            ->makePdf();
 
         $email = Mail::to($this->order->customer->email);
 
@@ -170,7 +172,7 @@ class Order extends Component
         $email_sent_field = $type . '_email_at';
 
         // TODO: How do I handle mail-sent errors ... try catch?
-        $email->send(new $emailClass($this->order));
+        $email->send(new $emailClass($this->order, $invoice));
 
         if ($type !== 'cancelled') {
             $this->order->update([

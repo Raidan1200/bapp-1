@@ -13,17 +13,22 @@ class DepositEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $order;
+    public $pdf;
 
-    public function __construct(Order $order)
+    public function __construct(Order $order, string $pdf)
     {
         $this->order = $order;
+        $this->pdf = $pdf;
     }
 
     public function build()
     {
-        return $this
-            ->from($this->order->venue->email)
-            ->subject('Reservierung für ' . $this->order->venue->name)
-            ->view('emails.deposit');
+        $this
+        ->from($this->order->venue->email)
+        ->subject('Reservierung für ' . $this->order->venue->name)
+        ->attachData($this->pdf, 'rechnung-'.$this->order->deposit_invoice_id.'.pdf', [
+            'mime' => 'application/pdf',
+        ])
+        ->view('emails.deposit');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use setasign\Fpdi\Fpdi;
+use Illuminate\Support\Facades\Storage;
 
 class Pdf
 {
@@ -19,7 +20,8 @@ class Pdf
         $this->pdf->AddPage();
         $this->pdf->setLeftMargin(25);
 
-        // $this->pdf->image(__DIR__.'/../../images/'.$this->text->getText('rechnung', 'logo'), 141, 30, 39, 13);
+        $path = $this->invoice->order->venue->slug . '/logo.png';
+        $this->pdf->image(Storage::disk('public')->path($path), 141, 30, 39, 13);
 
         $this->pdf->setTextColor(0,0,0);
 

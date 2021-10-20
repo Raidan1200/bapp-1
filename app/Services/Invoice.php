@@ -15,6 +15,8 @@ class Invoice
     public $subject = '';
     public $text = [];
 
+    private $dest = 'I';
+
     protected $types = ['deposit', 'interim', 'final', 'cancelled'];
     protected $updatedFields = [];
 
@@ -49,9 +51,21 @@ class Invoice
         return $this->invoiceId;
     }
 
+    public function asString()
+    {
+        $this->dest = 'S';
+        return $this;
+    }
+
+    public function asStream()
+    {
+        $this->dest = 'I';
+        return $this;
+    }
+
     public function makePdf()
     {
-        return (new Pdf($this))->output();
+        return (new Pdf($this))->output($this->dest);
     }
 
     protected function setDate()

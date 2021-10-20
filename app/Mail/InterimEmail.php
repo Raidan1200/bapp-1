@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use App\Models\Order;
-use App\Services\Invoice;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -14,23 +13,22 @@ class InterimEmail extends Mailable
     use Queueable, SerializesModels;
 
     public $order;
+    public $pdf;
 
-    public function __construct(Order $order)
+    public function __construct(Order $order, string $pdf)
     {
         $this->order = $order;
+        $this->pdf = $pdf;
     }
 
     public function build()
     {
-        // TODO EMAIL: JSON error
-        // $pdf = (new Invoice)
-        //     ->ofType('interim')
-        //     ->forOrder($this->order)
-        //     ->makePdf();
-
         $this
             ->from($this->order->venue->email)
             ->subject('Abschlussrechnung für ' . $this->order->venue->name)
+            ->attachData($this->pdf, 'rechnung-'.$this->order->deposit_invoice_id.'.pdf', [
+                'mime' => 'application/pdf',
+            ])
             ->view('emails.interim');
     }
 }
