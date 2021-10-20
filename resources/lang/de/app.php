@@ -6,4 +6,5 @@ return [
     'interim_paid' => 'Zwischengezahlt',
     'final_paid' => 'Endgezahlt',
     'cancelled' => 'Storniert',
+    'not_paid' => 'Nicht bezahlt',
 ];

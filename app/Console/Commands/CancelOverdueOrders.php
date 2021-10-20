@@ -41,7 +41,7 @@ class CancelOverdueOrders extends Command
         foreach (Venue::all() as $venue) {
             $venue->dueOrderCancellations()->map(function($order) {
                 $order->update([
-                    'state' => 'cancelled',
+                    'state' => 'not-paid',
                     'cancelled_at' => now(),
                 ]);
             });

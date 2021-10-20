@@ -122,6 +122,7 @@
                 @endif
               </option>
               <option value="cancelled">Storniert</option>
+              <option value="not_paid">Nicht bezahlt</option>
             </select>
           @else
             <div class="w-64">

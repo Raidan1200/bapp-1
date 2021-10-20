@@ -40,7 +40,7 @@ abstract class NewOrderController extends Controller
             ->where('ends_at', '>=', $from)
             ->withOnly('order:id,state')
             ->get()
-            ->filter(fn ($booking) => !in_array($booking->order->state, ['cancelled', 'not-paid']))
+            ->filter(fn ($booking) => !in_array($booking->order->state, ['cancelled', 'not_paid']))
             ->values();
     }
 

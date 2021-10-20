@@ -26,10 +26,11 @@ class Order extends Component
 
     protected $colors = [
         'fresh' => 'border-red-500',
-        'cancelled' => 'border-red-500',
         'deposit_paid' => 'border-yellow-500',
         'interim_paid' => 'border-blue-500',
         'final_paid' => 'border-green-500',
+        'cancelled' => 'border-gray-400',
+        'not_paid' => 'border-gray-300',
     ];
 
     public $rules = [
@@ -131,6 +132,9 @@ class Order extends Component
 
             case 'cancelled':
                 $timestamps['cancelled_at'] = Carbon::now();
+                break;
+
+            case 'not-paid':
                 break;
         }
 

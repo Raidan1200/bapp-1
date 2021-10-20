@@ -103,6 +103,11 @@
                   class="py-1 px-3 block hover:bg-indigo-100"
                 >{{ __('app.cancelled') }}</a>
               </li>
+              <li>
+                <a href="{{ route('dashboard', array_filter(array_merge($filters, ['state' => 'not_paid']))) }}"
+                  class="py-1 px-3 block hover:bg-indigo-100"
+                >{{ __('app.not_paid') }}</a>
+              </li>
             </ul>
           </div>
         </div>
