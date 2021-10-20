@@ -99,23 +99,37 @@ class Invoice
         switch ($this->type) {
             case 'deposit':
                 $this->text = [
-                    'Bitte überweisen Sie den Betrag von ' .
-                    money($this->order->deposit_amount) .
-                    ' Euro bis zum ' .
+                    'Bitte überweisen Sie den Betrag von ' . money($this->order->deposit_amount) . ' Euro bis zum ' .
                     $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
                     ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
-                ,
+                    ,
                     'BITTE BEACHTEN SIE: Der Geldeingang muss bis spätestens 7 Werktage nach Ihrer Reservierung erfolgt sein, spätere Eingänge werden nicht mehr berücksichtigt und die betreffende Bestellung wird automatisch storniert.'
                 ];
                 break;
             case 'interim':
-                $this->text = ['Abschlussrechnung'];
+                $this->text = [
+                    'Bitte überweisen Sie den Betrag von ' . money($this->order->interim_amount) . ' Euro bis zum ' .
+                    $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
+                    ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
+                    ,
+                ];
                 break;
             case 'final':
-                $this->text = ['Gesamtrechnung'];
+                $this->text = [
+                    'Bitte überweisen Sie den Betrag von ' . money($this->order->deposit_amount) . ' Euro bis zum ' .
+                    $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
+                    ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
+                    ,
+                ];
+
                 break;
             case 'cancelled':
-                $this->text = ['Stornorechnung'];
+                $this->text = [
+                    'Bitte überweisen Sie den Betrag von ' . money($this->order->deposit_amount) . ' Euro bis zum ' .
+                    $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
+                    ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
+                    ,
+                ];
                 break;
         }
 

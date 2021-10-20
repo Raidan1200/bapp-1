@@ -235,7 +235,7 @@ class Pdf
             $this->pdf->setX(33);
             // $this->pdf->write(6, utf8_decode('VERANZ'));
             // $this->pdf->setX(50);
-            $this->pdf->write(6, utf8_decode('Verrechnung Zwischenrechnung ('.$order->interim_invoice_id.')'));
+            $this->pdf->write(6, utf8_decode('Verrechnung Abschlussrechnung ('.$order->interim_invoice_id.')'));
             $this->pdf->setX(167);
             $this->pdf->write(6, utf8_decode(money($order->interim_amount * -1) .' Euro'));
         }
@@ -298,10 +298,7 @@ class Pdf
         $this->pdf->write(5, money($grossTotal).' Euro');
 
         $this->pdf->setFont("Arial","", 9);
-
         $this->pdf->ln(20);
-
-        $this->pdf->ln();
 
         foreach ($this->invoice->text as $text) {
             $this->pdf->write(5, utf8_decode($text));
