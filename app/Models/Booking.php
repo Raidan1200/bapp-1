@@ -50,6 +50,7 @@ class Booking extends Model
 
     public function getGrossTotalAttribute()
     {
+        // TODO: IF HAS RATE HOURLY
         return $this->unit_price * $this->quantity;
     }
 
@@ -60,6 +61,7 @@ class Booking extends Model
 
     public function getGrossDepositAttribute()
     {
+        // TODO: IF HAS RATE HOURLY
         return $this->unit_price * $this->deposit / 100;
     }
 

@@ -8,6 +8,9 @@ use App\Services\Pdf;
 
 class Invoice
 {
+    // TODO TODO move into DB:Venue
+    private const PAYMENT_DELAY = 7;
+
     public $invoiceId;
     public $type = '';
     public $date;
@@ -108,13 +111,11 @@ class Invoice
 
     protected function setText()
     {
-        $grace_days = 7;
-
         switch ($this->type) {
             case 'deposit':
                 $this->text = [
                     'Bitte überweisen Sie den Betrag von ' . money($this->order->deposit_amount) . ' Euro bis zum ' .
-                    $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
+                    $this->order->created_at->addDays(self::PAYMENT_DELAY)->format('d.m.Y') .
                     ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
                     ,
                     'BITTE BEACHTEN SIE: Der Geldeingang muss bis spätestens 7 Werktage nach Ihrer Reservierung erfolgt sein, spätere Eingänge werden nicht mehr berücksichtigt und die betreffende Bestellung wird automatisch storniert.'
@@ -130,7 +131,7 @@ class Invoice
 
                 $this->text = [
                     'Bitte überweisen Sie den Betrag von ' . money($grossTotal) . ' Euro bis zum ' .
-                    ($this->order->interim_invoice_at ?: now())->addDays($grace_days)->format('d.m.Y') .
+                    ($this->order->interim_invoice_at ?: now())->addDays(self::PAYMENT_DELAY)->format('d.m.Y') .
                     ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
                     ,
                 ];
@@ -149,7 +150,7 @@ class Invoice
 
                 $this->text = [
                     'Bitte überweisen Sie den Betrag von ' . money($grossTotal) . ' Euro bis zum ' .
-                    ($this->order->final_invoice_at ?: now())->addDays($grace_days)->format('d.m.Y') .
+                    ($this->order->final_invoice_at ?: now())->addDays(self::PAYMENT_DELAY)->format('d.m.Y') .
                     ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
                     ,
                 ];

@@ -16,6 +16,9 @@ class Order extends Component
 {
     use AuthorizesRequests;
 
+    // TODO TODO move into DB:Venue
+    private const PAYMENT_DELAY = 7;
+
     public $order;
 
     public $notes;
@@ -26,6 +29,7 @@ class Order extends Component
 
     protected $colors = [
         'fresh' => 'border-gray-400',
+        'overdue' => 'border->red->400',
         'deposit_paid' => 'border-yellow-500',
         'interim_paid' => 'border-green-500',
         'final_paid' => 'border-blue-500',
@@ -93,12 +97,21 @@ class Order extends Component
 
     public function getColorProperty() : string
     {
-        // WENN Abschluss oder Gesamtemail gesendet wurde
-        //  UND entsprechend ABSCHLUSS bzw GESAMT nicht auf BEZAHLT steht
-        //  DANN nach VENUE_CONFIG Tagen Farbe auf ULTRAVIOLETT ändern
+        // if (
+        //     (
+        //         ($this->order->interim_email_at && ! $this->order->interim_paid_at)
+        //         ||
+        //         ($this->order->final_email_at && ! $this->order->final_paid_at)
+        //     )
+        //     &&
+        //     now()->greaterThan($this->order->interim_email_at->addDays(self::PAYMENT_DELAY))
+        // ) {
+        //     return $this->colors['overdue'];
+        // }
 
-        // WENN interim_is_final UND interim_paid UND event vorbei
-        //   DANN BLAU
+        // if ($this->order->interim_is_final && $this->order->interim_paid_at) {
+        //     return $this->colors['final_paid'];
+        // }
 
         return $this->colors[$this->order->state] ?? '';
     }

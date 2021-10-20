@@ -4,15 +4,10 @@
   <p class="my-2">Vielen Dank für ihr Buchung bei {{ $order->venue->name }}.</p>
 
   <p class="my-2">
-    Im Anhang erhalten sie ihre Reservierungsbestätigung ROLAND FALSCH mit der Bitte
-    die Anzahlung in Höhe von {{ money($order->deposit_amount) }}€
-    innerhalb der nächsten 7 Werktage zu überweisen.
+    Bitte überweisen Sie {{ money($order->deposit_amount) }}€
+    innerhalb der nächsten 7 Werktage.
     {{-- LATER Zahl konfigurierbar machen --}}
   </p>
-
-  <p class="my-2">ROLAND Aufgrund der großen Nachfrage können wir die Plätze leider nur eine Woche verbindlich für Sie reservieren.</p>
-
-  <p class="my-2">ROLAND Sollte die Anzahlung nicht erfolgen, werden die Plätze automatisch wieder vom System freigegeben.</p>
 
   <p class="my-2">Vielen Dank für ihr Verständnis.</p>
 

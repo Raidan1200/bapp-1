@@ -17,7 +17,7 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->string('product_name');
             $table->unsignedInteger('quantity');
-            $table->unsignedInteger('unit_price');
+            $table->integer('unit_price');
             $table->unsignedFloat('vat');
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

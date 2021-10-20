@@ -21,7 +21,7 @@ class CreateBookingsTable extends Migration
 
             $table->string('package_name');
             $table->unsignedInteger('quantity');
-            $table->unsignedInteger('unit_price');
+            $table->integer('unit_price');
             $table->unsignedFloat('vat');
             $table->unsignedFloat('deposit');
             $table->boolean('is_flat');

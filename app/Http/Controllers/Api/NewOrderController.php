@@ -62,6 +62,10 @@ abstract class NewOrderController extends Controller
         Mail::to($order->customer->email)
             ->send(new DepositEmail($order, $invoice));
 
+        $order->update([
+            'deposit_mail_at' => now(),
+        ]);
+
         return $order;
     }
 
