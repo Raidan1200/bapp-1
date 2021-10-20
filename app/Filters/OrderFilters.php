@@ -44,6 +44,7 @@ class OrderFilters extends QueryFilter
             ->whereBetween(
                 'created_at',
                 [now()->startOfDay()->subDays(1), now()]
-            );
+            )
+            ->orderBy('created_at', 'desc');
     }
 }
