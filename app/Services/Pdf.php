@@ -277,12 +277,17 @@ class Pdf
         $this->pdf->write(5, "Gesamt Brutto");
         $this->pdf->setX(167);
 
+
         if ($this->invoice->type === 'deposit') {
             $grossTotal = $order->deposit_amount;
+
         } elseif ($this->invoice->type === 'interim') {
-            $grossTotal = $order->deposit_paid_at
-                ? $order->interim_amount
-                : $order->grossTotal;
+            $grossTotal = collect($order->bookings)->sum('grossTotal');
+
+            if ($order->deposit_paid_at) {
+                $grossTotal -= $order->deposit_amount;
+            }
+
         } elseif ($this->invoice->type === 'final') {
             $grossTotal = $order->grossTotal;
 
@@ -293,6 +298,7 @@ class Pdf
             if ($order->interim_paid_at) {
                 $grossTotal -= $order->interim_amount;
             }
+
         } elseif ($this->invoice->type === 'cancelled') {
             //
         }

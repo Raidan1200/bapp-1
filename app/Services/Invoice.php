@@ -135,7 +135,7 @@ class Invoice
 
                 $this->text = [
                     'Bitte überweisen Sie den Betrag von ' . money($grossTotal) . ' Euro bis zum ' .
-                    ($this->final_invoice_at ?: now())->addDays($grace_days)->format('d.m.Y') .
+                    ($this->order->final_invoice_at ?: now())->addDays($grace_days)->format('d.m.Y') .
                     ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
                     ,
                 ];
