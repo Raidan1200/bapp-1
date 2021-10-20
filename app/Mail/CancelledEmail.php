@@ -23,7 +23,7 @@ class CancelledEmail extends Mailable
     {
         return $this
             ->from($this->order->venue->email)
-            ->subject('Stornierung von ' . $this->order->venue->name)
+            ->subject('Stornierung der Buchung von ' . $this->order->venue->name)
             ->view('emails.cancelled');
     }
 }

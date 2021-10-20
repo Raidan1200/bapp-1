@@ -94,16 +94,33 @@
               {{-- LATER: Find a more elegant solution ... please :) --}}
               <option value="fresh"
                 {{ (in_array($order->state, ['deposit_paid', 'interim_paid', 'final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
-              >Nicht bestätigt</option>
+              >
+                Nicht bestätigt
+              </option>
               <option value="deposit_paid"
                 {{ (in_array($order->state, ['interim_paid', 'final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
-              >Anzahlung eingegangen</option>
+              >
+                Anzahlung eingegangen
+                @if ($this->order->deposit_paid_at)
+                  &#10003;
+                @endif
+              </option>
               <option value="interim_paid"
                 {{ (in_array($order->state, ['final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
-              >Zwischenrechnung bezahlt</option>
+              >
+                Abschlussrechnung bezahlt
+                @if ($this->order->interim_paid_at)
+                  &#10003;
+                @endif
+              </option>
               <option value="final_paid"
-                {{ (in_array($order->state, ['cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
-              >Schlussrechnung bezahlt</option>
+                {{ $this->order->interim_is_final || (in_array($order->state, ['cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
+              >
+                Gesamtrechnung bezahlt
+                @if ($this->order->final_paid_at)
+                  &#10003;
+                @endif
+              </option>
               <option value="cancelled">Storniert</option>
             </select>
           @else
@@ -181,20 +198,20 @@
             >
               Anzahlung
             </div>
-            @unless ($order->interim_is_final)
-              <div
-                wire:click="makeInvoice('interim')"
-                class="m-2 cursor-pointer"
-              >
-                Zwischen
-              </div>
-            @endunless
             <div
-              wire:click="makeInvoice('final')"
+              wire:click="makeInvoice('interim')"
               class="m-2 cursor-pointer"
             >
               Abschluss
             </div>
+            @unless ($order->interim_is_final)
+              <div
+                wire:click="makeInvoice('final')"
+                class="m-2 cursor-pointer"
+              >
+                Gesamt
+              </div>
+            @endunless
             <div
               wire:click="makeInvoice('cancelled')"
               class="m-2 cursor-pointer"
@@ -230,7 +247,7 @@
                 wire:click="sendEmail('interim')"
                 class="m-2 cursor-pointer"
               >
-                Zwischen
+                Abschluss
                 @if ($order->interim_email_at)
                   <span>(resend)</span>
                 @endif
@@ -240,7 +257,7 @@
               wire:click="sendEmail('final')"
               class="m-2 cursor-pointer"
             >
-              Abschluss
+              Gesamt
               @if ($order->final_email_at)
                 <span>(resend)</span>
               @endif

@@ -23,7 +23,7 @@ class ConfirmationEmail extends Mailable
     {
         return $this
             ->from($this->order->venue->email)
-            ->subject('Bestätigung Ihrer Buchung für ' . $this->order->venue->name)
+            ->subject('Bestätigung der Buchung von ' . $this->order->venue->name)
             ->view('emails.confirmation');
     }
 }

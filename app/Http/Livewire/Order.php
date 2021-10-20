@@ -149,12 +149,35 @@ class Order extends Component
             $order->update($updatedFields);
         }
 
-        return $invoice->makePdf();
+        return response()->streamDownload(fn() => $invoice->makePdf());
     }
 
     public function sendEmail(string $type)
     {
-        InvoiceEmailRequested::dispatch($type, $this->order);
+        // InvoiceEmailRequested::dispatch($type, $this->order);
+
+        $order = OrderModel::findOrFail($this->order->id)->load('venue');
+
+        // TODO EMAIL: JSON error
+        // $invoice = (new Invoice)
+        //     ->ofType($type)
+        //     ->forOrder($order)
+        //     ->makePdf();
+
+        $email = Mail::to($this->order->customer->email);
+
+        $emailClass = '\\App\\Mail\\' . ucfirst($type) . 'Email';
+        $email_sent_field = $type . '_email_at';
+
+        // TODO: How do I handle mail-sent errors ... try catch?
+        $email->send(new $emailClass($this->order));
+
+        if ($type !== 'cancelled') {
+            $this->order->update([
+                $email_sent_field => Carbon::now()
+            ]);
+        }
+
     }
 
     public function stateHasChanged()

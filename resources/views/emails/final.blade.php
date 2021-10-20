@@ -1,8 +1,8 @@
-<h1>Abschlussrechnung</h1>
+<h1>Gesamtrechnung</h1>
 <pre>
 Hallo {{ $order->customer->first_name }},
 
-Hier ist ihre Schlussrechnung.
+Hier ist ihre Gesamtrechnung.
 
 @foreach ($order->bookings as $booking)
 - {{ $booking->quantity }} Mal {{ $booking->package_name }}

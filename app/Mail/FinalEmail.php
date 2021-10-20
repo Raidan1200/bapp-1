@@ -23,7 +23,7 @@ class FinalEmail extends Mailable
     {
         return $this
             ->from($this->order->venue->email)
-            ->subject('Schlussrechnung für ' . $this->order->venue->name)
+            ->subject('Gesamtrechnung für ' . $this->order->venue->name)
             ->view('emails.final');
     }
 }

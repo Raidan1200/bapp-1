@@ -14,7 +14,7 @@ class Pdf
         $this->pdf = new Fpdi();
         $this->invoice = $invoice;
 
-        $this->pdf->setTitle('TODO TITLE');
+        $this->pdf->setTitle($this->invoice->type . ' ' . $this->invoice->invoiceId);
         $this->pdf->SetAutoPageBreak(true, 5);
         $this->pdf->AddPage();
         $this->pdf->setLeftMargin(25);
@@ -297,7 +297,7 @@ class Pdf
 
         $this->pdf->write(5, money($grossTotal).' Euro');
 
-        $this->pdf->setFont("Arial","", 8);
+        $this->pdf->setFont("Arial","", 9);
 
         $this->pdf->ln(20);
 
@@ -305,7 +305,7 @@ class Pdf
 
         foreach ($this->invoice->text as $text) {
             $this->pdf->write(5, utf8_decode($text));
-            $this->pdf->ln();
+            $this->pdf->ln(8);
         }
         // TODO
         // $this->pdf->write(5, utf8_decode($this->invoice->text->getText('rechnung', 'pay_info')));

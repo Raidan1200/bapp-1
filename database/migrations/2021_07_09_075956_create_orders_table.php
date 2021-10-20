@@ -30,6 +30,7 @@ class CreateOrdersTable extends Migration
             $table->integer('deposit_amount')->nullable();  // LATER: nullable() ?
             $table->boolean('needs_check')->default(false);
             // Interim
+            // TODO TODO LATER: rename interim as installment or full
             $table->string('interim_invoice_id')->nullable();
             $table->datetime('interim_invoice_at')->nullable();
             $table->datetime('interim_email_at')->nullable();

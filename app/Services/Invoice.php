@@ -34,6 +34,7 @@ class Invoice
         $this->setDate();
         $this->setInvoiceId();
         $this->setSubject();
+        $this->setText();
 
         return $this;
     }
@@ -50,16 +51,7 @@ class Invoice
 
     public function makePdf()
     {
-        // Dynamic Data:
-        //   Betreff: Anzahlungsrechnung
-        //   Text: Bitte überweisen Sie
-        //     mit 2 Platzhaltern für Betrag und Datum
-
-        // TODO: put subject line
-
-        return response()->streamDownload(fn() =>
-            (new Pdf($this))->output()
-        );
+        return (new Pdf($this))->output();
     }
 
     protected function setDate()
@@ -78,53 +70,12 @@ class Invoice
 
     protected function setSubject()
     {
-        switch ($this->type) {
-            case 'deposit':
-                $this->subject = 'Anzahlungsrechnung';
-                break;
-            case 'interim':
-                $this->subject = 'Abschlussrechnung';
-                break;
-            case 'final':
-                $this->subject = 'Gesamtrechnung';
-                break;
-            case 'cancelled':
-                $this->subject = 'Stornorechnung';
-                break;
-            default:
-                $this->subject = 'Rechnung';
-        }
-    }
-
-    // BITTE BEACHTEN SIE: Der Geldeingang muss bis spätestens 7 Werktage nach Ihrer Reservierung erfolgt sein, spätere Eingänge
-    // werden nicht mehr berücksichtigt und die betreffende Bestellung wird automatisch storniert.
-    // Es gelten unser allgemeinen Geschäfts- und Vertragsbedingungen.
-
-    protected function setText()
-    {
-        $grace_days = 7;
-
-        switch ($this->type) {
-            case 'deposit':
-                $this->text[] =
-                    'Bitte überweisen Sie den Betrag von ' .
-                    money($this->order->deposit_amount) .
-                    ' Euro bis ' .
-                    $this->order->created_at->addDays($grace_days)->format('Y M.D.') .
-                    ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.';
-                break;
-            case 'interim':
-                $this->text = 'Abschlussrechnung';
-                break;
-            case 'final':
-                $this->text = 'Gesamtrechnung';
-                break;
-            case 'cancelled':
-                $this->text = 'Stornorechnung';
-                break;
-            default:
-                $this->text = 'Rechnung';
-        }
+        $this->subject = [
+            'deposit' => 'Anzahlungsrechnung',
+            'interim' => 'Abschlussrechnung',
+            'final' => 'Gesamtrechnung',
+            'cancelled' => 'Stornorechnung',
+        ][$this->type];
     }
 
     protected function setInvoiceId()
@@ -139,5 +90,47 @@ class Invoice
         }
 
         return $this;
+    }
+
+    protected function setText()
+    {
+        $grace_days = 7;
+
+        switch ($this->type) {
+            case 'deposit':
+                $this->text = [
+                    'Bitte überweisen Sie den Betrag von ' .
+                    money($this->order->deposit_amount) .
+                    ' Euro bis zum ' .
+                    $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
+                    ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
+                ,
+                    'BITTE BEACHTEN SIE: Der Geldeingang muss bis spätestens 7 Werktage nach Ihrer Reservierung erfolgt sein, spätere Eingänge werden nicht mehr berücksichtigt und die betreffende Bestellung wird automatisch storniert.'
+                ];
+                break;
+            case 'interim':
+                $this->text = ['Abschlussrechnung'];
+                break;
+            case 'final':
+                $this->text = ['Gesamtrechnung'];
+                break;
+            case 'cancelled':
+                $this->text = ['Stornorechnung'];
+                break;
+        }
+
+        if (
+            $this->order->cash_payment &&
+            ! in_array($this->order->type, ['deposit', 'cancelled']) &&
+            (
+                $this->type === 'final' && $this->order->final_paid_at
+                ||
+                $this->type === 'interim' && $this->order->interim_paid_at && $this->order->interim_is_final
+            )
+        ) {
+            $this->text[] = 'Die Rechnung wurde am Veranstaltungstag in Bar beglichen!';
+        }
+
+        $this->text[] = 'Es gelten unser allgemeinen Geschäfts- und Vertragsbedingungen.';
     }
 }

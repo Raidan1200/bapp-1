@@ -117,8 +117,6 @@ class Bookings extends Component
             }
         }
 
-        // dd($newBookings);
-
         $this->editing = false;
         $this->bookings = $newBookings;
         $this->data = $newBookings;

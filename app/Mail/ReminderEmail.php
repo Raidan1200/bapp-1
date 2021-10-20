@@ -22,8 +22,8 @@ class ReminderEmail extends Mailable
     public function build()
     {
         return $this
-        ->from($this->order->venue->email)
-        ->subject('Zahlungserinnerung für ' . $this->order->venue->name)
-        ->view('emails.reminder');
+            ->from($this->order->venue->email)
+            ->subject('Zahlungserinnerung für ' . $this->order->venue->name)
+            ->view('emails.reminder');
     }
 }
