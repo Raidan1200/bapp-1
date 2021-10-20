@@ -280,7 +280,9 @@ class Pdf
         if ($this->invoice->type === 'deposit') {
             $grossTotal = $order->deposit_amount;
         } elseif ($this->invoice->type === 'interim') {
-            $grossTotal = $order->interim_amount;
+            $grossTotal = $order->deposit_paid_at
+                ? $order->interim_amount
+                : $order->grossTotal;
         } elseif ($this->invoice->type === 'final') {
             $grossTotal = $order->grossTotal;
 
