@@ -55,15 +55,18 @@ abstract class NewOrderController extends Controller
 
         $invoice = (new Invoice)
             ->ofType('deposit')
-            ->forOrder($order)
-            ->asString()
-            ->makePdf();
+            ->forOrder($order);
+
+        // TODO REPEATED from Livewire/order ... this is BAD
+        if ($updatedFields = $invoice->updatedFields()) {
+            $order->update($updatedFields);
+        }
 
         Mail::to($order->customer->email)
-            ->send(new DepositEmail($order, $invoice));
+            ->send(new DepositEmail($order, $invoice->asString()->makePdf()));
 
         $order->update([
-            'deposit_mail_at' => now(),
+            'deposit_email_at' => now(),
         ]);
 
         return $order;

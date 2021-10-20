@@ -11,7 +11,7 @@
 
   <p class="my-2">
     Sollte sich noch etwas bezüglich der Personenanzahl ändern,
-    bitten wir sie uns dies bis spätestens 14 Tage vor Veranstaltung schriftlich mitzuteilen.
+    bitten wir Sie uns dies bis spätestens 14 Tage vor Veranstaltung schriftlich mitzuteilen.
   </p>
 
 </x-email-layout>

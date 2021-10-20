@@ -225,6 +225,13 @@ class Order extends Component
             if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
                 $this->sendConfirmationEmail();
             }
+
+            if ($this->order->state === 'deposit_paid' && $this->selectedState === 'interim_paid') {
+                $this->order->update([
+                    'interim_amount' => 123, // XXXXXXXXXXXXXX
+                ]);
+            }
+
             $this->updatePaymentChecks();
         }
     }

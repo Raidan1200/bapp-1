@@ -176,6 +176,7 @@ class Pdf
             // $this->pdf->write(6, utf8_decode('ART NR?')); // LATER
             // $this->pdf->setX(50);
             $package_name = $booking->package_name;
+
             if ($this->invoice->type === 'deposit') {
                 $package_name .= " ({$booking->deposit}%)";
             }
@@ -201,7 +202,7 @@ class Pdf
             $this->pdf->write(6, utf8_decode(money($gross_total).' Euro'));
         }
 
-        if ($this->invoice->type === 'final') {
+        if (in_array($this->invoice->type, ['interim', 'final'])) {
             foreach ($order->items as $item) {
                 $this->pdf->ln();
                 $this->pdf->write(6, $i++);
@@ -231,7 +232,7 @@ class Pdf
             $this->pdf->write(6, utf8_decode(money($order->deposit_amount * -1) .' Euro'));
         }
 
-        if ($this->invoice->type === 'final' && $order->interim_paid_at) {
+        if ($this->invoice->type === 'interim' && ! $order->interim_paid_at) {
             $this->pdf->ln();
             $this->pdf->write(6, $i++);
             $this->pdf->setX(33);
@@ -252,7 +253,7 @@ class Pdf
         if ($this->invoice->type === 'deposit') {
             $netTotal = $order->netDepositTotal;
         } elseif ($this->invoice->type === 'interim') {
-            $netTotal = collect($order->bookings)->sum('netTotal');
+            $netTotal = $order->netTotal;
         } elseif ($this->invoice->type === 'final') {
             $netTotal = $order->netTotal;
         } elseif ($this->invoice->type === 'cancelled') {
@@ -284,7 +285,7 @@ class Pdf
             $grossTotal = $order->deposit_amount;
 
         } elseif ($this->invoice->type === 'interim') {
-            $grossTotal = collect($order->bookings)->sum('grossTotal');
+            $grossTotal = $order->grossTotal;
 
             if ($order->deposit_paid_at) {
                 $grossTotal -= $order->deposit_amount;
