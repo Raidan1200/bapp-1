@@ -182,7 +182,7 @@ class Pdf
 
             $this->pdf->write(6, utf8_decode($package_name));
             $this->pdf->setX(96);
-            $this->pdf->write(6, utf8_decode($booking->starts_at->format('d.m.Y H:i').'-'.$booking->ends_at->format('H:i')));
+            $this->pdf->write(6, utf8_decode($booking->starts_at->timezone('Europe/Berlin')->format('d.m.Y H:i').'-'.$booking->ends_at->timezone('Europe/Berlin')->format('H:i')));
             $this->pdf->setX(128);
             $this->pdf->write(6, utf8_decode($booking->quantity));
             $this->pdf->setX(141);
