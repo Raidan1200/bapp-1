@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-email-layout>
   <h1 class="text-2xl">Ihre Abschlussrechnung</h1>
 
   <p class="my-2">Vielen Dank für ihr Buchung bei {{ $order->venue->name }}.</p>
@@ -16,4 +16,4 @@
 
   <p class="my-2">Vielen Dank für ihr Verständnis.</p>
 
-</x-app-layout>
+</x-email-layout>

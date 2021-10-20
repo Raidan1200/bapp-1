@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class PdfLayout extends Component
+class EmailLayout extends Component
 {
     /**
      * Get the view / contents that represents the component.
@@ -13,6 +13,6 @@ class PdfLayout extends Component
      */
     public function render()
     {
-        return view('layouts.pdf');
+        return view('layouts.email');
     }
 }

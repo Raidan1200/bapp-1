@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-email-layout>
   <h1 class="text-2xl">Ihre Anzahlungsbestätigung</h1>
 
   <p class="my-2">Vielen Dank für ihr Buchung bei {{ $order->venue->name }}.</p>
@@ -10,4 +10,4 @@
     bitten wir sie uns dies bis spätestens 14 Tage vor Veranstaltung schriftlich mitzuteilen.
   </p>
 
-</x-app-layout>
+</x-email-layout>

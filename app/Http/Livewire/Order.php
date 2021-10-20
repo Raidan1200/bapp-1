@@ -25,12 +25,12 @@ class Order extends Component
     public $dirty = false;
 
     protected $colors = [
-        'fresh' => 'border-red-500',
+        'fresh' => 'border-gray-400',
         'deposit_paid' => 'border-yellow-500',
-        'interim_paid' => 'border-blue-500',
-        'final_paid' => 'border-green-500',
+        'interim_paid' => 'border-green-500',
+        'final_paid' => 'border-blue-500',
         'cancelled' => 'border-gray-400',
-        'not_paid' => 'border-gray-300',
+        'not_paid' => 'border-gray-400',
     ];
 
     public $rules = [
@@ -93,6 +93,13 @@ class Order extends Component
 
     public function getColorProperty() : string
     {
+        // WENN Abschluss oder Gesamtemail gesendet wurde
+        //  UND entsprechend ABSCHLUSS bzw GESAMT nicht auf BEZAHLT steht
+        //  DANN nach VENUE_CONFIG Tagen Farbe auf ULTRAVIOLETT ändern
+
+        // WENN interim_is_final UND interim_paid UND event vorbei
+        //   DANN BLAU
+
         return $this->colors[$this->order->state] ?? '';
     }
 

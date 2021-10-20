@@ -7,11 +7,14 @@ use App\Models\Order;
 use App\Models\Venue;
 use App\Models\Package;
 use App\Models\Customer;
+use App\Services\Invoice;
+use App\Mail\DepositEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ZauberRequest;
+use Illuminate\Support\Facades\Mail;
 use App\Events\InvoiceEmailRequested;
 
 abstract class NewOrderController extends Controller
@@ -48,9 +51,16 @@ abstract class NewOrderController extends Controller
     {
         $order = $this->store($request->validated(), $venue);
 
-        $order->load(['customer', 'venue']);
+        $order = Order::findOrFail($order->id)->load('venue');
 
-        InvoiceEmailRequested::dispatch('deposit', $order->load('customer'));
+        $invoice = (new Invoice)
+            ->ofType('deposit')
+            ->forOrder($order)
+            ->asString()
+            ->makePdf();
+
+        Mail::to($order->customer->email)
+            ->send(new DepositEmail($order, $invoice));
 
         return $order;
     }
