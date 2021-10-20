@@ -99,7 +99,7 @@ class Invoice
         switch ($this->type) {
             case 'deposit':
                 $this->text = [
-                    'Bitte überweisen Sie den Betrag von ' . money($this->order->deposit_amount) . ' Euro bis zum ' .
+                    'aitte überweisen Sie den Betrag von ' . money($this->order->deposit_amount) . ' Euro bis zum ' .
                     $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
                     ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
                     ,
@@ -108,15 +108,26 @@ class Invoice
                 break;
             case 'interim':
                 $this->text = [
-                    'Bitte überweisen Sie den Betrag von ' . money($this->order->interim_amount) . ' Euro bis zum ' .
+                    'Bitte überweisen Sie den Betrag von ' . money($this->order->desposit_paid_at ? $this->order->interim_amount : collect($this->order->bookings)->sum('grossTotal')) . ' Euro bis zum ' .
                     $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
                     ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
                     ,
                 ];
                 break;
             case 'final':
+                // TODO TODO copied from Pdf.php
+                $grossTotal = $this->order->grossTotal;
+
+                if ($this->order->deposit_paid_at) {
+                    $grossTotal -= $this->order->deposit_amount;
+                }
+
+                if ($this->order->interim_paid_at) {
+                    $grossTotal -= $this->order->interim_amount;
+                }
+
                 $this->text = [
-                    'Bitte überweisen Sie den Betrag von ' . money($this->order->deposit_amount) . ' Euro bis zum ' .
+                    'Bitte überweisen Sie den Betrag von ' . money($grossTotal) . ' Euro bis zum ' .
                     $this->order->created_at->addDays($grace_days)->format('d.m.Y') .
                     ' unter Angabe der Rechnungsnummer auf das genannte Konto der Ostsächsische Sparkasse Dresden.'
                     ,

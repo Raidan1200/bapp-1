@@ -242,7 +242,6 @@
                 <span>(resend)</span>
               @endif
             </div>
-            @unless ($order->interim_is_final)
               <div
                 wire:click="sendEmail('interim')"
                 class="m-2 cursor-pointer"
@@ -252,16 +251,17 @@
                   <span>(resend)</span>
                 @endif
               </div>
+            @unless ($order->interim_is_final)
+              <div
+                wire:click="sendEmail('final')"
+                class="m-2 cursor-pointer"
+              >
+                Gesamt
+                @if ($order->final_email_at)
+                  <span>(resend)</span>
+                @endif
+              </div>
             @endunless
-            <div
-              wire:click="sendEmail('final')"
-              class="m-2 cursor-pointer"
-            >
-              Gesamt
-              @if ($order->final_email_at)
-                <span>(resend)</span>
-              @endif
-            </div>
             <div
               wire:click="sendEmail('cancelled')"
               class="m-2 cursor-pointer"
