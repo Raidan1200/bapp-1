@@ -37,6 +37,7 @@ class Invoice
     public function forOrder(Order $order)
     {
         $this->order = $order;
+
         $this->setDate();
         $this->setInvoiceId();
         $this->setSubject();
@@ -69,27 +70,50 @@ class Invoice
 
     public function makePdf()
     {
-        $file_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'.pdf';
+        if ($this->type !== 'cancelled') {
+            // Generate PDF file if it doesn't exist already
+            // Regenerate PDF file if the corresponding invoice hasn't been paid yet
+            $file_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'.pdf';
+            $cancelled_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'-S.pdf';
 
-        // Generate PDF file if it doesn't exist already
-        // Regenerate PDF file if the corresponding invoice hasn't been paid yet
-        if (
-            Storage::disk('public')->missing($file_path) ||
-            (
-                $this->type === 'deposit' && $this->order->deposit_paid_at === null ||
-                $this->type === 'interim' && $this->order->interim_paid_at === null ||
-                $this->type === 'final' && $this->order->final_paid_at === null
-            )
-        ) {
-            Storage::disk('public')->put($file_path, (new Pdf($this))->output('S'));
+            if (
+                Storage::disk('public')->missing($file_path) ||
+                (
+                    $this->type === 'deposit' && $this->order->deposit_paid_at === null ||
+                    $this->type === 'interim' && $this->order->interim_paid_at === null ||
+                    $this->type === 'final' && $this->order->final_paid_at === null
+                )
+            ) {
+                Storage::disk('public')->put($file_path, (new Pdf($this))->output('S'));
+                Storage::disk('public')->put($cancelled_path, (new Pdf(
+                    $this->setSubject('cancelled')->setInvoiceId($this->invoiceId.'-S')
+                ))->output('S'));
+            }
         }
 
+        if ($this->type === 'cancelled') {
+            if ($this->order->final_invoice_at) {
+                $this->invoiceId = $this->order->final_invoice_id;
+            } elseif ($this->order->interim_invoice_at) {
+                $this->invoiceId = $this->order->interim_invoice_id;
+            } elseif ($this->order->deposit_invoice_at) {
+                $this->invoiceId = $this->order->deposit_invoice_id;
+            }
+        }
+
+        $file_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'.pdf';
+        $cancelled_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'-S.pdf';
+
         if ($this->dest === 'I') {
-            return Storage::disk('public')->download($file_path);
+            return Storage::disk('public')->download(
+                $this->type === 'cancelled' ? $cancelled_path : $file_path
+            );
         }
 
         if ($this->dest === 'S') {
-            return Storage::disk('public')->get($file_path);
+            return Storage::disk('public')->get(
+                $this->type === 'cancelled' ? $cancelled_path : $file_path
+            );
         }
     }
 
@@ -107,18 +131,25 @@ class Invoice
         return $this;
     }
 
-    protected function setSubject()
+    protected function setSubject($type = null)
     {
         $this->subject = [
             'deposit' => 'Anzahlungsrechnung',
             'interim' => 'Abschlussrechnung',
             'final' => 'Gesamtrechnung',
             'cancelled' => 'Stornorechnung',
-        ][$this->type];
+        ][$type ?? $this->type];
+
+        return $this;
     }
 
-    protected function setInvoiceId()
+    protected function setInvoiceId($id = null)
     {
+        if ($id) {
+            $this->invoiceId = $id;
+            return $this;
+        }
+
         $id_field = $this->type . '_invoice_id';
 
         $this->invoiceId = $this->order->$id_field;

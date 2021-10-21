@@ -258,8 +258,6 @@ class Pdf
             $netTotal = $order->netTotal;
         } elseif ($this->invoice->type === 'final') {
             $netTotal = $order->netTotal;
-        } elseif ($this->invoice->type === 'cancelled') {
-            $netTotal = 0;
         }
 
         $this->pdf->write(5, money($netTotal).' Euro');
@@ -302,9 +300,6 @@ class Pdf
             if ($order->interim_paid_at) {
                 $grossTotal -= $order->interim_amount;
             }
-
-        } elseif ($this->invoice->type === 'cancelled') {
-            //
         }
 
         $this->pdf->write(5, money($grossTotal).' Euro');

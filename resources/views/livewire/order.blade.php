@@ -198,6 +198,9 @@
               class="m-2 cursor-pointer"
             >
               Anzahlung
+              @if ($order->deposit_invoice_at)
+                <span>&#10003;</span>
+              @endif
             </div>
             @if ($order->deposit_paid_at)
               <div
@@ -205,6 +208,9 @@
                 class="m-2 cursor-pointer"
               >
                 Abschluss
+                @if ($order->interim_invoice_at)
+                  <span>&#10003;</span>
+                @endif
               </div>
             @endif
             @if (! $order->interim_is_final)
@@ -213,17 +219,18 @@
                 class="m-2 cursor-pointer"
               >
                 Gesamt
+                @if ($order->final_invoice_at)
+                  <span>&#10003;</span>
+                @endif
               </div>
             @endif
             {{-- TODO TODO --}}
-            @if (false)
             <div
               wire:click="makeInvoice('cancelled')"
               class="m-2 cursor-pointer"
             >
               Storno
             </div>
-            @endif
           </x-slot>
         </x-dropdown>
         <x-dropdown align="left">
@@ -245,7 +252,7 @@
             >
               Anzahlung
               @if ($order->deposit_email_at)
-                <span>(resend)</span>
+                <span>&#10003;</span>
               @endif
             </div>
               <div
@@ -254,7 +261,7 @@
               >
                 Abschluss
                 @if ($order->interim_email_at)
-                  <span>(resend)</span>
+                  <span>&#10003;</span>
                 @endif
               </div>
             @unless ($order->interim_is_final)
@@ -264,7 +271,7 @@
               >
                 Gesamt
                 @if ($order->final_email_at)
-                  <span>(resend)</span>
+                  <span>&#10003;</span>
                 @endif
               </div>
             @endunless
@@ -273,8 +280,8 @@
               class="m-2 cursor-pointer"
             >
               Stornierung
-              @if ($order->cancelled_email_at)
-                <span>(resend)</span>
+              @if ($order->cancelled_at)
+                <span>&#10003;</span>
               @endif
             </div>
           </x-slot>
