@@ -30,7 +30,7 @@ class CreateVenueRequest extends FormRequest
             'invoice_blocks' => 'nullable|json',
             'reminder_delay' => 'required|integer|min:0',
             'check_delay' => 'required|integer|min:0|gte:reminder_delay',
-            'cancel_delay' => 'required|integer|min:0|gte:check_delay',
+            'not_paid_delay' => 'required|integer|min:0|gte:check_delay',
             'payment_delay' => 'required|integer|min:0|gte:check_delay',
             'invoice_id_format' => 'required'
         ];

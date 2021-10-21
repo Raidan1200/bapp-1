@@ -32,7 +32,7 @@ class VenueController extends Controller
             'delays' => [
                 'reminder_delay' => $validated['reminder_delay'],
                 'check_delay' => $validated['check_delay'],
-                'cancel_delay' => $validated['cancel_delay'],
+                'not_paid_delay' => $validated['not_paid_delay'],
                 'payment_delay' => $validated['payment_delay'],
             ]
         ];
@@ -69,7 +69,7 @@ class VenueController extends Controller
             'delays' => [
                 'reminder_delay' => $validated['reminder_delay'],
                 'check_delay' => $validated['check_delay'],
-                'cancel_delay' => $validated['cancel_delay'],
+                'not_paid_delay' => $validated['not_paid_delay'],
                 'payment_delay' => $validated['payment_delay'],
             ]
         ];

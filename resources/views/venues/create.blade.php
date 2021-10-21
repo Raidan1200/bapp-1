@@ -54,8 +54,8 @@
 
         {{-- HIDE --}}
         <x-form-field>
-          <x-label for="cancel_delay">Tage bis Stornierung</x-label>
-          <x-input type="number" min="0" name="cancel_delay" class="w-full" value="{{ old('cancel_delay') ?? $venue->config['delays']['cancel_delay'] ?? '' }}"  id="cancel_delay" />
+          <x-label for="not_paid_delay">Tage bis Unbezahlt</x-label>
+          <x-input type="number" min="0" name="not_paid_delay" class="w-full" value="{{ old('not_paid_delay') ?? $venue->config['delays']['not_paid_delay'] ?? '' }}"  id="not_paid_delay" />
         </x-form-field>
 
         {{-- HIDE --}}
