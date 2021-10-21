@@ -20,7 +20,7 @@ class Pdf
         $this->pdf->AddPage();
         $this->pdf->setLeftMargin(25);
 
-        $path = $this->invoice->order->venue->slug . '/logo.png';
+        $path = $this->invoice->order->venue->slug.'/images/logo.png';
         $this->pdf->image(Storage::disk('public')->path($path), 141, 30, 39, 13);
 
         $this->pdf->setTextColor(0,0,0);
@@ -188,13 +188,15 @@ class Pdf
             $this->pdf->write(6, utf8_decode($booking->quantity));
             $this->pdf->setX(141);
 
-            $unit_price = ($this->invoice->type === 'deposit')
+            // Einzelpreis brutto
+            $grossPrice = ($this->invoice->type === 'deposit')
                 ? $booking->grossDeposit
-                : $booking->unit_price;
+                : $booking->grossPrice;
 
-            $this->pdf->write(6, utf8_decode(money($unit_price).' Euro'));
+            $this->pdf->write(6, utf8_decode(money($grossPrice).' Euro'));
             $this->pdf->setX(167);
 
+            // Gesamtpreis brutto
             $gross_total = ($this->invoice->type === 'deposit')
                 ? $booking->grossDepositTotal
                 : $booking->grossTotal;
@@ -232,7 +234,7 @@ class Pdf
             $this->pdf->write(6, utf8_decode(money($order->deposit_amount * -1) .' Euro'));
         }
 
-        if ($this->invoice->type === 'interim' && ! $order->interim_paid_at) {
+        if ($this->invoice->type === 'final' && $order->interim_paid_at) {
             $this->pdf->ln();
             $this->pdf->write(6, $i++);
             $this->pdf->setX(33);
@@ -279,7 +281,6 @@ class Pdf
         $this->pdf->setX(141);
         $this->pdf->write(5, "Gesamt Brutto");
         $this->pdf->setX(167);
-
 
         if ($this->invoice->type === 'deposit') {
             $grossTotal = $order->deposit_amount;

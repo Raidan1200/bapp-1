@@ -173,9 +173,7 @@ class Order extends Component
             $order->update($updatedFields);
         }
 
-        return response()->streamDownload(fn() =>
-            $invoice->asStream()->makePdf()
-        );
+        return $invoice->asStream()->makePdf();
     }
 
     public function sendEmail(string $type)
@@ -223,13 +221,20 @@ class Order extends Component
         if ($this->stateWillChange()) {
             $this->logStateChange();
             if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
+                // TODO TODO $this->storeInvoice('deposit');
                 $this->sendConfirmationEmail();
             }
 
             if ($this->order->state === 'deposit_paid' && $this->selectedState === 'interim_paid') {
-                $this->order->update([
-                    'interim_amount' => 123, // XXXXXXXXXXXXXX
-                ]);
+                // TODO TODO $this->storeInvoice('interim');
+            }
+
+            if ($this->selectedState === 'final_paid') {
+                // TODO TODO $this->storeInvoice('final');
+            }
+
+            if ($this->selectedState === 'cancelled') {
+                // TODO TODO $this->storeInvoice('cancelled');
             }
 
             $this->updatePaymentChecks();
@@ -254,10 +259,13 @@ class Order extends Component
 
         if ($this->order->deposit_paid_at === null) {
             $bookingData['deposit_amount'] = $this->order->deposit;
-            $bookingData['interim_amount'] = $this->order->grossTotal - $this->order->deposit;
-        } elseif ($this->order->deposit_paid_at && $this->order->interim_paid_at === null) {
-            $bookingData['interim_amount'] = $this->order->grossTotal - $this->order->deposit;
-        } elseif ($this->order->deposit_paid_at && $this->order->interim_paid_at) {
+        }
+
+        if ($this->order->interim_paid_at === null) {
+            $bookingData['interim_amount'] = $this->order->grossTotal - $this->order->deposit_amount;
+        }
+
+        if ($this->order->deposit_paid_at && $this->order->interim_paid_at) {
             $bookingData['interim_is_final'] = false;
         }
 

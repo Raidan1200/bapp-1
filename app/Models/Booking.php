@@ -15,6 +15,7 @@ class Booking extends Model
     protected $fillable = [
         'starts_at',
         'ends_at',
+        'interval',
         'package_name',
         'quantity',
         'unit_price',
@@ -50,10 +51,21 @@ class Booking extends Model
         return $this->belongsTo(package::class);
     }
 
+    public function getGrossPriceAttribute()
+    {
+        $slots = 1;
+
+        if ($this->interval) {
+            $minutes = $this->starts_at->diffInMinutes($this->ends_at);
+            $slots = $minutes / $this->interval;
+        }
+
+        return $this->unit_price * $slots;
+    }
+
     public function getGrossTotalAttribute()
     {
-        // TODO: IF HAS RATE HOURLY
-        return $this->unit_price * $this->quantity;
+        return $this->grossPrice * $this->quantity;
     }
 
     public function getNetTotalAttribute()
@@ -63,8 +75,7 @@ class Booking extends Model
 
     public function getGrossDepositAttribute()
     {
-        // TODO: IF HAS RATE HOURLY
-        return $this->unit_price * $this->deposit / 100;
+        return $this->grossPrice * $this->deposit / 100;
     }
 
     public function getGrossDepositTotalAttribute()

@@ -122,6 +122,7 @@ abstract class NewOrderController extends Controller
 
         foreach ($bookingData as $booking) {
             $package = Package::findOrFail($booking['package_id']);
+            $booking['interval'] = $package->interval;
             $booking['package_name'] = $package->name;
             $booking['unit_price'] = $package->unit_price;
             $booking['vat'] = $package->vat;
@@ -152,6 +153,7 @@ abstract class NewOrderController extends Controller
             'id', 'name', 'slug',
             'unit_price', 'vat', 'deposit', 'is_flat',
             'price_flat', 'vat_flat', 'deposit_flat',
+            'interval',
             'venue_id'
         );
     }

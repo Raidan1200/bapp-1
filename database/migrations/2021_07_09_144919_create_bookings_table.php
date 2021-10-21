@@ -18,6 +18,7 @@ class CreateBookingsTable extends Migration
 
             $table->datetime('starts_at')->nullable();
             $table->datetime('ends_at')->nullable();
+            $table->unsignedInteger('interval')->nullable();
 
             $table->string('package_name');
             $table->unsignedInteger('quantity');

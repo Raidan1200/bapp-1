@@ -67,6 +67,7 @@ class OrderSeeder extends Seeder
                     'unit_price' => $combo[1]->unit_price,
                     'starts_at' => $start,
                     'ends_at' => $end = (new Carbon($start))->addHours(rand(1, 3)),
+                    'interval' => $combo[1]->interval,
                     'order_id' => $order->id,
                     'quantity' => rand(1, round($combo[0]->capacity / 3)),
                 ]);

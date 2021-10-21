@@ -135,7 +135,14 @@
             </td>
             @can('modify bookings')
               <td class="text-right">
-                {{ money($booking['unit_price']) }}
+                {{-- TODO!!! Livewire sucks!!! $booking is not a Model but an Array so all Accessors are BOOM --}}
+                {{
+                  money(
+                    $booking['interval']
+                      ? $booking['unit_price'] * (new Carbon\Carbon($booking['starts_at']))->diffInMinutes(new Carbon\Carbon($booking['ends_at'])) / $booking['interval']
+                      : $booking['unit_price']
+                  )
+                }}
               </td>
               <td class="text-right">
                 {{ $booking['vat'] }}%
@@ -144,7 +151,14 @@
                 {{ $booking['deposit'] }}%
               </td>
               <td class="text-right">
-                {{ money($booking['quantity'] * $booking['unit_price']) }}
+                {{-- TODO!!! Livewire sucks!!! $booking is not a Model but an Array so all Accessors are BOOM --}}
+                {{
+                  money(
+                    $booking['interval']
+                      ? $booking['unit_price'] * (new Carbon\Carbon($booking['starts_at']))->diffInMinutes(new Carbon\Carbon($booking['ends_at'])) / $booking['interval'] * $booking['quantity']
+                      : $booking['unit_price'] * $booking['quantity']
+                  )
+                }}
               </td>
             @endcan
           </tr>

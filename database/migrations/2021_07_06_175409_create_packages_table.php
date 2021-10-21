@@ -29,6 +29,8 @@ class CreatePackagesTable extends Migration
             $table->time('opens_at');
             $table->time('closes_at');
 
+            $table->unsignedInteger('interval')->nullable();
+
             $table->unsignedInteger('min_occupancy')->default(0);
 
             // All prices are after VAT

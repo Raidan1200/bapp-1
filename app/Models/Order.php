@@ -109,10 +109,10 @@ class Order extends Model
     public function getDepositAttribute()
     {
         $deposit = $this->bookings->reduce(function ($deposit, $booking) {
-            return $deposit += ($booking->quantity * $booking->unit_price) * ($booking->deposit / 100);
+            return $deposit += $booking->grossTotal * ($booking->deposit / 100);
         });
 
-        return round($deposit);
+        return $deposit;
     }
 
     public function getNetTotalAttribute()
@@ -127,11 +127,11 @@ class Order extends Model
 
     protected function getTotal(string $type)
     {
-        return round(
+        return
             collect($this->bookings)->sum($type)
             +
             collect($this->items)->sum($type)
-        );
+        ;
     }
 
     public function getNetDepositTotalAttribute()

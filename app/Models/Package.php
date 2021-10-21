@@ -22,6 +22,7 @@ class Package extends Model
         'ends_at',
         'opens_at',
         'closes_at',
+        'interval',
         'min_occupancy',
         'unit_price',
         'vat',

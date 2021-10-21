@@ -106,7 +106,7 @@
                 @endif
               </option>
               <option value="interim_paid"
-                {{ (in_array($order->state, ['final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') ? 'disabled' : '' }}
+                {{ (in_array($order->state, ['final_paid', 'cancelled'])) && auth()->user()->cannot('admin orders') || ! $this->order->deposit_paid_at ? 'disabled' : '' }}
               >
                 Abschlussrechnung bezahlt
                 @if ($this->order->interim_paid_at)
@@ -199,20 +199,22 @@
             >
               Anzahlung
             </div>
-            <div
-              wire:click="makeInvoice('interim')"
-              class="m-2 cursor-pointer"
-            >
-              Abschluss
-            </div>
-            @unless ($order->interim_is_final)
+            @if ($order->deposit_paid_at)
+              <div
+                wire:click="makeInvoice('interim')"
+                class="m-2 cursor-pointer"
+              >
+                Abschluss
+              </div>
+            @endif
+            @if (! $order->interim_is_final)
               <div
                 wire:click="makeInvoice('final')"
                 class="m-2 cursor-pointer"
               >
                 Gesamt
               </div>
-            @endunless
+            @endif
             <div
               wire:click="makeInvoice('cancelled')"
               class="m-2 cursor-pointer"

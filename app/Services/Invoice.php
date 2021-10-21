@@ -3,8 +3,9 @@
 namespace App\Services;
 
 use App\Models\Order;
-use Illuminate\Support\Carbon;
 use App\Services\Pdf;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class Invoice
 {
@@ -68,7 +69,19 @@ class Invoice
 
     public function makePdf()
     {
-        return (new Pdf($this))->output($this->dest);
+        $file_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'.pdf';
+
+        if (Storage::disk('public')->missing($file_path)) {
+            Storage::disk('public')->put($file_path, (new Pdf($this))->output('S'));
+        }
+
+        if ($this->dest === 'I') {
+            return Storage::disk('public')->download($file_path);
+        }
+
+        if ($this->dest === 'S') {
+            return Storage::disk('public')->get($file_path);
+        }
     }
 
     protected function setDate()
