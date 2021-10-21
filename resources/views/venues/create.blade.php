@@ -33,21 +33,26 @@
           <x-label for="email">E-Mail</x-label>
           <x-input type="text" name="email" class="w-full" value="{{ old('email') ?? $venue->email ?? '' }}" id="email" />
         </x-form-field>
-        <x-form-field>
-            <x-label for="invoice_blocks">Rechnungs-Blöcke</x-label>
-            <x-textarea rows=10 type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ old('invoice_blocks') ?? trim(json_encode($venue->config['invoice_blocks'] ?? '', JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), '"') }}</x-textarea>
-          </x-form-field>
 
+        {{-- HIDE --}}
+        <x-form-field>
+          <x-label for="invoice_blocks">Rechnungs-Blöcke</x-label>
+          <x-textarea rows=10 type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ old('invoice_blocks') ?? trim(json_encode($venue->config['invoice_blocks'] ?? '', JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), '"') }}</x-textarea>
+        </x-form-field>
+
+        {{-- HIDE --}}
         <x-form-field>
           <x-label for="reminder_delay">Tage bis Erinnerungsmail</x-label>
           <x-input type="number" min="0" name="reminder_delay" class="w-full" value="{{ old('reminder_delay') ?? $venue->reminder_delay ?? '' }}"  id="reminder_delay" />
         </x-form-field>
 
+        {{-- HIDE --}}
         <x-form-field>
           <x-label for="check_delay">Tage bis Mitarbeiternotitz</x-label>
           <x-input type="number" min="0" name="check_delay" class="w-full" value="{{ old('check_delay') ?? $venue->check_delay ?? '' }}"  id="check_delay" />
         </x-form-field>
 
+        {{-- HIDE --}}
         <x-form-field>
           <x-label for="cancel_delay">Tage bis Stornierung</x-label>
           <x-input type="number" min="0" name="cancel_delay" class="w-full" value="{{ old('cancel_delay') ?? $venue->cancel_delay ?? '' }}"  id="cancel_delay" />
