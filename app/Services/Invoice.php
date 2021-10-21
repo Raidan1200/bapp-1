@@ -149,6 +149,7 @@ class Invoice
                     $grossTotal = $this->order->deposit_amount;
 
                 } elseif ($this->type === 'interim') {
+                    // TODO TODO Isnt't this just the interim_amount???
                     $grossTotal = $this->order->grossTotal;
 
                     if ($this->order->deposit_paid_at) {

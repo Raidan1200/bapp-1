@@ -5,7 +5,7 @@
 
   <p class="my-2">
     Im Anhang erhalten Sie ihre Reservierungsbestätigung mit der Bitte
-    die Anzahlung in Höhe von {{ money($order->deposit_amount) }}€
+    die Anzahlung in Höhe von {{ money($order->interim_amount) }}€
     innerhalb der nächsten 7 Werktage zu überweisen.
     {{-- LATER Zahl konfigurierbar machen --}}
   </p>
