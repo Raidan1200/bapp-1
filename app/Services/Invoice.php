@@ -71,7 +71,16 @@ class Invoice
     {
         $file_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'.pdf';
 
-        if (Storage::disk('public')->missing($file_path)) {
+        // Generate PDF file if it doesn't exist already
+        // Regenerate PDF file if the corresponding invoice hasn't been paid yet
+        if (
+            Storage::disk('public')->missing($file_path) ||
+            (
+                $this->type === 'deposit' && $this->order->deposit_paid_at === null ||
+                $this->type === 'interim' && $this->order->interim_paid_at === null ||
+                $this->type === 'final' && $this->order->final_paid_at === null
+            )
+        ) {
             Storage::disk('public')->put($file_path, (new Pdf($this))->output('S'));
         }
 

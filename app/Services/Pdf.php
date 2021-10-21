@@ -116,7 +116,7 @@ class Pdf
         $this->pdf->setFontSize(10);
         $this->pdf->write(5, utf8_decode($customer->company));
         $this->pdf->ln();
-        $this->pdf->write(5, utf8_decode($customer->lasfirst_namet_name).' '.utf8_decode($customer->last_name));
+        $this->pdf->write(5, utf8_decode($customer->first_name).' '.utf8_decode($customer->last_name));
         $this->pdf->ln();
         $this->pdf->write(5, utf8_decode($customer->street).' '.utf8_decode($customer->street_no));
         $this->pdf->ln();

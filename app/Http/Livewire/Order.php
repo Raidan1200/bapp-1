@@ -165,6 +165,7 @@ class Order extends Component
     {
         $order = OrderModel::findOrFail($this->order->id)->load('venue');
 
+        // TODO INVOICE GENERATION This sucks ... make it shorter!!!
         $invoice = (new Invoice)
             ->ofType($type)
             ->forOrder($order);
@@ -180,6 +181,7 @@ class Order extends Component
     {
         $order = OrderModel::findOrFail($this->order->id)->load('venue');
 
+        // TODO INVOICE GENERATION This sucks ... make it shorter!!!
         $invoice = (new Invoice)
             ->ofType($type)
             ->forOrder($order)
@@ -288,11 +290,17 @@ class Order extends Component
 
     public function itemsUpdated()
     {
-        if ($this->order->items->count()) {
-            $this->order->update([
-                'interim_is_final' => false
-            ]);
+        $itemData = [];
+
+        if ($this->order->interim_paid_at === null) {
+            $itemData['interim_amount'] = $this->order->grossTotal - $this->order->deposit_amount;
         }
+
+        if ($this->order->interim_paid_at) {
+            $itemData['interim_is_final'] = false;
+        }
+
+        $this->order->update($itemData);
     }
 
 

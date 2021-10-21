@@ -53,6 +53,7 @@ abstract class NewOrderController extends Controller
 
         $order = Order::findOrFail($order->id)->load('venue');
 
+        // TODO INVOICE GENERATION This sucks ... make it shorter!!!
         $invoice = (new Invoice)
             ->ofType('deposit')
             ->forOrder($order);
