@@ -29,6 +29,7 @@ class Package extends Model
         'is_flat',
         'unit_price_flat',
         'vat_flat',
+        'config',
         'venue_id',
     ];
 
@@ -36,6 +37,7 @@ class Package extends Model
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
         'is_flat' => 'boolean',
+        'config' => 'array',
     ];
 
     public function venue()

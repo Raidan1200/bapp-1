@@ -14,7 +14,12 @@ class Item extends Model
         'quantity',
         'unit_price',
         'vat',
+        'config',
         'order_id',
+    ];
+
+    protected $casts = [
+        'config' => 'array',
     ];
 
     public function order()

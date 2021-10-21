@@ -19,6 +19,8 @@ class CreateItemsTable extends Migration
             $table->unsignedInteger('quantity');
             $table->integer('unit_price');
             $table->unsignedFloat('vat');
+            $table->json('config')->nullable();
+
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

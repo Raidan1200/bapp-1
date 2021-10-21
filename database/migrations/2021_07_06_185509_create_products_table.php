@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             // All prices are after VAT
             $table->unsignedInteger('unit_price');
             $table->unsignedFloat('vat');
+            $table->json('config')->nullable();
 
             $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

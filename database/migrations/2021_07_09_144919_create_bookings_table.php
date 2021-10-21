@@ -25,7 +25,7 @@ class CreateBookingsTable extends Migration
             $table->unsignedFloat('vat');
             $table->unsignedFloat('deposit');
             $table->boolean('is_flat');
-
+            $table->json('config')->nullable();
             $table->json('snapshot')->nullable();
 
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();

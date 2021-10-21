@@ -20,6 +20,7 @@ class Venue extends Model
         'slug',
         'email',
         'invoice_blocks',
+        'config',
         'reminder_delay',
         'check_delay',
         'check_count',
@@ -30,6 +31,7 @@ class Venue extends Model
 
     protected $casts = [
         'invoice_blocks' => 'array',
+        'config' => 'array',
     ];
 
     public function users()

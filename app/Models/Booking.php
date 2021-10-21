@@ -21,6 +21,7 @@ class Booking extends Model
         'vat',
         'deposit',
         'is_flat',
+        'config',
         'snapshot',
         'room_id',
         'package_id',
@@ -31,6 +32,7 @@ class Booking extends Model
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
         'package_snapshot' => 'array',
+        'config' => 'array',
     ];
 
     public function room()

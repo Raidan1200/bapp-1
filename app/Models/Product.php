@@ -14,7 +14,12 @@ class Product extends Model
         'name',
         'unit_price',
         'vat',
-        'venue_id'
+        'config',
+        'venue_id',
+    ];
+
+    protected $casts = [
+        'config' => 'array',
     ];
 
     public function venue()
