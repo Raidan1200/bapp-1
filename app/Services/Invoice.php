@@ -145,28 +145,28 @@ class Invoice
                 break;
             case 'interim':
                 // TODO TODO copied from Pdf.php
-                if ($this->invoice->type === 'deposit') {
-                    $grossTotal = $order->deposit_amount;
+                if ($this->type === 'deposit') {
+                    $grossTotal = $this->order->deposit_amount;
 
-                } elseif ($this->invoice->type === 'interim') {
-                    $grossTotal = $order->grossTotal;
+                } elseif ($this->type === 'interim') {
+                    $grossTotal = $this->order->grossTotal;
 
-                    if ($order->deposit_paid_at) {
-                        $grossTotal -= $order->deposit_amount;
+                    if ($this->order->deposit_paid_at) {
+                        $grossTotal -= $this->order->deposit_amount;
                     }
 
-                } elseif ($this->invoice->type === 'final') {
-                    $grossTotal = $order->grossTotal;
+                } elseif ($this->type === 'final') {
+                    $grossTotal = $this->order->grossTotal;
 
                     if ($order->deposit_paid_at) {
-                        $grossTotal -= $order->deposit_amount;
+                        $grossTotal -= $this->order->deposit_amount;
                     }
 
                     if ($order->interim_paid_at) {
-                        $grossTotal -= $order->interim_amount;
+                        $grossTotal -= $this->order->interim_amount;
                     }
 
-                } elseif ($this->invoice->type === 'cancelled') {
+                } elseif ($this->type === 'cancelled') {
                     //
                 }
 
