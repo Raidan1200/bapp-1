@@ -215,12 +215,15 @@
                 Gesamt
               </div>
             @endif
+            {{-- TODO TODO --}}
+            @if (false)
             <div
               wire:click="makeInvoice('cancelled')"
               class="m-2 cursor-pointer"
             >
               Storno
             </div>
+            @endif
           </x-slot>
         </x-dropdown>
         <x-dropdown align="left">
