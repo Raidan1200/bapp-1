@@ -61,7 +61,7 @@ class Pdf
         $this->pdf->setXY($x, $y+15);
         $this->pdf->write(5, "Internet:");
 
-        $blocks = $this->invoice->order->venue->invoice_blocks;
+        $blocks = $this->invoice->order->venue->config->invoice_blocks;
 
         $this->pdf->setFont("Arial","", 7);
         $this->pdf->setXY($x+15, $y);
@@ -76,7 +76,7 @@ class Pdf
 
     private function writeBank($x, $y)
     {
-        $blocks = $this->invoice->order->venue->invoice_blocks;
+        $blocks = $this->invoice->order->venue->config->invoice_blocks;
 
         $this->pdf->setFont("Arial","", 7);
         $this->pdf->setXY($x, $y);
@@ -96,7 +96,7 @@ class Pdf
 
     private function writeKopf()
     {
-        $blocks = $this->invoice->order->venue->invoice_blocks;
+        $blocks = $this->invoice->order->venue->config->invoice_blocks;
         $this->pdf->setFont("Arial","", 7);
         $this->pdf->setY(46);
         $this->pdf->write(10, utf8_decode(
@@ -338,7 +338,7 @@ class Pdf
 
     private function writeFuss()
     {
-        $blocks = $this->invoice->order->venue->invoice_blocks;
+        $blocks = $this->invoice->order->venue->config->invoice_blocks;
 
         $this->pdf->setFont("Arial","", 8);
         $this->pdf->setY(260);

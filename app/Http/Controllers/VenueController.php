@@ -54,7 +54,10 @@ class VenueController extends Controller
     public function update(CreateVenueRequest $request, Venue $venue)
     {
         $validated = $request->validated();
-        $validated['invoice_blocks'] = json_decode($validated['invoice_blocks']);
+
+        $validated['config'] = [
+            'invoice_blocks' => json_decode($validated['invoice_blocks'])
+        ];
 
         $venue->update($validated);
 

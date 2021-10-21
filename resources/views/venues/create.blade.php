@@ -35,7 +35,7 @@
         </x-form-field>
         <x-form-field>
             <x-label for="invoice_blocks">Rechnungs-Blöcke</x-label>
-            <x-textarea rows=10 type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ old('invoice_blocks') ?? trim(json_encode($venue->invoice_blocks ?? '', JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), '"') }}</x-textarea>
+            <x-textarea rows=10 type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ old('invoice_blocks') ?? trim(json_encode($venue->config['invoice_blocks'] ?? '', JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), '"') }}</x-textarea>
           </x-form-field>
 
         <x-form-field>
