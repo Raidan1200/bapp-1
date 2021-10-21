@@ -19,7 +19,6 @@ class Venue extends Model
         'name',
         'slug',
         'email',
-        'invoice_blocks',
         'config',
         'reminder_delay',
         'check_delay',
@@ -30,7 +29,6 @@ class Venue extends Model
     ];
 
     protected $casts = [
-        'invoice_blocks' => 'array',
         'config' => 'array',
     ];
 

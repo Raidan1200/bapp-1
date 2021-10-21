@@ -19,7 +19,6 @@ class CreateVenuesTable extends Migration
             $table->string('slug');
             $table->string('email');
             $table->string('logo')->nullable();
-            $table->json('invoice_blocks')->nullable();
             $table->json('config')->nullable();
             $table->unsignedInteger('reminder_delay')->default(7);
             $table->unsignedInteger('check_delay')->default(7);

@@ -30,7 +30,7 @@ class ZauberRequest extends FormRequest
             'customer.company' => 'sometimes',
             'customer.street' => 'required',
             'customer.street_no' => 'required',
-            'customer.zip' => 'required',
+            'customer.zip' => 'required|max:5',
             'customer.city' => 'required',
             'customer.phone' => 'required',
 

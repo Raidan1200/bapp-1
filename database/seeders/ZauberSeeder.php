@@ -12,23 +12,25 @@ use Illuminate\Support\Facades\DB;
 
 class ZauberSeeder extends Seeder
 {
-    public $zauber_json = [
-        'company' => 'i(s)s anders Catering & Event GmbH',
-        'street' => 'Schützenhöhe',
-        'street_no' => '11',
-        'zip' => '01099',
-        'city' => 'Dresden',
-        'phone' => '0351 8053280',
-        'fax' => '0351 8053281',
-        'email' => 'info@huettenzauber-dresden.de',
-        'web' => 'www.huettenzauber-dresden.de',
-        'bank' => 'Ostsächsische Sparkasse Dresden',
-        'iban' => 'DE94 8505 0300 0221 0877 96',
-        'bic' => 'OSDDDE81XXX',
-        'manager' => 'Nico Thierbach',
-        'tax_id' => '202/111/06930',
-        'hrb' => '34457',
-        'court' => 'Amtsgericht Dresden',
+    public $config = [
+        'invoice_blocks' => [
+            'company' => 'i(s)s anders Catering & Event GmbH',
+            'street' => 'Schützenhöhe',
+            'street_no' => '11',
+            'zip' => '01099',
+            'city' => 'Dresden',
+            'phone' => '0351 8053280',
+            'fax' => '0351 8053281',
+            'email' => 'info@huettenzauber-dresden.de',
+            'web' => 'www.huettenzauber-dresden.de',
+            'bank' => 'Ostsächsische Sparkasse Dresden',
+            'iban' => 'DE94 8505 0300 0221 0877 96',
+            'bic' => 'OSDDDE81XXX',
+            'manager' => 'Nico Thierbach',
+            'tax_id' => '202/111/06930',
+            'hrb' => '34457',
+            'court' => 'Amtsgericht Dresden',
+        ],
     ];
 
     public function run()
@@ -38,7 +40,7 @@ class ZauberSeeder extends Seeder
             'slug' => 'zauber',
             'email' => 'info@huettenzauber-dresden.de',
             'logo' => null, // TODO
-            'invoice_blocks' => $this->zauber_json,
+            'config' => $this->config,
             'invoice_id_format' => 'R-HUE-%05d',
             'reminder_delay' => 5,
             'check_delay' => 7,
