@@ -145,7 +145,7 @@ class Invoice
                 break;
             case 'interim':
                 // TODO TODO copied from Pdf.php
-                $grossTotal = collect($this->order->bookings)->sum('grossTotal');
+                $grossTotal = $this->order->grossTotal;
 
                 if ($this->order->deposit_paid_at) {
                     $grossTotal -= $this->order->deposit_amount;

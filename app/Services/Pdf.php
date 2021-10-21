@@ -316,6 +316,7 @@ class Pdf
             $this->pdf->write(5, utf8_decode($text));
             $this->pdf->ln(8);
         }
+
         // TODO
         // $this->pdf->write(5, utf8_decode($this->invoice->text->getText('rechnung', 'pay_info')));
         // $this->pdf->ln();
