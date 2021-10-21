@@ -54,7 +54,7 @@ class OrderSeeder extends Seeder
 
             $order = Order::factory()->create([
                 'state' => $state,
-                'cash_payment' => ! rand(0, 3),
+                'cash_payment' => ! rand(0, 5),
                 'venue_id' => $venue->id,
                 'starts_at' => $start,
             ]);
