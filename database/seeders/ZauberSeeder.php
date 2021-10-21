@@ -31,6 +31,12 @@ class ZauberSeeder extends Seeder
             'hrb' => '34457',
             'court' => 'Amtsgericht Dresden',
         ],
+        'delays' => [
+            'reminder_delay' => 5,
+            'check_delay' => 7,
+            'not_paid_delay' => 11,
+            'payment_delay' => 7,
+        ],
     ];
 
     public function run()

@@ -26,7 +26,16 @@ class VenueController extends Controller
     public function store(CreateVenueRequest $request)
     {
         $validated = $request->validated();
-        $validated['invoice_blocks'] = str_replace(["\r", "\n"], '', $validated['invoice_blocks']);
+
+        $validated['config'] = [
+            'invoice_blocks' => json_decode($validated['invoice_blocks']),
+            'delays' => [
+                'reminder_delay' => $validated['reminder_delay'],
+                'check_delay' => $validated['check_delay'],
+                'cancel_delay' => $validated['cancel_delay'],
+                'payment_delay' => $validated['payment_delay'],
+            ]
+        ];
 
         $venue = Venue::create($validated);
 
@@ -56,7 +65,13 @@ class VenueController extends Controller
         $validated = $request->validated();
 
         $validated['config'] = [
-            'invoice_blocks' => json_decode($validated['invoice_blocks'])
+            'invoice_blocks' => json_decode($validated['invoice_blocks']),
+            'delays' => [
+                'reminder_delay' => $validated['reminder_delay'],
+                'check_delay' => $validated['check_delay'],
+                'cancel_delay' => $validated['cancel_delay'],
+                'payment_delay' => $validated['payment_delay'],
+            ]
         ];
 
         $venue->update($validated);

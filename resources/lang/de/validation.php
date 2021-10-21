@@ -165,6 +165,7 @@ return [
         'reminder_delay'        => 'Tage bis Erinnerungsmail',
         'check_delay'           => 'Tage bis Mitarbeiternotitz',
         'cancel_delay'          => 'Tage bis Stornierung',
+        'payment_delay'         => 'Zahlungsziel',
         'second'                => 'Sekunde',
         'sex'                   => 'Geschlecht',
         'size'                  => 'Größe',

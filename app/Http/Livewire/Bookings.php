@@ -130,6 +130,7 @@ class Bookings extends Component
         $this->bookings[] = [
             'starts_at' => null,
             'ends_at' => null,
+            'interval' => null,
             'package_name' => '',
             'quantity' => 1,
             'unit_price' => 0,
@@ -184,6 +185,7 @@ class Bookings extends Component
         $this->bookings[$key] = [
             'package_name' => $package['name'],
             'starts_at' => '',
+            'interval' => $package['interval'],
             'ends_at' => '',
             'quantity' => 1,
             'unit_price' => $package['unit_price'],

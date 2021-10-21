@@ -43,19 +43,25 @@
         {{-- HIDE --}}
         <x-form-field>
           <x-label for="reminder_delay">Tage bis Erinnerungsmail</x-label>
-          <x-input type="number" min="0" name="reminder_delay" class="w-full" value="{{ old('reminder_delay') ?? $venue->reminder_delay ?? '' }}"  id="reminder_delay" />
+          <x-input type="number" min="0" name="reminder_delay" class="w-full" value="{{ old('reminder_delay') ?? $venue->config['delays']['reminder_delay'] ?? '' }}"  id="reminder_delay" />
         </x-form-field>
 
         {{-- HIDE --}}
         <x-form-field>
           <x-label for="check_delay">Tage bis Mitarbeiternotitz</x-label>
-          <x-input type="number" min="0" name="check_delay" class="w-full" value="{{ old('check_delay') ?? $venue->check_delay ?? '' }}"  id="check_delay" />
+          <x-input type="number" min="0" name="check_delay" class="w-full" value="{{ old('check_delay') ?? $venue->config['delays']['check_delay'] ?? '' }}"  id="check_delay" />
         </x-form-field>
 
         {{-- HIDE --}}
         <x-form-field>
           <x-label for="cancel_delay">Tage bis Stornierung</x-label>
-          <x-input type="number" min="0" name="cancel_delay" class="w-full" value="{{ old('cancel_delay') ?? $venue->cancel_delay ?? '' }}"  id="cancel_delay" />
+          <x-input type="number" min="0" name="cancel_delay" class="w-full" value="{{ old('cancel_delay') ?? $venue->config['delays']['cancel_delay'] ?? '' }}"  id="cancel_delay" />
+        </x-form-field>
+
+        {{-- HIDE --}}
+        <x-form-field>
+          <x-label for="payment_delay">Zahlungsziel</x-label>
+          <x-input type="number" min="0" name="payment_delay" class="w-full" value="{{ old('payment_delay') ?? $venue->config['delays']['payment_delay'] ?? '' }}"  id="payment_delay" />
         </x-form-field>
 
         <x-form-field>
