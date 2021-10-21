@@ -184,9 +184,9 @@ class Bookings extends Component
     {
         $this->bookings[$key] = [
             'package_name' => $package['name'],
-            'starts_at' => '',
+            'starts_at' => $package['opens_at'],
             'interval' => $package['interval'],
-            'ends_at' => '',
+            'ends_at' => $package['opens_at'],
             'quantity' => 1,
             'unit_price' => $package['unit_price'],
             'vat' => $package['vat'],

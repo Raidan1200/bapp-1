@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use App\Models\Venue;
 use Illuminate\Console\Command;
 
-class CancelOverdueOrders extends Command
+class SetNotPaidOverdueOrders extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bapp:cancel-overdue';
+    protected $signature = 'bapp:set-not-paid';
 
     /**
      * The console command description.
