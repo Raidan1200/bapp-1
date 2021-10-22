@@ -70,11 +70,13 @@ class Invoice
 
     public function makePdf()
     {
+
         if ($this->type !== 'cancelled') {
             // Generate PDF file if it doesn't exist already
             // Regenerate PDF file if the corresponding invoice hasn't been paid yet
             $file_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'.pdf';
             $cancelled_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'-S.pdf';
+            $invoiceId = $this->invoiceId;
 
             if (
                 Storage::disk('public')->missing($file_path) ||
@@ -86,23 +88,23 @@ class Invoice
             ) {
                 Storage::disk('public')->put($file_path, (new Pdf($this))->output('S'));
                 Storage::disk('public')->put($cancelled_path, (new Pdf(
-                    $this->setSubject('cancelled')->setInvoiceId($this->invoiceId.'-S')
+                    $this->setSubject('cancelled')->setInvoiceId($invoiceId.'-S')
                 ))->output('S'));
             }
         }
 
         if ($this->type === 'cancelled') {
             if ($this->order->final_invoice_at) {
-                $this->invoiceId = $this->order->final_invoice_id;
+                $invoiceId = $this->order->final_invoice_id;
             } elseif ($this->order->interim_invoice_at) {
-                $this->invoiceId = $this->order->interim_invoice_id;
+                $invoiceId = $this->order->interim_invoice_id;
             } elseif ($this->order->deposit_invoice_at) {
-                $this->invoiceId = $this->order->deposit_invoice_id;
+                $invoiceId = $this->order->deposit_invoice_id;
             }
         }
 
-        $file_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'.pdf';
-        $cancelled_path = $this->order->venue->slug.'/invoices/'.$this->invoiceId.'-S.pdf';
+        $file_path = $this->order->venue->slug.'/invoices/'.$invoiceId.'.pdf';
+        $cancelled_path = $this->order->venue->slug.'/invoices/'.$invoiceId.'-S.pdf';
 
         if ($this->dest === 'I') {
             return Storage::disk('public')->download(
