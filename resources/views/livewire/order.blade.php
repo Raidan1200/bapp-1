@@ -224,13 +224,14 @@
                 @endif
               </div>
             @endif
-            {{-- TODO TODO --}}
-            <div
-              wire:click="makeInvoice('cancelled')"
-              class="m-2 cursor-pointer"
-            >
-              Storno
-            </div>
+            @if ($order->state === 'cancelled')
+              <div
+                wire:click="makeInvoice('cancelled')"
+                class="m-2 cursor-pointer"
+              >
+                Storno
+              </div>
+            @endif
           </x-slot>
         </x-dropdown>
         <x-dropdown align="left">
@@ -275,15 +276,17 @@
                 @endif
               </div>
             @endunless
-            <div
-              wire:click="sendEmail('cancelled')"
-              class="m-2 cursor-pointer"
-            >
-              Stornierung
-              @if ($order->cancelled_at)
-                <span>&#10003;</span>
-              @endif
-            </div>
+            @if ($order->state === 'cancelled')
+              <div
+                wire:click="sendEmail('cancelled')"
+                class="m-2 cursor-pointer"
+              >
+                Stornierung
+                @if ($order->cancelled_at)
+                  <span>&#10003;</span>
+                @endif
+              </div>
+            @endif
           </x-slot>
         </x-dropdown>
       </div>

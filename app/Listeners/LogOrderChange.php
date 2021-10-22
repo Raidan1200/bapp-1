@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Models\Action;
+use Illuminate\Support\Str;
 use App\Events\OrderHasChanged;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

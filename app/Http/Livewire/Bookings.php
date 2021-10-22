@@ -73,9 +73,11 @@ class Bookings extends Component
         $this->authorize('modify bookings');
 
         foreach ($this->bookings as &$booking) {
-            $starts_at = Carbon::createFromTimeString($booking['starts_time'], 'Europe/Berlin')
-                ->setDateFrom($booking['starts_at'])
-                ->setTimezone('UTC');
+            $starts_at = $booking['starts_time']
+                ? Carbon::createFromTimeString($booking['starts_time'], 'Europe/Berlin')
+                    ->setDateFrom($booking['starts_at'])
+                    ->setTimezone('UTC')
+                : null;
             $ends_at = Carbon::createFromTimeString($booking['ends_time'], 'Europe/Berlin')
                 ->setDateFrom($booking['ends_at'])
                 ->setTimezone('UTC');
@@ -202,8 +204,16 @@ class Bookings extends Component
 
     public function render()
     {
+        // dd($this->bookings);
         foreach ($this->bookings as &$booking) {
-            $booking['starts_time'] = Carbon::create($booking['starts_at'])->timezone('Europe/Berlin')->format('H:i');
+        // dd($booking['starts_at']);
+
+            if ($booking['starts_at']) {
+                $booking['starts_time'] = Carbon::create($booking['starts_at'])->timezone('Europe/Berlin')->format('H:i');
+            } else {
+                $booking['starts_time'] = null;
+            }
+
             $booking['ends_time'] = Carbon::create($booking['ends_at'])->timezone('Europe/Berlin')->format('H:i');
         }
 
