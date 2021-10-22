@@ -31,8 +31,8 @@ class LogOrderChange
             'user_name' => $event->user->name,
             'user_email' => $event->user->email,
             'what' => $event->what,
-            'from' => $event->from,
-            'to' => $event->to,
+            'from' => Str::limit($event->from, 250, '...'),
+            'to' => Str::limit($event->to, 250, '...'),
             'order_id' => $event->order->id,
             'user_id' => $event->user->id,
         ]);

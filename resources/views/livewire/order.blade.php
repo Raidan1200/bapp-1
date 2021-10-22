@@ -16,7 +16,7 @@
       @else
         {{ $order->customer->name }}
       @endisset
-      ({{ $order->deposit_invoice_id ?? $order->interim_invoice_id ?? $order->final_invoice_id ?? 'Noch keine Rechnung' }})
+      ({{ $order->final_invoice_id ?? $order->interim_invoice_id ?? $order->deposit_invoice_id ?? 'Noch keine Rechnung' }})
     </button>
     <div>
       <div class="font-semibold text-right">{{ $order->starts_at->timezone('Europe/Berlin')->formatLocalized('%a %d.%m %H:%M') }}</div>
