@@ -19,7 +19,7 @@ class SetNotPaidOverdueOrders extends Command
      *
      * @var string
      */
-    protected $description = 'Cancel orders where deposit grace period is over.';
+    protected $description = 'Set state of orders where deposit grace period is over to "not paid".';
 
     /**
      * Create a new command instance.
@@ -41,7 +41,7 @@ class SetNotPaidOverdueOrders extends Command
         foreach (Venue::all() as $venue) {
             $venue->dueOrderCancellations()->map(function($order) {
                 $order->update([
-                    'state' => 'not-paid',
+                    'state' => 'not_paid',
                     'cancelled_at' => now(),
                 ]);
             });

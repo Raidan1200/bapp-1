@@ -19,7 +19,7 @@
   </div>
   <div>
     <div class="text-xl font-semibold border-t-2 mt-2 pt-2">Springe zu</div>
-    <form action="?" method="GET">
+    <form action="/?" method="GET">
       <x-input type="date" name="from" id="" value="{{ $filters['from'] ?? '' }}" class="w-full" />
       <div class="my-2 flex justify-between">
         <x-button class="flex-1 mr-2" type="submit" name="days" value="1">Tag</x-button>

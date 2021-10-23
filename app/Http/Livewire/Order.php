@@ -154,7 +154,7 @@ class Order extends Component
                 $timestamps['cancelled_at'] = Carbon::now();
                 break;
 
-            case 'not-paid':
+            case 'not_paid':
                 break;
         }
 
@@ -166,15 +166,11 @@ class Order extends Component
         $order = OrderModel::findOrFail($this->order->id)->load('venue');
 
         // TODO INVOICE GENERATION This sucks ... make it shorter!!!
-        $invoice = (new Invoice)
+        return (new Invoice)
             ->ofType($type)
-            ->forOrder($order);
-
-        if ($updatedFields = $invoice->updatedFields()) {
-            $order->update($updatedFields);
-        }
-
-        return $invoice->asStream()->makePdf();
+            ->forOrder($order)
+            ->asStream()
+            ->makePdf();
     }
 
     public function sendEmail(string $type)
@@ -182,6 +178,8 @@ class Order extends Component
         $order = OrderModel::findOrFail($this->order->id)->load('venue');
 
         // TODO INVOICE GENERATION This sucks ... make it shorter!!!
+        // TODO TODO TODO THIS REALLY sucks because its TOOO easy to forget
+        // the call to updatedFields which will result in chaos and destruction!!!
         $invoice = (new Invoice)
             ->ofType($type)
             ->forOrder($order)

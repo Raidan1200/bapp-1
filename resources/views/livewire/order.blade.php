@@ -224,7 +224,7 @@
                 @endif
               </div>
             @endif
-            @if ($order->state === 'cancelled')
+            @if ($order->state === 'cancelled' && ($order->deposit_invoice_at || $order->interim_invoice_at || $order->final_invoice_at))
               <div
                 wire:click="makeInvoice('cancelled')"
                 class="m-2 cursor-pointer"
@@ -256,6 +256,7 @@
                 <span>&#10003;</span>
               @endif
             </div>
+            @if ($order->deposit_paid_at)
               <div
                 wire:click="sendEmail('interim')"
                 class="m-2 cursor-pointer"
@@ -265,6 +266,7 @@
                   <span>&#10003;</span>
                 @endif
               </div>
+            @endif
             @unless ($order->interim_is_final)
               <div
                 wire:click="sendEmail('final')"
@@ -276,15 +278,16 @@
                 @endif
               </div>
             @endunless
-            @if ($order->state === 'cancelled')
+            @if ($order->state === 'cancelled' && ($order->deposit_invoice_at || $order->interim_invoice_at || $order->final_invoice_at))
               <div
                 wire:click="sendEmail('cancelled')"
                 class="m-2 cursor-pointer"
               >
-                Stornierung
-                @if ($order->cancelled_at)
+                {{-- TODO ? Bisher wird nicht gespeichert, wenn eine Stornomail rausgeht --}}
+                Storno
+                {{-- @if ($order->cancelled_at)
                   <span>&#10003;</span>
-                @endif
+                @endif --}}
               </div>
             @endif
           </x-slot>

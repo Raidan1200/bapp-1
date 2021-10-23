@@ -204,10 +204,7 @@ class Bookings extends Component
 
     public function render()
     {
-        // dd($this->bookings);
         foreach ($this->bookings as &$booking) {
-        // dd($booking['starts_at']);
-
             if ($booking['starts_at']) {
                 $booking['starts_time'] = Carbon::create($booking['starts_at'])->timezone('Europe/Berlin')->format('H:i');
             } else {

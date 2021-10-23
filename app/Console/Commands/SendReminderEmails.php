@@ -42,10 +42,11 @@ class SendReminderEmails extends Command
     public function handle()
     {
         foreach (Venue::all() as $venue) {
-            $venue->dueEmailReminders()->map(function($order) {
+            $venue->dueReminderEmails()->map(function($order) {
                 $this->sendReminderEmail($order);
-                $order->deposit_reminder_at = now();
-                $order->save();
+                $order->update([
+                    'deposit_reminder_at' => now(),
+                ]);
             });
         }
 

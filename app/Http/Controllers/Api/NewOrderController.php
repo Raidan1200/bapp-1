@@ -54,17 +54,15 @@ abstract class NewOrderController extends Controller
         $order = Order::findOrFail($order->id)->load('venue');
 
         // TODO INVOICE GENERATION This sucks ... make it shorter!!!
+        // TODO REPEATED from Livewire/order ... this is BAD
         $invoice = (new Invoice)
             ->ofType('deposit')
-            ->forOrder($order);
-
-        // TODO REPEATED from Livewire/order ... this is BAD
-        if ($updatedFields = $invoice->updatedFields()) {
-            $order->update($updatedFields);
-        }
+            ->forOrder($order)
+            ->asString()
+            ->makePdf();
 
         Mail::to($order->customer->email)
-            ->send(new DepositEmail($order, $invoice->asString()->makePdf()));
+            ->send(new DepositEmail($order, $invoice));
 
         $order->update([
             'deposit_email_at' => now(),

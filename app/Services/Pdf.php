@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\Storage;
 class Pdf
 {
     private $pdf;
-    private $invoice;
+    private $data;
 
-    public function __construct(Invoice $invoice)
+    public function __construct(array $data)
     {
         $this->pdf = new Fpdi();
-        $this->invoice = $invoice;
+        $this->data = $data;
 
-        $this->pdf->setTitle($this->invoice->type . ' ' . $this->invoice->invoiceId);
+        $this->pdf->setTitle($this->data['type'] . ' ' . $this->data['invoice_id']);
         $this->pdf->SetAutoPageBreak(true, 5);
         $this->pdf->AddPage();
         $this->pdf->setLeftMargin(25);
 
-        $path = $this->invoice->order->venue->slug.'/images/logo.png';
+        $path = $this->data['order']->venue->slug.'/images/logo.png';
         $this->pdf->image(Storage::disk('public')->path($path), 141, 30, 39, 13);
 
         $this->pdf->setTextColor(0,0,0);
@@ -61,7 +61,7 @@ class Pdf
         $this->pdf->setXY($x, $y+15);
         $this->pdf->write(5, "Internet:");
 
-        $blocks = $this->invoice->order->venue->config['invoice_blocks'];
+        $blocks = $this->data['order']->venue->config['invoice_blocks'];
 
         $this->pdf->setFont("Arial","", 7);
         $this->pdf->setXY($x+15, $y);
@@ -76,7 +76,7 @@ class Pdf
 
     private function writeBank($x, $y)
     {
-        $blocks = $this->invoice->order->venue->config['invoice_blocks'];
+        $blocks = $this->data['order']->venue->config['invoice_blocks'];
 
         $this->pdf->setFont("Arial","", 7);
         $this->pdf->setXY($x, $y);
@@ -96,7 +96,7 @@ class Pdf
 
     private function writeKopf()
     {
-        $blocks = $this->invoice->order->venue->config['invoice_blocks'];
+        $blocks = $this->data['order']->venue->config['invoice_blocks'];
         $this->pdf->setFont("Arial","", 7);
         $this->pdf->setY(46);
         $this->pdf->write(10, utf8_decode(
@@ -110,7 +110,7 @@ class Pdf
 
     private function writeAnschrift()
     {
-        $customer = $this->invoice->order->customer;
+        $customer = $this->data['order']->customer;
 
         $this->pdf->ln();
         $this->pdf->setFontSize(10);
@@ -127,25 +127,25 @@ class Pdf
     {
         $this->pdf->setFontSize(11);
         $this->pdf->ln(30);
-        $this->pdf->write(5, $this->invoice->subject);
+        $this->pdf->write(5, $this->data['subject']);
 
         $this->pdf->setFontSize(9);
         $this->pdf->ln(7);
 
         $this->pdf->write(5, "Rechnungsnummer: ");
         $this->pdf->setX(57);
-        $this->pdf->write(5, $this->invoice->invoiceId);
+        $this->pdf->write(5, $this->data['invoice_id']);
         $this->pdf->setX(100);
         $this->pdf->write(5, "Rechnungsdatum: ");
         $this->pdf->setX(129);
-        $this->pdf->write(5, $this->invoice->date->format('d.m.Y'));
+        $this->pdf->write(5, $this->data['date']->format('d.m.Y'));
         $this->pdf->ln();
         $this->pdf->cell(170, 0, "", true);
     }
 
     private function drawPositionen()
     {
-        $order = $this->invoice->order;
+        $order = $this->data['order'];
 
         $this->pdf->ln(8);
         $this->pdf->setFont("Arial","B", 8);
@@ -177,7 +177,7 @@ class Pdf
             // $this->pdf->setX(50);
             $package_name = $booking->package_name;
 
-            if ($this->invoice->type === 'deposit') {
+            if ($this->data['type'] === 'deposit') {
                 $package_name .= " ({$booking->deposit}%)";
             }
 
@@ -189,7 +189,7 @@ class Pdf
             $this->pdf->setX(141);
 
             // Einzelpreis brutto
-            $grossPrice = ($this->invoice->type === 'deposit')
+            $grossPrice = ($this->data['type'] === 'deposit')
                 ? $booking->grossDeposit
                 : $booking->grossPrice;
 
@@ -197,14 +197,14 @@ class Pdf
             $this->pdf->setX(167);
 
             // Gesamtpreis brutto
-            $gross_total = ($this->invoice->type === 'deposit')
+            $gross_total = ($this->data['type'] === 'deposit')
                 ? $booking->grossDepositTotal
                 : $booking->grossTotal;
 
             $this->pdf->write(6, utf8_decode(money($gross_total).' Euro'));
         }
 
-        if (in_array($this->invoice->type, ['interim', 'final'])) {
+        if (in_array($this->data['type'], ['interim', 'final'])) {
             foreach ($order->items as $item) {
                 $this->pdf->ln();
                 $this->pdf->write(6, $i++);
@@ -223,7 +223,7 @@ class Pdf
             }
         }
 
-        if (in_array($this->invoice->type, ['interim', 'final']) && $order->deposit_paid_at) {
+        if (in_array($this->data['type'], ['interim', 'final']) && $order->deposit_paid_at) {
             $this->pdf->ln();
             $this->pdf->write(6, $i++);
             $this->pdf->setX(33);
@@ -234,7 +234,7 @@ class Pdf
             $this->pdf->write(6, utf8_decode(money($order->deposit_amount * -1) .' Euro'));
         }
 
-        if ($this->invoice->type === 'final' && $order->interim_paid_at) {
+        if ($this->data['type'] === 'final' && $order->interim_paid_at) {
             $this->pdf->ln();
             $this->pdf->write(6, $i++);
             $this->pdf->setX(33);
@@ -252,17 +252,17 @@ class Pdf
         $this->pdf->write(5, "Gesamt netto");
         $this->pdf->setX(167);
 
-        if ($this->invoice->type === 'deposit') {
+        if ($this->data['type'] === 'deposit') {
             $netTotal = $order->netDepositTotal;
-        } elseif ($this->invoice->type === 'interim') {
+        } elseif ($this->data['type'] === 'interim') {
             $netTotal = $order->netTotal;
-        } elseif ($this->invoice->type === 'final') {
+        } elseif ($this->data['type'] === 'final') {
             $netTotal = $order->netTotal;
         }
 
         $this->pdf->write(5, money($netTotal).' Euro');
 
-        $vats = ($this->invoice->type === 'deposit')
+        $vats = ($this->data['type'] === 'deposit')
             ? $order->depositVats
             : $order->vats;
 
@@ -280,17 +280,17 @@ class Pdf
         $this->pdf->write(5, "Gesamt Brutto");
         $this->pdf->setX(167);
 
-        if ($this->invoice->type === 'deposit') {
+        if ($this->data['type'] === 'deposit') {
             $grossTotal = $order->deposit_amount;
 
-        } elseif ($this->invoice->type === 'interim') {
+        } elseif ($this->data['type'] === 'interim') {
             $grossTotal = $order->grossTotal;
 
             if ($order->deposit_paid_at) {
                 $grossTotal -= $order->deposit_amount;
             }
 
-        } elseif ($this->invoice->type === 'final') {
+        } elseif ($this->data['type'] === 'final') {
             $grossTotal = $order->grossTotal;
 
             if ($order->deposit_paid_at) {
@@ -307,13 +307,13 @@ class Pdf
         $this->pdf->setFont("Arial","", 9);
         $this->pdf->ln(20);
 
-        foreach ($this->invoice->text as $text) {
+        foreach ($this->data['text'] as $text) {
             $this->pdf->write(5, utf8_decode($text));
             $this->pdf->ln(8);
         }
 
         // TODO
-        // $this->pdf->write(5, utf8_decode($this->invoice->text->getText('rechnung', 'pay_info')));
+        // $this->pdf->write(5, utf8_decode($this->data['text->getText('rechnung', 'pay_info')));
         // $this->pdf->ln();
 
         // $this->pdf->ln();
@@ -334,7 +334,7 @@ class Pdf
 
     private function writeFuss()
     {
-        $blocks = $this->invoice->order->venue->config['invoice_blocks'];
+        $blocks = $this->data['order']->venue->config['invoice_blocks'];
 
         $this->pdf->setFont("Arial","", 8);
         $this->pdf->setY(260);

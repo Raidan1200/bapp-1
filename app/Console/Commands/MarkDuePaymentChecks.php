@@ -39,12 +39,11 @@ class MarkDuePaymentChecks extends Command
      */
     public function handle()
     {
-        Venue::all()->map(function ($venue) {
-            $dueToday = $venue->duePaymentChecks();
-
-            // LATER: Is there some kind of bulk update in Laravel?
-            $dueToday->map(function ($order) {
-                $order->update(['needs_check' => true]);
+        foreach (Venue::all() as $venue) {
+            $venue->duePaymentChecks()->map(function ($order) {
+                $order->update([
+                    'needs_check' => true
+                ]);
             });
 
             $count = Order::where('venue_id', $venue->id)
@@ -54,7 +53,7 @@ class MarkDuePaymentChecks extends Command
             $venue->update([
                 'check_count' => $count,
             ]);
-        });
+        };
 
         return 0;
     }

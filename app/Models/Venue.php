@@ -54,7 +54,7 @@ class Venue extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function dueEmailReminders()
+    public function dueReminderEmails()
     {
         return $this
             ->due('reminder_delay')
