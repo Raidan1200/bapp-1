@@ -1,9 +1,11 @@
-<h1>Anzahlungsrechnung</h1>
-<pre>
-Hallo {{ $order->customer->first_name }},
+<x-email-layout>
 
-Sie haben ihre Bestellung storniert. Das ist schade.
-Wollen Sie uns nicht trotzdem etwas überweisen?
+  <h1>Stornorechnung</h1>
 
-Bankdaten Trallalla.
-</pre>
+  Hallo {{ $order->customer->first_name }},
+
+  <p>Sie haben leider Ihre Bestellung bei {{ $order->venue->name }} storniert.</p>
+
+  <p>Wir bedauern dies sehr und werden Ihnen innerhalb der nächsten 14 Tage ihr Geld zurück überweisen.</p>
+
+</x-email-layout>

@@ -26,7 +26,7 @@ class FinalEmail extends Mailable
         $this
         ->from($this->order->venue->email)
         ->subject('Gesamtrechnung für ' . $this->order->venue->name)
-        ->attachData($this->pdf, 'rechnung-'.$this->order->deposit_invoice_id.'.pdf', [
+        ->attachData($this->pdf, 'rechnung-'.$this->order->final_invoice_id.'.pdf', [
             'mime' => 'application/pdf',
         ])
         ->view('emails.final');
