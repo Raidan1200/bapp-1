@@ -113,7 +113,17 @@ class Order extends Component
         //     return $this->colors['final_paid'];
         // }
 
-        return $this->colors[$this->order->state] ?? '';
+        $color = $this->colors[$this->order->state] ?? '';
+
+        if (
+            $this->order->state === 'interim_paid' &&
+            $this->order->interim_is_final &&
+            $this->order->starts_at->endOfDay()->lessThan(now())
+        ) {
+            $color = $this->colors['final_paid'];
+        }
+
+        return $color;
     }
 
     public function updatedTimestamps() : array
