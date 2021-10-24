@@ -47,17 +47,25 @@
           @endif
           <tr
             wire:key="{{ $key }}"
-            class="{{ $booking['state'] === 'delete' ? 'bg-red-200' : '' }} {{ $booking['state'] === 'new' ? 'bg-green-200' : '' }}"
+            class="
+              {{ $booking['state'] === 'delete' ? 'bg-red-200' : '' }}
+              {{ $booking['state'] === 'new' ? 'bg-green-200' : '' }}
+            "
           >
             <td>
               <x-input
-                wire:model="bookings.{{ $key }}.package_name"
+                wire:model="bookings.{{ $key }}.data.package_name"
                 class="w-full"
               />
               @if (count($foundPackages) && $key == $row)
                 <ul class="absolute bg-white z-10">
                   @foreach ($foundPackages as $package)
-                    <li wire:click="fillFields({{ $row }}, {{ $package }})">{{ $package->name }}</li>
+                    <li
+                      wire:click="fillFields({{ $row }}, {{ $package }})"
+                      class="m-2"
+                    >
+                      {{ $package->name }}
+                    </li>
                   @endforeach
                 </ul>
               @endif
@@ -77,39 +85,39 @@
             <td class="flex justify-center">
               <x-input
                 type="checkbox"
-                wire:model.defer="bookings.{{ $key }}.is_flat"
+                wire:model.defer="bookings.{{ $key }}.data.is_flat"
               />
             </td>
             <td class="text-right">
               <x-input
-                wire:model.defer="bookings.{{ $key }}.quantity"
+                wire:model.defer="bookings.{{ $key }}.data.quantity"
                 class="w-full"
               />
             </td>
             <td class="text-right">
               <x-input
-                wire:model.defer="bookings.{{ $key }}.unit_price"
+                wire:model.defer="bookings.{{ $key }}.data.unit_price"
                 class="w-full"
               />
             </td>
             <td class="text-right">
               <x-input
-                wire:model.defer="bookings.{{ $key }}.vat"
+                wire:model.defer="bookings.{{ $key }}.data.vat"
                 class="w-full"
               />
             </td>
             <td class="text-right">
               @if ($order->deposit_paid_at)
-                <span >{{ $bookings[$key]['deposit'] }}%</span>
+                <span >{{ $bookings['data'][$key]['deposit'] }}%</span>
               @else
                 <x-input
-                  wire:model.defer="bookings.{{ $key }}.deposit"
+                  wire:model.defer="bookings.{{ $key }}.data.deposit"
                   class="w-full"
                 />
               @endif
             </td>
             <td class="text-right">
-              <button wire:click="removeRow({{ $key }})">
+              <button wire:click="toggleDelete({{ $key }})">
                 <x-icons.delete width="4" height="4" />
               </button>
             </td>
@@ -117,46 +125,46 @@
         @else
           <tr>
             <td>
-              {{ $booking['package_name'] }}
+              {{ $booking['data']['package_name'] }}
             </td>
             <td class="text-right">
-              {{ (new Carbon\Carbon($booking['starts_at']))->timezone('Europe/Berlin')->format('H:i') }}
+              {{ $booking['starts_time'] }}
             </td>
             <td class="text-right">
-              {{ (new Carbon\Carbon($booking['ends_at']))->timezone('Europe/Berlin')->format('H:i') }}
+              {{ $booking['ends_time'] }}
             </td>
             <td class="flex justify-center">
-              @if ($booking['is_flat'])
+              @if ($booking['data']['is_flat'])
                 <x-icons.check />
               @endif
             </td>
             <td class="text-right">
-              {{ $booking['quantity'] }}
+              {{ $booking['data']['quantity'] }}
             </td>
             @can('modify bookings')
               <td class="text-right">
                 {{-- TODO!!! Livewire sucks!!! $booking is not a Model but an Array so all Accessors are BOOM --}}
                 {{
                   money(
-                    $booking['interval']
-                      ? $booking['unit_price'] * (new Carbon\Carbon($booking['starts_at']))->diffInMinutes(new Carbon\Carbon($booking['ends_at'])) / $booking['interval']
-                      : $booking['unit_price']
+                    $booking['data']['interval']
+                      ? $booking['data']['unit_price'] * (new Carbon\Carbon($booking['data']['starts_at']))->diffInMinutes(new Carbon\Carbon($booking['data']['ends_at'])) / $booking['data']['interval']
+                      : $booking['data']['unit_price']
                   )
                 }}
               </td>
               <td class="text-right">
-                {{ $booking['vat'] }}%
+                {{ $booking['data']['vat'] }}%
               </td>
               <td class="text-right">
-                {{ $booking['deposit'] }}%
+                {{ $booking['data']['deposit'] }}%
               </td>
               <td class="text-right">
                 {{-- TODO!!! Livewire sucks!!! $booking is not a Model but an Array so all Accessors are BOOM --}}
                 {{
                   money(
-                    $booking['interval']
-                      ? $booking['unit_price'] * (new Carbon\Carbon($booking['starts_at']))->diffInMinutes(new Carbon\Carbon($booking['ends_at'])) / $booking['interval'] * $booking['quantity']
-                      : $booking['unit_price'] * $booking['quantity']
+                    $booking['data']['interval']
+                      ? $booking['data']['unit_price'] * (new Carbon\Carbon($booking['data']['starts_at']))->diffInMinutes(new Carbon\Carbon($booking['data']['ends_at'])) / $booking['data']['interval'] * $booking['data']['quantity']
+                      : $booking['data']['unit_price'] * $booking['data']['quantity']
                   )
                 }}
               </td>

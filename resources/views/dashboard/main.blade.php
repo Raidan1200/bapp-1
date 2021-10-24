@@ -37,9 +37,8 @@
   <div>{{ $orders->links() }}</div>
 @endisset
 
-
 @foreach ($orders as $order)
-  <livewire:order :order="$order" />
+  <livewire:order :order="$order" :wire:key="$order->id" />
 @endforeach
 
 {{ $orders->links() }}

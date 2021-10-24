@@ -230,21 +230,18 @@ class Order extends Component
     {
         if ($this->stateWillChange()) {
             $this->logStateChange();
+
             if ($this->order->state === 'fresh' && $this->selectedState === 'deposit_paid') {
-                // TODO TODO $this->storeInvoice('deposit');
                 $this->sendConfirmationEmail();
             }
 
             if ($this->order->state === 'deposit_paid' && $this->selectedState === 'interim_paid') {
-                // TODO TODO $this->storeInvoice('interim');
             }
 
             if ($this->selectedState === 'final_paid') {
-                // TODO TODO $this->storeInvoice('final');
             }
 
             if ($this->selectedState === 'cancelled') {
-                // TODO TODO $this->storeInvoice('cancelled');
             }
 
             $this->updatePaymentChecks();
@@ -272,7 +269,7 @@ class Order extends Component
         }
 
         if ($this->order->interim_paid_at === null) {
-            $bookingData['interim_amount'] = $this->order->grossTotal - $this->order->deposit_amount;
+            $bookingData['interim_amount'] = $this->order->grossTotal - $this->order->deposit;
         }
 
         if ($this->order->deposit_paid_at && $this->order->interim_paid_at) {
@@ -288,12 +285,14 @@ class Order extends Component
     protected function firstBookingDate($bookings)
     {
         return new Carbon(
-            collect($bookings)
+            (collect($bookings)
                 ->pluck('starts_at')
-                ->sort()
-                ->values()
-                ->first()
-            );
+                ->filter(function($b) { return $b !== null; })
+            )
+            ->sort()
+            ->values()
+            ->first()
+        );
     }
 
     public function itemsUpdated()
