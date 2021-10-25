@@ -157,7 +157,7 @@ class Bookings extends Component
             'quantity' => 1,
             'unit_price' => $package['unit_price'],
             'vat' => $package['vat'],
-            'deposit' => 0,
+            'deposit' => $package['deposit'],
             'interval' => $package['interval'],
             'is_flat' => false,
             'package_id' => $package['id'],
