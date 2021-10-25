@@ -108,7 +108,7 @@
             </td>
             <td class="text-right">
               @if ($order->deposit_paid_at)
-                <span >{{ $bookings['data'][$key]['deposit'] }}%</span>
+                <span >{{ $bookings[$key]['data']['deposit'] }}%</span>
               @else
                 <x-input
                   wire:model.defer="bookings.{{ $key }}.data.deposit"
