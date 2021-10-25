@@ -55,7 +55,7 @@ class Booking extends Model
     {
         $slots = 1;
 
-        if ($this->interval) {
+        if ($this->interval && $this->starts_at && $this->ends_at) {
             $minutes = $this->starts_at->diffInMinutes($this->ends_at);
             $slots = $minutes / $this->interval;
         }

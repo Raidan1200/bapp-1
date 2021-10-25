@@ -143,10 +143,9 @@
             </td>
             @can('modify bookings')
               <td class="text-right">
-                {{-- TODO!!! Livewire sucks!!! $booking is not a Model but an Array so all Accessors are BOOM --}}
                 {{
                   money(
-                    $booking['data']['interval']
+                    $booking['data']['interval'] && $booking['data']['starts_at'] && $booking['data']['ends_at']
                       ? $booking['data']['unit_price'] * (new Carbon\Carbon($booking['data']['starts_at']))->diffInMinutes(new Carbon\Carbon($booking['data']['ends_at'])) / $booking['data']['interval']
                       : $booking['data']['unit_price']
                   )

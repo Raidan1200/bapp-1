@@ -150,6 +150,7 @@ class Bookings extends Component
     public function fillFields($key, $package)
     {
         $this->bookings[$key]['data'] = $this->makeBooking([
+            'id' => $this->bookings[$key]['data']['id'],
             'package_name' => $package['name'],
             'starts_at' => $this->order->starts_at,
             'ends_at' => $this->order->starts_at,
@@ -203,6 +204,7 @@ class Bookings extends Component
     protected function makeBooking(array $data = [])
     {
         return array_merge([
+            'id' => null,
             'package_name' => '',
             'starts_at' => null,
             'ends_at' => null,
