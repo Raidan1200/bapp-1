@@ -34,35 +34,34 @@
           <x-input type="text" name="email" class="w-full" value="{{ old('email') ?? $venue->email ?? '' }}" id="email" />
         </x-form-field>
 
-        {{-- HIDE --}}
+        @if (false)
         <x-form-field>
           <x-label for="invoice_blocks">Rechnungs-Blöcke</x-label>
           <x-textarea rows=10 type="text" name="invoice_blocks" class="w-full" id="invoice_blocks" >{{ old('invoice_blocks') ?? trim(json_encode($venue->config['invoice_blocks'] ?? '', JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), '"') }}</x-textarea>
         </x-form-field>
+        @endif
 
-        {{-- HIDE --}}
         <x-form-field>
           <x-label for="reminder_delay">Erinnerungsmail nach ... Tagen</x-label>
           <x-input type="number" min="0" name="reminder_delay" class="w-full" value="{{ old('reminder_delay') ?? $venue->config['delays']['reminder_delay'] ?? '' }}"  id="reminder_delay" />
         </x-form-field>
 
-        {{-- HIDE --}}
         <x-form-field>
           <x-label for="check_delay">Mitarbeiternotitz nach ... Tagen</x-label>
           <x-input type="number" min="0" name="check_delay" class="w-full" value="{{ old('check_delay') ?? $venue->config['delays']['check_delay'] ?? '' }}"  id="check_delay" />
         </x-form-field>
 
-        {{-- HIDE --}}
         <x-form-field>
           <x-label for="not_paid_delay">Unbezahlt markieren nach ... Tagen</x-label>
           <x-input type="number" min="0" name="not_paid_delay" class="w-full" value="{{ old('not_paid_delay') ?? $venue->config['delays']['not_paid_delay'] ?? '' }}"  id="not_paid_delay" />
         </x-form-field>
 
-        {{-- HIDE --}}
+        @if (false)
         <x-form-field>
           <x-label for="payment_delay">Zahlungsziel innerhalb von ... Tagen</x-label>
           <x-input type="number" min="0" name="payment_delay" class="w-full" value="{{ old('payment_delay') ?? $venue->config['delays']['payment_delay'] ?? '' }}"  id="payment_delay" />
         </x-form-field>
+        @endif
 
         <x-form-field>
           <x-label for="invoice_id_format">Rechnungsnummernformat</x-label>
