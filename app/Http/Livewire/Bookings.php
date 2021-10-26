@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Order;
 use App\Models\Booking;
 use App\Models\Package;
 use Livewire\Component;
@@ -12,10 +13,6 @@ class Bookings extends Component
 {
     use AuthorizesRequests;
 
-    public $bookings;
-
-    public $data;
-
     public $order;
 
     public bool $editing = false;
@@ -24,16 +21,17 @@ class Bookings extends Component
     public $row;
 
     public $rules = [
-        'bookings.*.id' => 'nullable',
-        'bookings.*.starts_at' => 'required|date',
-        'bookings.*.ends_at' => 'required|date',
-        'bookings.*.package_name' => 'required|string|max:255',
-        'bookings.*.is_flat' => 'required',
-        'bookings.*.quantity' => 'required|integer',
-        'bookings.*.unit_price' => 'required|numeric',
-        'bookings.*.vat' => 'required|numeric',
-        'bookings.*.deposit' => 'required|numeric',
         'bookings.*.state' => 'required|in:stored,new,delete',
+        'bookings.*.starts_time' => 'nullable|date_format:H:i',
+        'bookings.*.ends_time' => 'nullable|date_format:H:i',
+
+        'bookings.*.data.id' => 'nullable',
+        'bookings.*.data.package_name' => 'required|string|max:255',
+        'bookings.*.data.is_flat' => 'required',
+        'bookings.*.data.quantity' => 'required|integer',
+        'bookings.*.data.unit_price' => 'required|numeric',
+        'bookings.*.data.vat' => 'required|numeric',
+        'bookings.*.data.deposit' => 'required|numeric',
     ];
 
     public $validationAttributes = [
@@ -46,14 +44,16 @@ class Bookings extends Component
         'bookings.*.deposit' => 'Anzahlung',
     ];
 
-    public function mount()
+    public function mount(Order $order)
     {
-        foreach ($this->bookings as &$booking) {
-            $booking['state'] = 'stored';
-            $booking['is_flat'] = $booking['is_flat'] ?? false;
-        }
+        $this->order = $order;
 
-        $this->data = $this->bookings;
+        $this->bookings = $this->getBookings($order);
+    }
+
+    public function render()
+    {
+        return view('livewire.bookings');
     }
 
     public function startEditing()
@@ -63,65 +63,41 @@ class Bookings extends Component
 
     public function cancel()
     {
-        $this->resetValidation();
-        $this->bookings = $this->data;
+        $this->bookings = $this->getBookings();
         $this->editing = false;
     }
 
     public function save()
     {
         $this->authorize('modify bookings');
-
-        foreach ($this->bookings as &$booking) {
-            $starts_at = $booking['starts_time']
-                ? Carbon::createFromTimeString($booking['starts_time'], 'Europe/Berlin')
-                    ->setDateFrom($booking['starts_at'])
-                    ->setTimezone('UTC')
-                : null;
-            $ends_at = Carbon::createFromTimeString($booking['ends_time'], 'Europe/Berlin')
-                ->setDateFrom($booking['ends_at'])
-                ->setTimezone('UTC');
-            $booking['starts_at'] = $starts_at;
-            $booking['ends_at'] = $ends_at;
-        }
-
-        unset($booking); // PHP. You gotta love it.
-
         $this->validate();
 
-        $newBookings = [];
+        foreach ($this->bookings as $idx => &$booking) {
+            $data = &$booking['data'];
+            $data['starts_at'] = $this->setTime($booking['starts_time']);
+            $data['ends_at'] = $this->setTime($booking['ends_time']);
 
-        // LATER This is REAAAALLY inefficient
-        //       Does Laravel have something like "bulkUpdate" or "updateMany"?
-
-        foreach ($this->bookings as $booking) {
             if ($booking['state'] === 'delete' || $booking['state'] === 'stored') {
-                $model = Booking::find($booking['id']);
+                $model = Booking::find($booking['data']['id']);
 
                 if ($booking['state'] === 'delete') {
                     $model->delete();
+                    array_splice($this->bookings, $idx, 1);
                 }
 
                 if ($booking['state'] === 'stored') {
-                    $model->update($booking);
-                    $newBookings[] = $booking;
+                    $model->update($booking['data']);
                 }
             }
 
             if ($booking['state'] === 'new') {
-                $booking['order_id'] = $this->order->id;
-
-                $newBooking = Booking::create($booking);
-                $booking['id'] = $newBooking->id;
+                $model = Booking::create($booking['data']);
+                $booking['data']['id'] = $model->id;
                 $booking['state'] = 'stored';
-
-                $newBookings[] = $booking;
             }
         }
 
         $this->editing = false;
-        $this->bookings = $newBookings;
-        $this->data = $newBookings;
         $this->emitUp('updateBookings');
     }
 
@@ -129,23 +105,12 @@ class Bookings extends Component
     {
         $this->resetValidation();
 
-        $this->bookings[] = [
-            'starts_at' => null,
-            'ends_at' => null,
-            'interval' => null,
-            'package_name' => '',
-            'quantity' => 1,
-            'unit_price' => 0,
-            'vat' => 20,
-            'deposit' => 0,
-            'is_flat' => false,
-            'package_id' => null,
-            'room_id' => null,
-            'state' => 'new'
-        ];
+        $booking = $this->makeBooking();
+
+        $this->bookings[] = $this->wrapBooking($booking, 'new');
     }
 
-    public function removeRow($key)
+    public function toggleDelete($key)
     {
         $this->resetValidation();
 
@@ -166,7 +131,7 @@ class Bookings extends Component
 
     public function updating($row, $search)
     {
-        $this->row = str_replace(['bookings.', '.package_name'], ['', ''], $row);
+        $this->row = str_replace(['bookings.', '.data.package_name'], ['', ''], $row);
 
         if (mb_strlen($search) >= 3) {
             $this->foundPackages = $this->findPackages($search);
@@ -184,36 +149,74 @@ class Bookings extends Component
 
     public function fillFields($key, $package)
     {
-        $this->bookings[$key] = [
+        $this->bookings[$key]['data'] = $this->makeBooking([
+            'id' => $this->bookings[$key]['data']['id'],
             'package_name' => $package['name'],
-            'starts_at' => $package['opens_at'],
-            'interval' => $package['interval'],
-            'ends_at' => $package['opens_at'],
+            'starts_at' => $this->order->starts_at,
+            'ends_at' => $this->order->starts_at,
             'quantity' => 1,
             'unit_price' => $package['unit_price'],
             'vat' => $package['vat'],
-            'deposit' => 0,
+            'deposit' => $package['deposit'],
+            'interval' => $package['interval'],
             'is_flat' => false,
             'package_id' => $package['id'],
             'room_id' => null, // TODO: $package['roomId'] ... NO IDEA!!!
-            'state' => 'new'
-        ];
+        ]);
 
         $this->foundPackages = [];
     }
 
-    public function render()
+    protected function getBookings()
     {
-        foreach ($this->bookings as &$booking) {
-            if ($booking['starts_at']) {
-                $booking['starts_time'] = Carbon::create($booking['starts_at'])->timezone('Europe/Berlin')->format('H:i');
-            } else {
-                $booking['starts_time'] = null;
-            }
+        return $this->order->bookings->map(function ($booking) {
+            return $this->wrapBooking($booking, 'stored');
+        })->toArray();
+    }
 
-            $booking['ends_time'] = Carbon::create($booking['ends_at'])->timezone('Europe/Berlin')->format('H:i');
-        }
+    protected function wrapBooking($booking, string $state)
+    {
+        return [
+            'data' => $booking instanceof Booking ? $booking->toArray() : $booking,
+            'state' => $state,
+            'starts_time' => $this->screenDate($booking['starts_at']),
+            'ends_time' => $this->screenDate($booking['ends_at']),
+        ];
+    }
 
-        return view('livewire.bookings');
+    protected function screenDate($date)
+    {
+        return $date
+            ? (new Carbon($date))->timezone('Europe/Berlin')->format('H:i')
+            : '';
+    }
+
+    protected function setTime($time)
+    {
+        return $time
+            ? Carbon::createFromTimeString($time, 'Europe/Berlin')
+                ->setDateFrom($this->order->starts_at)
+                ->setTimezone('UTC')
+            : null;
+
+    }
+
+    protected function makeBooking(array $data = [])
+    {
+        return array_merge([
+            'id' => null,
+            'package_name' => '',
+            'starts_at' => null,
+            'ends_at' => null,
+            'quantity' => 1,
+            'unit_price' => 100,
+            'vat' => 20,
+            'deposit' => 0,
+            'interval' => null,
+            'is_flat' => false,
+            'order_id' => $this->order->id,
+            'package_id' => null,
+            'room_id' => null,
+        ], $data);
     }
 }

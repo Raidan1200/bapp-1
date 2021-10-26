@@ -34,10 +34,7 @@
     />
   </div>
   <div class="mt-2">
-    <livewire:bookings
-      :bookings="$order->bookings->toArray()"
-      :order="$order"
-    />
+    <livewire:bookings :order="$order" />
   </div>
   <div class="mt-2">
       <livewire:items

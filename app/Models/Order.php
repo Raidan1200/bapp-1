@@ -110,7 +110,7 @@ class Order extends Model
     {
         $deposit = $this->bookings->reduce(function ($deposit, $booking) {
             return $deposit += $booking->grossTotal * ($booking->deposit / 100);
-        });
+        }, 0);
 
         return $deposit;
     }

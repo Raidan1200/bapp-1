@@ -39,6 +39,7 @@ class SetNotPaidOverdueOrders extends Command
     public function handle()
     {
         foreach (Venue::all() as $venue) {
+            // TODO rename function
             $venue->dueOrderCancellations()->map(function($order) {
                 $order->update([
                     'state' => 'not_paid',
