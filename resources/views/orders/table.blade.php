@@ -119,10 +119,10 @@
             </template>
           </td>
           <td>
-            <template x-if="order.deposit_paid_at || !state.editing">
+            <template x-if="!state.editing || order.deposit_paid_at">
               <span x-text="booking.data.deposit">%</span>
             </template>
-            <template x-if="state.editing">
+            <template x-if="state.editing && !order.deposit_paid_at">
               <x-input
                 x-model="booking.data.deposit"
                 class="w-full"
